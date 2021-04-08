@@ -1,7 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
-const port = 3001
 const db = require('./queries')
 
 app.use(bodyParser.json())
@@ -35,6 +34,8 @@ app.get('/clients/:id', db.getClientById)
 app.post('/clients', db.createClient)
 app.put('/clients/:id', db.updateClient)
 app.delete('/clients/:id', db.deleteClient)
+
+let port = process.env.PORT;
 
 app.listen(port, () => {
     console.log(`Goco backend running on port ${port}.`)
