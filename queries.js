@@ -251,6 +251,31 @@ const deleteFeedback = (request, response) => {
     })
 }
 
+const TelegramBot = require('node-telegram-bot-api')
+const token = '1618943992:AAGAUZswIDgksry3QFpxkt2yhg9jo4F2_ZU'
+const bot = new TelegramBot(token, { polling: true })
+
+bot.onText(/\/register/, (msg, match) => {
+    const chatId = msg.chat.id
+    const course_id = msg.text.split(' ').pop();
+    console.log('User with username ' + msg.chat.username + ' registered with course id ' + course_id.toLowerCase());
+
+    pool.query('INSERT INTO telegram_bot_users (chat_id, first_name, username, course_id) VALUES ($1, $2, $3, $4)', [msg.chat.id, msg.chat.first_name, msg.chat.username, course_id], (error, result) => {
+        if (error) {
+            throw error
+        }
+        response.status(201).send(`Telegram bot user added with ID: ${result.insertId}`)
+    })
+
+    //users.push(chatId)
+    bot.sendMessage(chatId, 'Done.')
+})
+
+const writeTelegramMessage = (request, response) => {
+    const { receiver_chat_id, student } = request.body
+    bot.sendMessage(receiver_chat_id, `Hello`)
+}
+
 module.exports = {
     getFeedbacks,
     getFeedbackById,
