@@ -15,8 +15,11 @@ const pool = new Pool({
 const production_token = "1618943992:AAGeXUXVmAVlG42cCgAQWP2Htko4f1vo95A";
 const dev_token = "1782112572:AAFMbiHosVWH1TqKUXLmUUuiNV8q5Je0MPE";
 
+const current_token = process.env.PORT === undefined ? dev_token : production_token;
+
 const TelegramBot = require('node-telegram-bot-api')
-const bot = new TelegramBot(dev_token, { polling: true })
+
+const bot = new TelegramBot(current_token, { polling: true })
 
 bot.onText(/\/register/, (msg, match) => {
     const chatId = msg.chat.id
@@ -198,14 +201,18 @@ const getCourses = (request, response) => {
 }
 
 const getCourseById = (request, response) => {
-    const id = parseInt(request.params.id)
-
-    pool.query('SELECT * FROM courses WHERE id = $1', [id], (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json(results.rows)
-    })
+    try {
+        const id = parseInt(request.params.id);
+        pool.query('SELECT * FROM courses WHERE id = $1', [id], (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        })
+    }
+    catch{
+        console.log("")
+    }
 }
 
 const createCourse = (request, response) => {
