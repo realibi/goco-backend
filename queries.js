@@ -12,9 +12,11 @@ const pool = new Pool({
 
 //--------------------------------------------------------------
 
+const production_token = "1618943992:AAGeXUXVmAVlG42cCgAQWP2Htko4f1vo95A";
+const dev_token = "1782112572:AAFMbiHosVWH1TqKUXLmUUuiNV8q5Je0MPE";
+
 const TelegramBot = require('node-telegram-bot-api')
-const token = '1618943992:AAGeXUXVmAVlG42cCgAQWP2Htko4f1vo95A'
-const bot = new TelegramBot(token, { polling: true })
+const bot = new TelegramBot(dev_token, { polling: true })
 
 bot.onText(/\/register/, (msg, match) => {
     const chatId = msg.chat.id
@@ -39,7 +41,7 @@ const sendClientInfoNotification = (subcourse_id, client) => {
 
         const course_id = subcoursesResults.rows[0]['course_id'];
 
-        pool.query('SELECT * FROM telegram_bot_users WHERE course_id = $1', [course_id], (error, coursesResults) => {
+        pool.query('SELECT * FROM telegram_bot_users WHERE course_id = $1 or course_id = 0', [course_id], (error, coursesResults) => {
             if (error) {
                 throw error
             }
