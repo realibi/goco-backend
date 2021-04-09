@@ -13,7 +13,7 @@ const pool = new Pool({
 //--------------------------------------------------------------
 
 const TelegramBot = require('node-telegram-bot-api')
-const token = '1618943992:AAGosyGSk6CN_oFUGsEEIFUtGzSQpNh9f34'
+const token = '1618943992:AAGeXUXVmAVlG42cCgAQWP2Htko4f1vo95A'
 const bot = new TelegramBot(token, { polling: true })
 
 bot.onText(/\/register/, (msg, match) => {
