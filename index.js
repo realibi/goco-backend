@@ -35,7 +35,7 @@ app.post('/clients', db.createClient)
 app.put('/clients/:id', db.updateClient)
 app.delete('/clients/:id', db.deleteClient)
 
-let port = process.env.PORT;
+let port = process.env.PORT === undefined ? 3000 : process.env.PORT;
 
 app.listen(port, () => {
     console.log(`Goco backend running on port ${port}.`)

@@ -32,15 +32,30 @@ bot.onText(/\/register/, (msg, match) => {
 })
 
 const sendClientInfoNotification = (subcourse_id, client) => {
-    let subcourse = null;
-    pool.query('SELECT * FROM subcourses WHERE id = $1', [subcourse_id], (error, results) => {
+    pool.query('SELECT * FROM subcourses WHERE id = $1', [subcourse_id], (error, subcoursesResults) => {
         if (error) {
             throw error
         }
-        subcourse = JSON.parse(results.rows)
+
+        const course_id = results.rows[0]['course_id'];
+
+        pool.query('SELECT * FROM telegram_bot_users WHERE course_id = $1', [course_id], (error, coursesResults) => {
+            if (error) {
+                throw error
+            }
+            for(let i = 0; i < coursesResults.rows.length; i++){
+                let message =
+                    `
+                        Поздравляем с новым студентом вашего образовательного центра!\n
+                        ФИО: ${client.fullname}\n
+                        Телефон: ${client.phone}\n
+                        Оплаченная сумма: ${client.pay_sum}\n
+                        Дата записи на курс: ${client.date}\n
+                    `;
+                bot.sendMessage(coursesResults.rows[i]['chat_id'], )
+            }
+        })
     })
-    console.log(subcourse);
-    //bot.sendMessage(chatId, 'Done.')
 }
 
 //------------------------------------------------------------
@@ -69,7 +84,12 @@ const getClientById = (request, response) => {
 const createClient = (request, response) => {
     const { fullname, subcourse_id, date, phone, pay_sum } = request.body
 
-    sendClientInfoNotification(subcourse_id, {});
+    sendClientInfoNotification(subcourse_id, {
+        fullname: fullname,
+        phone: phone,
+        pay_sum: pay_sum,
+        date: date
+    });
 
     pool.query('INSERT INTO clients (fullname, subcourse_id, date, phone, pay_sum) VALUES ($1, $2, $3, $4, $5)', [fullname, subcourse_id, date, phone, pay_sum], (error, result) => {
         if (error) {
