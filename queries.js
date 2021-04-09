@@ -13,7 +13,7 @@ const pool = new Pool({
 //--------------------------------------------------------------
 
 const TelegramBot = require('node-telegram-bot-api')
-const token = '1618943992:AAGAUZswIDgksry3QFpxkt2yhg9jo4F2_ZU'
+const token = '1618943992:AAGosyGSk6CN_oFUGsEEIFUtGzSQpNh9f34'
 const bot = new TelegramBot(token, { polling: true })
 
 bot.onText(/\/register/, (msg, match) => {
@@ -37,7 +37,7 @@ const sendClientInfoNotification = (subcourse_id, client) => {
             throw error
         }
 
-        const course_id = results.rows[0]['course_id'];
+        const course_id = subcoursesResults.rows[0]['course_id'];
 
         pool.query('SELECT * FROM telegram_bot_users WHERE course_id = $1', [course_id], (error, coursesResults) => {
             if (error) {
@@ -45,14 +45,8 @@ const sendClientInfoNotification = (subcourse_id, client) => {
             }
             for(let i = 0; i < coursesResults.rows.length; i++){
                 let message =
-                    `
-                        Поздравляем с новым студентом вашего образовательного центра!\n
-                        ФИО: ${client.fullname}\n
-                        Телефон: ${client.phone}\n
-                        Оплаченная сумма: ${client.pay_sum}\n
-                        Дата записи на курс: ${client.date}\n
-                    `;
-                bot.sendMessage(coursesResults.rows[i]['chat_id'], )
+                    `Поздравляем с новым студентом вашего образовательного центра!\n\nФИО: ${client.fullname}\nТелефон: ${client.phone}\nОплаченная сумма: ${client.pay_sum}\nДата записи на курс: ${client.date}\n`;
+                bot.sendMessage(coursesResults.rows[i]['chat_id'], message);
             }
         })
     })
