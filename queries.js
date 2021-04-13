@@ -44,11 +44,12 @@ const sendClientInfoNotification = (subcourse_id, client) => {
 
         const course_id = subcoursesResults.rows[0]['course_id'];
 
-        pool.query('SELECT * FROM telegram_bot_users WHERE course_id = $1 or course_id = 0', [course_id], (error, coursesResults) => {
+        pool.query('SELECT * FROM telegram_bot_users WHERE course_id = $1 or course_id = 0', [course_id], (error, usersResult) => {
             if (error) {
                 throw error
             }
-            for(let i = 0; i < coursesResults.rows.length; i++){
+            console.log("Users count: " + usersResult.rows.length);
+            for(let i = 0; i < usersResult.rows.length; i++){
                 let message =
                     `Поздравляем с новым студентом вашего образовательного центра!\n\nФИО: ${client.fullname}\nТелефон: ${client.phone}\nОплаченная сумма: ${client.pay_sum}\nДата записи на курс: ${client.date}\n`;
                 bot.sendMessage(coursesResults.rows[i]['chat_id'], message);
@@ -94,7 +95,7 @@ const createClient = (request, response) => {
         if (error) {
             throw error
         }
-        response.status(201).send(`Client added with ID: ${result.insertId}`)
+        response.status(201).send(`Client added with ID: ${result.id}`)
     })
 
 
@@ -201,18 +202,14 @@ const getCourses = (request, response) => {
 }
 
 const getCourseById = (request, response) => {
-    try {
-        const id = parseInt(request.params.id);
-        pool.query('SELECT * FROM courses WHERE id = $1', [id], (error, results) => {
-            if (error) {
-                throw error
-            }
-            response.status(200).json(results.rows)
-        })
-    }
-    catch{
-        console.log("")
-    }
+    const id = parseInt(request.params.id);
+    console.log("course id: " + id);
+    pool.query('SELECT * FROM courses WHERE id = $1', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
 }
 
 const createCourse = (request, response) => {
