@@ -310,6 +310,71 @@ const deleteFeedback = (request, response) => {
     })
 }
 
+//---------------------------------------------------------------------------------
+
+const getPartnershipRequests = (request, response) => {
+    pool.query('SELECT * FROM partnership_requests', (error, results) => {
+        if (error) {
+            throw error
+        }
+        console.log('partnership_requests sent');
+        response.status(200).json(results.rows)
+    })
+}
+
+const getPartnershipRequestById = (request, response) => {
+    const id = parseInt(request.params.id)
+
+    pool.query('SELECT * FROM partnership_requests WHERE id = $1', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const createPartnershipRequest = (request, response) => {
+    const { company_name, fullname, email, phone } = request.body
+
+    pool.query('INSERT INTO partnership_requests (company_name, fullname, email, phone) VALUES ($1, $2, $3, $4)', [company_name, fullname, email, phone], (error, result) => {
+        if (error) {
+            throw error
+        }
+        response.status(201).send(`partnership_requests added with ID: ${result.id}`)
+    })
+
+
+}
+
+const updatePartnershipRequest = (request, response) => {
+    const id = parseInt(request.params.id)
+    const { company_name, fullname, email, phone } = request.body
+
+    pool.query(
+        'UPDATE partnership_requests SET company_name = $1, fullname = $2, email = $3, phone = $4 WHERE id = $5',
+        [company_name, fullname, email, phone, id],
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).send(`partnership_requests modified with ID: ${id}`)
+        }
+    )
+}
+
+const deletePartnershipRequest = (request, response) => {
+    const id = parseInt(request.params.id)
+
+    pool.query('DELETE FROM partnership_requests WHERE id = $1', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(`partnership_requests deleted with ID: ${id}`)
+    })
+}
+
+//---------------------------------------------------------------------------------
+
 const writeTelegramMessage = (request, response) => {
     const { receiver_chat_id, student } = request.body
     bot.sendMessage(receiver_chat_id, `Hello`)
@@ -336,4 +401,9 @@ module.exports = {
     createClient,
     updateClient,
     deleteClient,
+    getPartnershipRequests,
+    getPartnershipRequestById,
+    createPartnershipRequest,
+    updatePartnershipRequest,
+    deletePartnershipRequest,
 }
