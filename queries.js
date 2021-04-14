@@ -212,6 +212,17 @@ const getCourseById = (request, response) => {
     })
 }
 
+const getCoursesByCategory = (request, response) => {
+    const categoryId = parseInt(request.params.id);
+    console.log("category id: " + categoryId);
+    pool.query('SELECT * FROM courses WHERE category_id = $1', [categoryId], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const createCourse = (request, response) => {
     const { title, img_src, rating, subtitle, website_url, addresses, phones, description } = request.body
 
@@ -388,6 +399,7 @@ module.exports = {
     deleteFeedback,
     getCourses,
     getCourseById,
+    getCoursesByCategory,
     createCourse,
     updateCourse,
     deleteCourse,
