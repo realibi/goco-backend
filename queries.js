@@ -151,6 +151,17 @@ const getSubcourseById = (request, response) => {
     })
 }
 
+const getCourseSubcourses = (request, response) => {
+    const courseId = parseInt(request.params.courseId)
+
+    pool.query('SELECT * FROM subcourses WHERE course_id = $1', [courseId], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const createSubcourse = (request, response) => {
     const { course_id, title, description, price } = request.body
 
@@ -405,6 +416,7 @@ module.exports = {
     deleteCourse,
     getSubcourses,
     getSubcourseById,
+    getCourseSubcourses,
     createSubcourse,
     updateSubcourse,
     deleteSubcourse,
