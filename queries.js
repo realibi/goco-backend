@@ -402,6 +402,12 @@ const writeTelegramMessage = (request, response) => {
     bot.sendMessage(receiver_chat_id, `Hello`)
 }
 
+const handlePayment = (request, response) => {
+    console.log("Payment handler:");
+    console.log(request);
+    response.redirect('https://www.oilan.io/courses');
+}
+
 module.exports = {
     getFeedbacks,
     getFeedbackById,
@@ -430,4 +436,5 @@ module.exports = {
     createPartnershipRequest,
     updatePartnershipRequest,
     deletePartnershipRequest,
+    handlePayment
 }
