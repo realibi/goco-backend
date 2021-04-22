@@ -82,7 +82,7 @@ const getClientById = (request, response) => {
 }
 
 const createClient = (request, response) => {
-    const { fullname, subcourse_id, date, phone, pay_sum } = request.body
+    const { fullname, subcourse_id, date, phone, pay_sum, payment_reference_id, paid } = request.body
 
     sendClientInfoNotification(subcourse_id, {
         fullname: fullname,
@@ -91,7 +91,7 @@ const createClient = (request, response) => {
         date: date
     });
 
-    pool.query('INSERT INTO clients (fullname, subcourse_id, date, phone, pay_sum) VALUES ($1, $2, $3, $4, $5)', [fullname, subcourse_id, date, phone, pay_sum], (error, result) => {
+    pool.query('INSERT INTO clients (fullname, subcourse_id, date, phone, pay_sum, payment_reference_id, paid) VALUES ($1, $2, $3, $4, $5)', [fullname, subcourse_id, date, phone, pay_sum, payment_reference_id, paid], (error, result) => {
         if (error) {
             throw error
         }
@@ -126,6 +126,19 @@ const deleteClient = (request, response) => {
         }
         response.status(200).send(`User deleted with ID: ${id}`)
     })
+}
+
+const setClientStatusOk = (reference_id) => {
+    pool.query(
+        'UPDATE public.clients SET paid=true WHERE id=$1',
+        [reference_id],
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).send(`User modified with ID: ${id}`)
+        }
+    )
 }
 
 //---------------------------------------------------------------------------------
@@ -403,8 +416,10 @@ const writeTelegramMessage = (request, response) => {
 }
 
 const handlePayment = (request, response) => {
-    console.log("Payment handler:");
-    console.log(request);
+    if(request.data.status === 1){
+        let reference_id = request.data.reference_id;
+        setClientStatusOk(reference_id)
+    }
     response.redirect('https://www.oilan.io/courses');
 }
 
