@@ -91,7 +91,7 @@ const createClient = (request, response) => {
         date: date
     });
 
-    pool.query('INSERT INTO clients (fullname, subcourse_id, date, phone, pay_sum, payment_reference_id, paid) VALUES ($1, $2, $3, $4, $5)', [fullname, subcourse_id, date, phone, pay_sum, payment_reference_id, paid], (error, result) => {
+    pool.query('INSERT INTO clients (fullname, subcourse_id, date, phone, pay_sum, payment_reference_id, paid) VALUES ($1, $2, $3, $4, $5, $6, $7)', [fullname, subcourse_id, date, phone, pay_sum, payment_reference_id, paid], (error, result) => {
         if (error) {
             throw error
         }
