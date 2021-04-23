@@ -5,6 +5,25 @@ const db = require('./queries')
 let cors = require('cors')
 
 app.use(cors())
+//
+// app.use(function (req, res, next) {
+//     let origins = [
+//         'http://example.com',
+//         'http://www.example.com'
+//     ];
+//
+//     for(let i = 0; i < origins.length; i++){
+//         let origin = origins[i];
+//
+//         if(req.headers.origin.indexOf(origin) > -1){
+//             res.header('Access-Control-Allow-Origin', req.headers.origin);
+//         }
+//     }
+//
+//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+// });
 
 app.use(bodyParser.json())
 app.use(

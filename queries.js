@@ -52,7 +52,7 @@ const sendClientInfoNotification = (subcourse_id, client) => {
             for(let i = 0; i < usersResult.rows.length; i++){
                 let message =
                     `Поздравляем с новым студентом вашего образовательного центра!\n\nФИО: ${client.fullname}\nТелефон: ${client.phone}\nОплаченная сумма: ${client.pay_sum}\nДата записи на курс: ${client.date}\n`;
-                bot.sendMessage(coursesResults.rows[i]['chat_id'], message);
+                bot.sendMessage(usersResult.rows[i]['chat_id'], message);
             }
         })
     })
@@ -97,8 +97,6 @@ const createClient = (request, response) => {
         }
         response.status(201).send(`Client added with ID: ${result.id}`)
     })
-
-
 }
 
 const updateClient = (request, response) => {
