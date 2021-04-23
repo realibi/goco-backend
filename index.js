@@ -44,8 +44,7 @@ app.get('/partnershipRequests/:id', db.getPartnershipRequestById)
 app.post('/partnershipRequests', db.createPartnershipRequest)
 app.put('/partnershipRequests/:id', db.updatePartnershipRequest)
 app.delete('/partnershipRequests/:id', db.deletePartnershipRequest)
-app.get('/handlePayment', db.handlePaymentGet)
-app.post('/handlePayment', db.handlePaymentPost)
+app.get('/handlePayment', db.handlePayment)
 
 let port = process.env.PORT === undefined ? 3001 : process.env.PORT;
 
