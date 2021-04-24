@@ -5,25 +5,17 @@ const db = require('./queries')
 let cors = require('cors')
 
 app.use(cors())
-//
-// app.use(function (req, res, next) {
-//     let origins = [
-//         'http://example.com',
-//         'http://www.example.com'
-//     ];
-//
-//     for(let i = 0; i < origins.length; i++){
-//         let origin = origins[i];
-//
-//         if(req.headers.origin.indexOf(origin) > -1){
-//             res.header('Access-Control-Allow-Origin', req.headers.origin);
-//         }
-//     }
-//
-//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//     next();
-// });
+
+let whitelist = ['http://localhost:3000', 'https://www.oilan.io']
+let corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    }
+}
 
 app.use(bodyParser.json())
 app.use(
@@ -55,7 +47,7 @@ app.put('/subcourses/:id', db.updateSubcourse)
 app.delete('/subcourses/:id', db.deleteSubcourse)
 app.get('/clients', db.getClients)
 app.get('/clients/:id', db.getClientById)
-app.post('/clients', db.createClient)
+app.post('/clients', cors(corsOptions), db.createClient)
 app.put('/clients/:id', db.updateClient)
 app.delete('/clients/:id', db.deleteClient)
 app.get('/partnershipRequests', db.getPartnershipRequests)
