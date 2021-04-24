@@ -415,6 +415,8 @@ const writeTelegramMessage = (request, response) => {
 }
 
 const handlePayment = (request, response) => {
+    console.log("handle payment:");
+    console.log(request);
     if(request.data.status === 1){
         let reference_id = request.data.reference_id;
         setClientStatusOk(reference_id)
