@@ -215,7 +215,7 @@ const deleteSubcourse = (request, response) => {
 //---------------------------------------------------------------------------------
 
 const getCourses = (request, response) => {
-    pool.query('SELECT * FROM courses where title NOT IN (\'test\')', (error, results) => {
+    pool.query('SELECT * FROM courses where title NOT IN (\'test\') order by rating desc', (error, results) => {
         if (error) {
             throw error
         }
