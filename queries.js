@@ -93,6 +93,7 @@ const createClient = (request, response) => {
 
     pool.query('INSERT INTO clients (fullname, subcourse_id, date, phone, pay_sum, payment_reference_id, paid) VALUES ($1, $2, $3, $4, $5, $6, $7)', [fullname, subcourse_id, date, phone, pay_sum, payment_reference_id, paid], (error, result) => {
         if (error) {
+            console.log(error)
             throw error
         }
         response.status(201).send(`Client added with ID: ${result.id}`)
@@ -226,7 +227,7 @@ const getCourses = (request, response) => {
 const getCourseById = (request, response) => {
     const id = parseInt(request.params.id);
     console.log("course id: " + id);
-    pool.query('SELECT * FROM courses WHERE id = $1', [id], (error, results) => {
+    pool.query('SELECT * FROM courses WHERE id = $1 and title NOT IN (\'test\')', [id], (error, results) => {
         if (error) {
             throw error
         }
@@ -237,7 +238,7 @@ const getCourseById = (request, response) => {
 const getCoursesByCategory = (request, response) => {
     const categoryId = parseInt(request.params.id);
     console.log("category id: " + categoryId);
-    pool.query('SELECT * FROM courses WHERE category_id = $1', [categoryId], (error, results) => {
+    pool.query('SELECT * FROM courses WHERE category_id = $1 and title NOT IN (\'test\')', [categoryId], (error, results) => {
         if (error) {
             throw error
         }
