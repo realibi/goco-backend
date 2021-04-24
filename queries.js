@@ -417,11 +417,17 @@ const writeTelegramMessage = (request, response) => {
 const handlePayment = (request, response) => {
     console.log("handle payment:");
     console.log(request);
-    if(request.data.status === 1){
-        let reference_id = request.data.reference_id;
-        setClientStatusOk(reference_id)
+    if(request.data.body.status !== undefined){
+        if(request.data.body.status === 1){
+            let reference_id = request.data.reference_id;
+            setClientStatusOk(reference_id)
+            response.redirect('https://www.oilan.io');
+        }
+    }else{
+        response.redirect('https://www.oilan.io/courses');
     }
-    response.redirect('https://www.oilan.io/courses');
+
+
 }
 
 module.exports = {
