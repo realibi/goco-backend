@@ -128,8 +128,9 @@ const deleteClient = (request, response) => {
 }
 
 const setClientStatusOk = (reference_id) => {
+    console.log("USER WITH REFERENCE ID " + reference_id + " PAY");
     pool.query(
-        'UPDATE public.clients SET paid=true WHERE id=$1',
+        'UPDATE public.clients SET paid=true WHERE reference_id=$1',
         [reference_id],
         (error, results) => {
             if (error) {
@@ -415,29 +416,17 @@ const writeTelegramMessage = (request, response) => {
 }
 
 const handlePayment = (request, response) => {
-    console.log("handle payment:");
-    console.log(request);
-    if(request.data.body.status !== undefined){
-        if(request.data.body.status === 1){
-            let reference_id = request.data.reference_id;
-            setClientStatusOk(reference_id)
-            response.redirect('https://www.oilan.io');
-        }
-    }else{
-        response.redirect('https://www.oilan.io/courses');
-    }
+    response.redirect('https://www.oilan.io/courses');
 }
 
 const handlePaymentPost = (request, response) => {
     console.log("handle payment POST:");
     console.log(request);
-    if(request.data.body.status !== undefined){
-        if(request.data.body.status === 1){
-            let reference_id = request.data.reference_id;
-            setClientStatusOk(reference_id)
-            response.redirect('https://www.oilan.io');
-        }
-    }else{
+    if(request.data.body.status === 1){
+        let reference_id = request.data.reference_id;
+        setClientStatusOk(reference_id)
+        response.redirect('https://www.oilan.io');
+    } else{
         response.redirect('https://www.oilan.io/courses');
     }
 }
