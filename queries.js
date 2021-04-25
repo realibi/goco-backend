@@ -421,14 +421,14 @@ const handlePayment = (request, response) => {
 
 const handlePaymentPost = (request, response) => {
     console.log("handle payment POST:");
-    console.log(request);
-    if(request.data.body.status === 1){
-        let reference_id = request.data.reference_id;
-        setClientStatusOk(reference_id)
-        response.redirect('https://www.oilan.io');
-    } else{
-        response.redirect('https://www.oilan.io/courses');
-    }
+    console.log(request._readableState);
+    // if(request.data.body.status === 1){
+    //     let reference_id = request.data.reference_id;
+    //     setClientStatusOk(reference_id)
+    //     response.redirect('https://www.oilan.io');
+    // } else{
+    //     response.redirect('https://www.oilan.io/courses');
+    // }
 }
 
 module.exports = {
