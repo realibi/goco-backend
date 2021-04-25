@@ -130,7 +130,7 @@ const deleteClient = (request, response) => {
 const setClientStatusOk = (reference_id) => {
     console.log("USER WITH REFERENCE ID " + reference_id + " PAY");
     pool.query(
-        'UPDATE public.clients SET paid=true WHERE reference_id=$1',
+        'UPDATE public.clients SET paid=true WHERE payment_reference_id=$1',
         [reference_id],
         (error, results) => {
             if (error) {
