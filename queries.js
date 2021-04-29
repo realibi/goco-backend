@@ -58,6 +58,19 @@ const sendClientInfoNotification = (subcourse_id, client) => {
     })
 }
 
+const sendPartnershipRequestNotification = (partner) => {
+    pool.query('SELECT * FROM telegram_bot_users WHERE course_id = 0', [], (error, usersResult) => {
+        if (error) {
+            throw error
+        }
+        for(let i = 0; i < usersResult.rows.length; i++){
+            let message =
+                `У вас новая заявка на сотрудничество!\n\nНазвание компании: ${partner.company_name}\nФИО: ${partner.fullname}\nТелефон: ${partner.phone}\nПочта: ${partner.email}\n`;
+            bot.sendMessage(usersResult.rows[i]['chat_id'], message);
+        }
+    })
+}
+
 //------------------------------------------------------------
 
 const getClients = (request, response) => {
@@ -370,6 +383,15 @@ const getPartnershipRequestById = (request, response) => {
 
 const createPartnershipRequest = (request, response) => {
     const { company_name, fullname, email, phone } = request.body
+
+    let partner = {
+        company_name: company_name,
+        fullname: fullname,
+        email: email,
+        phone: phone
+    };
+
+    sendPartnershipRequestNotification(partner);
 
     pool.query('INSERT INTO partnership_requests (company_name, fullname, email, phone) VALUES ($1, $2, $3, $4)', [company_name, fullname, email, phone], (error, result) => {
         if (error) {
