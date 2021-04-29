@@ -399,8 +399,6 @@ const createPartnershipRequest = (request, response) => {
         }
         response.status(201).send(`partnership_requests added with ID: ${result.id}`)
     })
-
-
 }
 
 const updatePartnershipRequest = (request, response) => {
@@ -429,6 +427,69 @@ const deletePartnershipRequest = (request, response) => {
         response.status(200).send(`partnership_requests deleted with ID: ${id}`)
     })
 }
+
+
+//---------------------------------------------------------------------------------
+
+const getTeachers = (request, response) => {
+    pool.query('SELECT * FROM teachers', (error, results) => {
+        if (error) {
+            throw error
+        }
+        console.log('partnership_requests sent');
+        response.status(200).json(results.rows)
+    })
+}
+
+const getTeacherById = (request, response) => {
+    const id = parseInt(request.params.id)
+
+    pool.query('SELECT * FROM teachers WHERE id = $1', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const createTeacher = (request, response) => {
+    const { fullname, description, img_url, course_id } = request.body
+
+    pool.query('INSERT INTO teachers (fullname, description, img_url, course_id) VALUES ($1, $2, $3, $4)', [fullname, description, img_url, course_id], (error, result) => {
+        if (error) {
+            throw error
+        }
+        response.status(201).send(`teacher added with ID: ${result.id}`)
+    })
+}
+
+const updateTeacher = (request, response) => {
+    const id = parseInt(request.params.id)
+    const { fullname, description, img_url, course_id } = request.body
+
+    pool.query(
+        'UPDATE teachers SET fullname = $1, description = $2, img_url = $3, course_id = $4 WHERE id = $5',
+        [fullname, description, img_url, course_id, id],
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).send(`teacher modified with ID: ${id}`)
+        }
+    )
+}
+
+const deleteTeacher = (request, response) => {
+    const id = parseInt(request.params.id)
+
+    pool.query('DELETE FROM teachers WHERE id = $1', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(`teacher deleted with ID: ${id}`)
+    })
+}
+
 
 //---------------------------------------------------------------------------------
 
@@ -481,6 +542,11 @@ module.exports = {
     createPartnershipRequest,
     updatePartnershipRequest,
     deletePartnershipRequest,
+    getTeachers,
+    getTeacherById,
+    createTeacher,
+    updateTeacher,
+    deleteTeacher,
     handlePayment,
     handlePaymentPost
 }
