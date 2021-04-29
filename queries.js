@@ -441,6 +441,18 @@ const getTeachers = (request, response) => {
     })
 }
 
+const getCourseTeachers = (request, response) => {
+    const id = parseInt(request.params.id)
+
+    pool.query('SELECT * FROM teachers where course_id = $1', [id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        console.log('partnership_requests sent');
+        response.status(200).json(results.rows)
+    })
+}
+
 const getTeacherById = (request, response) => {
     const id = parseInt(request.params.id)
 
@@ -543,6 +555,7 @@ module.exports = {
     updatePartnershipRequest,
     deletePartnershipRequest,
     getTeachers,
+    getCourseTeachers,
     getTeacherById,
     createTeacher,
     updateTeacher,
