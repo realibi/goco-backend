@@ -12,7 +12,7 @@ const pool = new Pool({
 
 //--------------------------------------------------------------
 
-const production_token = "1618943992:AAGeXUXVmAVlG42cCgAQWP2Htko4f1vo95A";
+const production_token = "1618943992:AAEWsKDdD9_VWvpcPHNjGFs8WpQBDJ93JbA";
 const dev_token = "1782112572:AAFMbiHosVWH1TqKUXLmUUuiNV8q5Je0MPE";
 
 const current_token = process.env.PORT === undefined ? dev_token : production_token;
