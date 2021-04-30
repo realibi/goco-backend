@@ -180,6 +180,8 @@ const getSubcourseById = (request, response) => {
 const getCourseSubcourses = (request, response) => {
     const courseId = parseInt(request.params.courseId)
 
+    console.log("course id: " + courseId);
+
     pool.query('SELECT * FROM subcourses WHERE course_id = $1', [courseId], (error, results) => {
         if (error) {
             throw error
@@ -505,6 +507,19 @@ const deleteTeacher = (request, response) => {
 
 //---------------------------------------------------------------------------------
 
+const getCourseCardsById = (request, response) => {
+    const categoryId = parseInt(request.params.categoryId)
+
+    pool.query('SELECT subcourses.title, subcourses.description, subcourses.price, subcourses.schedule, subcourses.duration, subcourses.rating, courses.title as "course_title", courses.img_src from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.category_id = $1', [categoryId], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+//---------------------------------------------------------------------------------
+
 const writeTelegramMessage = (request, response) => {
     const { receiver_chat_id, student } = request.body
     bot.sendMessage(receiver_chat_id, `Hello`)
@@ -527,6 +542,7 @@ const handlePaymentPost = (request, response) => {
 }
 
 module.exports = {
+    getCourseCardsById,
     getFeedbacks,
     getFeedbackById,
     createFeedback,
