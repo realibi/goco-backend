@@ -510,7 +510,7 @@ const deleteTeacher = (request, response) => {
 const getCourseCardsById = (request, response) => {
     const categoryId = parseInt(request.params.categoryId)
 
-    pool.query('SELECT subcourses.title, subcourses.description, subcourses.price, subcourses.schedule, subcourses.duration, subcourses.rating, courses.title as "course_title", courses.img_src, courses.background_img_src from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.category_id = $1', [categoryId], (error, results) => {
+    pool.query('SELECT subcourses.title, subcourses.description, subcourses.price, subcourses.schedule, subcourses.duration, subcourses.rating, courses.title as "course_title", courses.img_src, courses.background_img_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.category_id = $1', [categoryId], (error, results) => {
         if (error) {
             throw error
         }
