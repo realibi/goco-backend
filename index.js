@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser'
 const app = express()
-import db from './queries'
+import db from './queries.js'
 import cors from 'cors'
 
 app.use(cors())
