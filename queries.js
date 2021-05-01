@@ -58,7 +58,7 @@ const sendClientInfoNotification = (subcourse_id, client) => {
             console.log("Users count: " + usersResult.rows.length);
             for(let i = 0; i < usersResult.rows.length; i++){
                 let message =
-                    `Поздравляем с новым студентом вашего образовательного центра!\n\nФИО: ${client.fullname}\nТелефон: ${client.phone}\nОплаченная сумма: ${client.pay_sum}\nДата записи на курс: ${client.date}\nКод студента: ${client.code}\n`;
+                    `Поздравляем с новым студентом вашего образовательного центра "${client.center_name}"!\n\nКурс: ${client.subcourse_title}\nРасписание: ${client.subcourse_schedule}\nФИО: ${client.fullname}\nТелефон: ${client.phone}\nОплаченная сумма: ${client.pay_sum}\nДата записи на курс: ${client.date}\nКод студента: ${client.code}\n`;
                 bot.sendMessage(usersResult.rows[i]['chat_id'], message);
             }
         })
@@ -553,11 +553,15 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
         let centerName = results.rows[0]['course_title'];
 
         sendClientInfoNotification(subcourseId, {
+            center_name: centerName,
+            subcourse_title: subcourseTitle,
             fullname: clientFullname,
+            email: clientEmail,
             phone: clientPhone,
             pay_sum: clientPaySum,
+            subcourse_schedule: subcourseSchedule,
             code: verificationCode,
-            date: moment().format()
+            date: moment().format('LLL')
         });
 
 
