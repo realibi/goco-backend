@@ -563,6 +563,35 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
             }
         });
 
+
+        let mailText = `
+            Уважаемый(-ая) ${clientFullname}, благодарим вас за то, что записались на курс от образовательного центра ${centerName} через Oilan!
+
+
+            Ваш код студента: ${verificationCode}.
+            
+            Укажите данный код у ресепшена ${centerName}, чтобы подтвердить, что вы уже купили курс.
+            
+            
+            Курс, на который вы записались: ${subcourseTitle}.
+            
+            Описание курса: ${subcourseDescription}.
+            
+            Расписание: ${subcourseSchedule}.
+            
+            Образовательный центр: ${centerName}.
+            
+            
+            Желаем вам удачи в обучении!
+            
+            С уважением, команда Oilan.
+            
+            
+            Если возникли вопросы, можете позвонить по номеру: +7 (708) 800-71-77
+            Или написать письмо по адресу: oilanedu@gmail.com
+        `;
+
+
         let mailOptions = {
             from: 'oilanedu@gmail.com',
             to: clientEmail,
