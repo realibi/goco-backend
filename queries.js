@@ -561,7 +561,7 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
             pay_sum: clientPaySum,
             subcourse_schedule: subcourseSchedule,
             code: verificationCode,
-            date: moment().format('LLL')
+            date: moment().add(4, 'hours').format('LLL')
         });
 
 
