@@ -149,7 +149,6 @@ const setClientStatusOk = (reference_id) => {
             if (error) {
                 throw error
             }
-            response.status(200).send(`User modified with ID: ${id}`)
         }
     )
 }
@@ -529,6 +528,16 @@ const handlePayment = (request, response) => {
     handlePaymentPost(request, response);
 }
 
+const sendCodeToEmail = (reference_id) => {
+    pool.query('SELECT * FROM clients WHERE id = $1', [reference_id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        console.log("Client info: ");
+        console.log(results.rows[0]);
+    })
+}
+
 const handlePaymentPost = (request, response) => {
     console.log("handle payment POST:");
 
@@ -537,7 +546,8 @@ const handlePaymentPost = (request, response) => {
     if(request.body.status === 1){
         console.log("request.body.status === 1");
         let reference_id = request.body.reference_id;
-        setClientStatusOk(reference_id)
+        setClientStatusOk(reference_id);
+        sendCodeToEmail(reference_id);
         response.redirect('https://www.oilan.io');
     } else{
         response.redirect('https://www.oilan.io/courses');
