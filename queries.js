@@ -554,7 +554,9 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
 
 
         let transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
             auth: {
                 user: 'oilanedu@gmail.com',
                 pass: 'OilanEducation01'
