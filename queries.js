@@ -57,7 +57,7 @@ const sendClientInfoNotification = (subcourse_id, client) => {
             console.log("Users count: " + usersResult.rows.length);
             for(let i = 0; i < usersResult.rows.length; i++){
                 let message =
-                    `Поздравляем с новым студентом вашего образовательного центра!\n\nФИО: ${client.fullname}\nТелефон: ${client.phone}\nОплаченная сумма: ${client.pay_sum}\nДата записи на курс: ${client.date}\n`;
+                    `Поздравляем с новым студентом вашего образовательного центра!\n\nФИО: ${client.fullname}\nТелефон: ${client.phone}\nОплаченная сумма: ${client.pay_sum}\nДата записи на курс: ${client.date}\nКод студента: ${client.code}\n`;
                 bot.sendMessage(usersResult.rows[i]['chat_id'], message);
             }
         })
@@ -139,11 +139,11 @@ const deleteClient = (request, response) => {
     })
 }
 
-const setClientStatusOk = (reference_id) => {
+const setClientStatusOk = (reference_id, code) => {
     console.log("USER WITH REFERENCE ID " + reference_id + " PAY");
     pool.query(
-        'UPDATE clients SET paid=true WHERE payment_reference_id=$1',
-        [reference_id],
+        'UPDATE clients SET paid=true, code=$1 WHERE payment_reference_id=$2',
+        [code, reference_id],
         (error, results) => {
             if (error) {
                 throw error
@@ -527,7 +527,7 @@ const handlePayment = (request, response) => {
     handlePaymentPost(request, response);
 }
 
-const sendCodeToEmail = (reference_id) => {
+const sendCodeToEmail = (reference_id, verificationCode) => {
     pool.query('SELECT clients.id, clients.fullname, clients.subcourse_id, clients.date, clients.phone, clients.pay_sum, clients.payment_reference_id, clients.paid, subcourses.id as "subcourse_id", subcourses.title as "subcourse_title", subcourses.schedule, subcourses.description, courses.title as "course_title" FROM clients inner join subcourses on clients.subcourse_id = subcourses.id inner join courses on subcourses.course_id = courses.id where payment_reference_id=$1', [reference_id], async (error, results) => {
         if (error) {
             throw error
@@ -536,7 +536,6 @@ const sendCodeToEmail = (reference_id) => {
         let clientFullname = results.rows[0]['fullname'];
         let clientPhone = results.rows[0]['phone'];
         let clientPaySum = results.rows[0]['pay_sum'];
-        let clientDate = results.rows[0]['date'];
         let subcourseId = results.rows[0]['subcourse_id'];
         let subcourseTitle = results.rows[0]['subcourse_title'];
         let subcourseSchedule = results.rows[0]['schedule'];
@@ -547,6 +546,7 @@ const sendCodeToEmail = (reference_id) => {
             fullname: clientFullname,
             phone: clientPhone,
             pay_sum: clientPaySum,
+            code: verificationCode,
             date: moment().format()
         });
 
@@ -580,7 +580,7 @@ const handlePaymentPost = (request, response) => {
     if(request.body.status === 1){
         let verificationCode = (Math.floor(Math.random() * 999999) + 100000).toString();
         let reference_id = request.body.reference_id;
-        setClientStatusOk(reference_id);
+        setClientStatusOk(reference_id, verificationCode);
         sendCodeToEmail(reference_id, verificationCode);
 
         response.redirect('https://www.oilan.io');
