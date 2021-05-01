@@ -596,7 +596,7 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
             from: 'oilanedu@gmail.com',
             to: clientEmail,
             subject: 'Вы записались на курс!',
-            text: 'прикол'
+            text: mailText
         };
 
         transporter.sendMail(mailOptions, function(error, info){
