@@ -526,14 +526,17 @@ const writeTelegramMessage = (request, response) => {
 }
 
 const handlePayment = (request, response) => {
-    response.redirect('https://www.oilan.io/courses');
+    //response.redirect('https://www.oilan.io/courses');
 }
 
 const handlePaymentPost = (request, response) => {
     console.log("handle payment POST:");
-    if(request.data.body.status === 1){
+
+    //bot.sendMessage(receiver_chat_id, `Hello`)
+
+    if(request.body.status === 1){
         console.log("request.body.status === 1");
-        let reference_id = request.data.reference_id;
+        let reference_id = request.body.reference_id;
         setClientStatusOk(reference_id)
         response.redirect('https://www.oilan.io');
     } else{
