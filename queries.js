@@ -2,6 +2,8 @@ import { init } from 'emailjs-com';
 import * as emailjs from "emailjs-com";
 import pg from 'pg';
 import TelegramBot from 'node-telegram-bot-api'
+import moment from 'moment'
+moment.locale('ru');
 
 const EMAIL_USER_ID = "user_ff1FMAT2kdXu57dcA5kiB";
 
@@ -545,7 +547,7 @@ const sendCodeToEmail = (reference_id) => {
             fullname: clientFullname,
             phone: clientPhone,
             pay_sum: clientPaySum,
-            date: clientDate
+            date: moment().format()
         });
 
         await init(EMAIL_USER_ID);
@@ -561,7 +563,7 @@ const sendCodeToEmail = (reference_id) => {
             center_name: centerName
         };
 
-        await emailjs.send('service_rh2qval', 'template_9ytb7ap', templateParams)
+        await emailjs.send('service_rh2qval', 'template_tlyzyej', templateParams)
             .then(function(response) {
                 console.log('SUCCESS!', response.status, response.text);
             }, function(error) {
