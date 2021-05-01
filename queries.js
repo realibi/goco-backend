@@ -2,6 +2,7 @@ import { init } from 'emailjs-com';
 import * as emailjs from "emailjs-com";
 import pg from 'pg';
 import TelegramBot from 'node-telegram-bot-api'
+import nodemailer from 'nodemailer';
 import moment from 'moment'
 moment.locale('ru');
 
@@ -550,28 +551,53 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
             date: moment().format()
         });
 
-        await init(EMAIL_USER_ID);
 
-        console.log("sent verification code: " + verificationCode);
-        const templateParams = {
-            to_email: clientEmail,
-            fullname: clientFullname,
-            student_code: verificationCode,
-            subcourse_title: subcourseTitle,
-            description: subcourseDescription,
-            schedule: subcourseSchedule,
-            center_name: centerName
+
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'oilanedu@gmail.com',
+                pass: 'OilanEducation01'
+            }
+        });
+
+        let mailOptions = {
+            from: 'oilanedu@gmail.com',
+            to: clientEmail,
+            subject: 'Вы записались на курс!',
+            text: 'прикол'
         };
 
-        console.log("template params:");
-        console.log(templateParams);
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
 
-        await emailjs.send('service_rh2qval', 'template_tlyzyej', templateParams)
-            .then(function(response) {
-                console.log('SUCCESS!', response.status, response.text);
-            }, function(error) {
-                console.log('FAILED...', error);
-            });
+        // await init(EMAIL_USER_ID);
+        //
+        // console.log("sent verification code: " + verificationCode);
+        // const templateParams = {
+        //     to_email: clientEmail,
+        //     fullname: clientFullname,
+        //     student_code: verificationCode,
+        //     subcourse_title: subcourseTitle,
+        //     description: subcourseDescription,
+        //     schedule: subcourseSchedule,
+        //     center_name: centerName
+        // };
+        //
+        // console.log("template params:");
+        // console.log(templateParams);
+        //
+        // await emailjs.send('service_rh2qval', 'template_tlyzyej', templateParams)
+        //     .then(function(response) {
+        //         console.log('SUCCESS!', response.status, response.text);
+        //     }, function(error) {
+        //         console.log('FAILED...', error);
+        //     });
     })
 }
 
