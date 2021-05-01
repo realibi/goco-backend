@@ -1,9 +1,11 @@
 import { init } from 'emailjs-com';
 import * as emailjs from "emailjs-com";
+import pg from 'pg';
+import TelegramBot from 'node-telegram-bot-api'
 
 const EMAIL_USER_ID = "user_ff1FMAT2kdXu57dcA5kiB";
 
-const Pool = require('pg').Pool
+const Pool = pg.Pool
 const pool = new Pool({
     user: 'qmnhjuaubjeicc',
     host: 'ec2-54-74-156-137.eu-west-1.compute.amazonaws.com',
@@ -21,9 +23,6 @@ const production_token = "1618943992:AAEWsKDdD9_VWvpcPHNjGFs8WpQBDJ93JbA";
 const dev_token = "1782112572:AAFMbiHosVWH1TqKUXLmUUuiNV8q5Je0MPE";
 
 const current_token = process.env.PORT === undefined ? dev_token : production_token;
-
-const TelegramBot = require('node-telegram-bot-api')
-
 const bot = new TelegramBot(current_token, { polling: true })
 
 bot.onText(/\/register/, (msg, match) => {
