@@ -559,7 +559,7 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
             secure: true,
             auth: {
                 user: 'oilanedu@gmail.com',
-                pass: 'OilanEducation01'
+                pass: 'dyvldkxooosevhon'
             }
         });
 
