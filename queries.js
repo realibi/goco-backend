@@ -563,6 +563,9 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
             center_name: centerName
         };
 
+        console.log("template params:");
+        console.log(templateParams);
+
         await emailjs.send('service_rh2qval', 'template_tlyzyej', templateParams)
             .then(function(response) {
                 console.log('SUCCESS!', response.status, response.text);
