@@ -526,7 +526,7 @@ const writeTelegramMessage = (request, response) => {
 }
 
 const handlePayment = (request, response) => {
-    //response.redirect('https://www.oilan.io/courses');
+    handlePaymentPost(request, response);
 }
 
 const handlePaymentPost = (request, response) => {
