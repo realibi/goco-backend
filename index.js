@@ -61,7 +61,7 @@ app.get('/partnershipRequests/:id', db.getPartnershipRequestById)
 app.post('/partnershipRequests', db.createPartnershipRequest)
 app.put('/partnershipRequests/:id', db.updatePartnershipRequest)
 app.delete('/partnershipRequests/:id', db.deletePartnershipRequest)
-app.get('/courseCards/:categoryId', db.getCourseCardsById)
+app.get('/courseCards/:categoryId', db.getCourseCardsByCategoryId)
 app.get('/handlePayment', db.handlePayment)
 app.post('/handlePayment', db.handlePaymentPost)
 
