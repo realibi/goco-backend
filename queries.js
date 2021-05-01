@@ -1,3 +1,8 @@
+import { init } from 'emailjs-com';
+import * as emailjs from "emailjs-com";
+
+const EMAIL_USER_ID = "user_ff1FMAT2kdXu57dcA5kiB";
+
 const Pool = require('pg').Pool
 const pool = new Pool({
     user: 'qmnhjuaubjeicc',
@@ -95,16 +100,9 @@ const getClientById = (request, response) => {
 }
 
 const createClient = (request, response) => {
-    const { fullname, subcourse_id, date, phone, pay_sum, payment_reference_id, paid } = request.body
+    const { fullname, subcourse_id, email, date, phone, pay_sum, payment_reference_id, paid } = request.body
 
-    sendClientInfoNotification(subcourse_id, {
-        fullname: fullname,
-        phone: phone,
-        pay_sum: pay_sum,
-        date: date
-    });
-
-    pool.query('INSERT INTO clients (fullname, subcourse_id, date, phone, pay_sum, payment_reference_id, paid) VALUES ($1, $2, $3, $4, $5, $6, $7)', [fullname, subcourse_id, date, phone, pay_sum, payment_reference_id, paid], (error, result) => {
+    pool.query('INSERT INTO clients (fullname, subcourse_id, email, date, phone, pay_sum, payment_reference_id, paid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [fullname, subcourse_id, email,  date, phone, pay_sum, payment_reference_id, paid], (error, result) => {
         if (error) {
             console.log(error)
             throw error
@@ -529,12 +527,47 @@ const handlePayment = (request, response) => {
 }
 
 const sendCodeToEmail = (reference_id) => {
-    pool.query('SELECT * FROM clients WHERE id = $1', [reference_id], (error, results) => {
+    pool.query('SELECT clients.id, clients.fullname, clients.subcourse_id, clients.date, clients.phone, clients.pay_sum, clients.payment_reference_id, clients.paid, subcourses.id as "subcourse_id", subcourses.title as "subcourse_title", subcourses.schedule, subcourses.description, courses.title as "course_title" FROM clients inner join subcourses on clients.subcourse_id = subcourses.id inner join courses on subcourses.course_id = courses.id where payment_reference_id=$1', [reference_id], async (error, results) => {
         if (error) {
             throw error
         }
-        console.log("Client info: ");
-        console.log(results.rows[0]);
+        let clientEmail = results.rows[0]['email'];
+        let clientFullname = results.rows[0]['fullname'];
+        let clientPhone = results.rows[0]['phone'];
+        let clientPaySum = results.rows[0]['pay_sum'];
+        let clientDate = results.rows[0]['date'];
+        let subcourseId = results.rows[0]['subcourse_id'];
+        let subcourseTitle = results.rows[0]['subcourse_title'];
+        let subcourseSchedule = results.rows[0]['schedule'];
+        let subcourseDescription = results.rows[0]['description'];
+        let centerName = results.rows[0]['course_title'];
+
+        sendClientInfoNotification(subcourseId, {
+            fullname: clientFullname,
+            phone: clientPhone,
+            pay_sum: clientPaySum,
+            date: clientDate
+        });
+
+        await init(EMAIL_USER_ID);
+
+        console.log("sent verification code: " + verificationCode);
+        const templateParams = {
+            to_email: clientEmail,
+            fullname: clientFullname,
+            student_code: verificationCode,
+            subcourse_title: subcourseTitle,
+            description: subcourseDescription,
+            schedule: subcourseSchedule,
+            center_name: centerName
+        };
+
+        await emailjs.send('service_rh2qval', 'template_9ytb7ap', templateParams)
+            .then(function(response) {
+                console.log('SUCCESS!', response.status, response.text);
+            }, function(error) {
+                console.log('FAILED...', error);
+            });
     })
 }
 
@@ -544,10 +577,11 @@ const handlePaymentPost = (request, response) => {
     //bot.sendMessage(receiver_chat_id, `Hello`)
 
     if(request.body.status === 1){
-        console.log("request.body.status === 1");
+        let verificationCode = (Math.floor(Math.random() * 999999) + 100000).toString();
         let reference_id = request.body.reference_id;
         setClientStatusOk(reference_id);
-        sendCodeToEmail(reference_id);
+        sendCodeToEmail(reference_id, verificationCode);
+
         response.redirect('https://www.oilan.io');
     } else{
         response.redirect('https://www.oilan.io/courses');
