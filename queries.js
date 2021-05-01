@@ -588,7 +588,7 @@ const handlePaymentPost = (request, response) => {
     }
 }
 
-module.exports = {
+export default {
     getCourseCardsByCategoryId,
     getFeedbacks,
     getFeedbackById,
