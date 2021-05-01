@@ -506,6 +506,15 @@ const deleteTeacher = (request, response) => {
 
 //---------------------------------------------------------------------------------
 
+const getCourseCards = (request, response) => {
+    pool.query('SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.price, subcourses.schedule, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id', [], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const getCourseCardsByCategoryId = (request, response) => {
     const categoryId = parseInt(request.params.categoryId)
 
@@ -650,6 +659,7 @@ const handlePaymentPost = (request, response) => {
 }
 
 export default {
+    getCourseCards,
     getCourseCardsByCategoryId,
     getFeedbacks,
     getFeedbackById,
