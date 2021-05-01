@@ -1,8 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser'
 const app = express()
-const db = require('./queries')
-let cors = require('cors')
+import db from './queries'
+import cors from 'cors'
 
 app.use(cors())
 
