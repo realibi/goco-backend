@@ -658,7 +658,7 @@ const handlePaymentPost = (request, response) => {
 
         response.redirect('https://www.oilan.io');
     } else{
-        response.redirect('https://www.oilan.io/courses');
+        response.redirect('https://www.oilan.io/');
     }
 }
 
