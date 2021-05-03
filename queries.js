@@ -515,10 +515,21 @@ const getCourseCards = (request, response) => {
     })
 }
 
+const getCourseCardById = (request, response) => {
+    const subcourseId = parseInt(request.params.subcourseId)
+
+    pool.query('SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.price, subcourses.schedule, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.id=$1', [subcourseId], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 const getCourseCardsByCategoryId = (request, response) => {
     const categoryId = parseInt(request.params.categoryId)
 
-    pool.query('SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.price, subcourses.schedule, subcourses.duration, subcourses.rating, courses.title as "course_title", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.category_id = $1', [categoryId], (error, results) => {
+    pool.query('SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.price, subcourses.schedule, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.category_id = $1', [categoryId], (error, results) => {
         if (error) {
             throw error
         }
@@ -664,6 +675,7 @@ const handlePaymentPost = (request, response) => {
 
 export default {
     getCourseCards,
+    getCourseCardById,
     getCourseCardsByCategoryId,
     getFeedbacks,
     getFeedbackById,
