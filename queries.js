@@ -65,6 +65,19 @@ const sendClientInfoNotification = (subcourse_id, client) => {
     })
 }
 
+const sendCallRequestNotification = (client) => {
+    pool.query('SELECT * FROM telegram_bot_users WHERE course_id = 0', [], (error, usersResult) => {
+        if (error) {
+            throw error
+        }
+        for(let i = 0; i < usersResult.rows.length; i++){
+            let message =
+                `Новый запрос на обратный звонок!\nТелефон: ${client.phone}\nВремя: ${client.currentDate}`;
+            bot.sendMessage(usersResult.rows[i]['chat_id'], message);
+        }
+    })
+}
+
 const sendPartnershipRequestNotification = (partner) => {
     pool.query('SELECT * FROM telegram_bot_users WHERE course_id = 0', [], (error, usersResult) => {
         if (error) {
@@ -673,7 +686,26 @@ const handlePaymentPost = (request, response) => {
     }
 }
 
+//----------------------------------------------------------
+
+const createCallRequest = (request, response) => {
+    const { phone } = request.body;
+    let currentDate = moment.format();
+
+    sendCallRequestNotification({phone: phone, currentDate: currentDate});
+
+    pool.query('INSERT INTO call_requests (phone, date) VALUES ($1, $2)', [phone, currentDate], (error, result) => {
+        if (error) {
+            throw error
+        }
+        response.status(201).send(`call_requests added with ID: ${result.id}`)
+    })
+}
+
+//----------------------------------------------------------
+
 export default {
+    createCallRequest,
     getCourseCards,
     getCourseCardById,
     getCourseCardsByCategoryId,
