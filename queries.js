@@ -10,10 +10,10 @@ const EMAIL_USER_ID = "user_ff1FMAT2kdXu57dcA5kiB";
 
 const Pool = pg.Pool
 const pool = new Pool({
-    user: 'qmnhjuaubjeicc',
-    host: 'ec2-54-74-156-137.eu-west-1.compute.amazonaws.com',
-    database: 'dbsn7oc14hgi3f',
-    password: '34e6ac10fde5da522cfb1089dd651b74c498cc3da5c13b4930bbe03bc6297f95',
+    user: 'hyhdsfgcsfgtko',
+    host: 'ec2-54-229-68-88.eu-west-1.compute.amazonaws.com',
+    database: 'dfjq5clee4ahv4',
+    password: 'bf322de92e8333896e987ab29ee34ae0b57ffdd145ee11e91b825e6b6de530df',
     port: 5432,
     ssl: {
         rejectUnauthorized: false
