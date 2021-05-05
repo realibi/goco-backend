@@ -698,7 +698,7 @@ const createCallRequest = (request, response) => {
         if (error) {
             throw error
         }
-        response.status(201).send(`call_requests added with ID: ${result.id}`)
+        response.status(201).send(`call_requests created`)
     })
 }
 
