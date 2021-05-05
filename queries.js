@@ -690,7 +690,7 @@ const handlePaymentPost = (request, response) => {
 
 const createCallRequest = (request, response) => {
     const { phone } = request.body;
-    let currentDate = moment.format();
+    let currentDate = moment().format();
 
     sendCallRequestNotification({phone: phone, currentDate: currentDate});
 
