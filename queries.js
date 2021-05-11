@@ -713,7 +713,42 @@ const createCallRequest = (request, response) => {
 
 //----------------------------------------------------------
 
+const courseCardsFilter = (request, response) => {
+    const { city, direction, courseName, price } = request.body;
+    let queryText = "";
+    switch(price){
+        case "0-20000":
+            queryText = "SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as \"course_id\", courses.title as \"course_title\", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where courses.city_id=$1, subcourses.category_id=$2, courses.title=$3, (subcourses.price >= 0 and subcourses.price <= 20000)";
+            break;
+        case "20000-40000":
+            queryText = "SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as \"course_id\", courses.title as \"course_title\", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where courses.city_id=$1, subcourses.category_id=$2, courses.title=$3, (subcourses.price >= 20000 and subcourses.price <= 40000)";
+            break;
+        case "40000-60000":
+            queryText = "SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as \"course_id\", courses.title as \"course_title\", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where courses.city_id=$1, subcourses.category_id=$2, courses.title=$3, (subcourses.price >= 40000 and subcourses.price <= 60000)";
+            break;
+        case "60000-80000":
+            queryText = "SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as \"course_id\", courses.title as \"course_title\", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where courses.city_id=$1, subcourses.category_id=$2, courses.title=$3, (subcourses.price >= 60000 and subcourses.price <= 80000)";
+            break;
+        case "80000-100000":
+            queryText = "SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as \"course_id\", courses.title as \"course_title\", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where courses.city_id=$1, subcourses.category_id=$2, courses.title=$3, (subcourses.price >= 80000 and subcourses.price <= 100000)";
+            break;
+        case "100000":
+            queryText = "SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as \"course_id\", courses.title as \"course_title\", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where courses.city_id=$1, subcourses.category_id=$2, courses.title=$3, subcourses.price >= 100000";
+            break;
+    }
+
+    pool.query(queryText, [city, direction, courseName], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+//----------------------------------------------------------
+
 export default {
+    courseCardsFilter,
     createCallRequest,
     getCourseCards,
     getCourseCardById,
