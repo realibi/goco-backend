@@ -776,7 +776,7 @@ const courseCardsFilter = (request, response) => {
 
     console.log("QUERY TEXT: " + queryText);
 
-    pool.query(queryText, [city, direction, course], (error, results) => {
+    pool.query(queryText, [], (error, results) => {
         if (error) {
             throw error
         }
