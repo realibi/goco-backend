@@ -745,7 +745,7 @@ const courseCardsFilter = (request, response) => {
         queryText += "subcourses.course_id=" + course;
     }
 
-    if(price !== 0){
+    if(price !== "0"){
         if(whereAdded){
             queryText += " where ";
         }else{
