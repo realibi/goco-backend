@@ -729,6 +729,7 @@ const courseCardsFilter = (request, response) => {
         if(whereAdded){
             queryText += " and ";
         }else{
+            whereAdded = true;
             queryText += " where ";
         }
 
@@ -749,6 +750,7 @@ const courseCardsFilter = (request, response) => {
         if(whereAdded){
             queryText += " and ";
         }else{
+            whereAdded = true;
             queryText += " where ";
         }
 
