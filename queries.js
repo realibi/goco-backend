@@ -735,15 +735,15 @@ const courseCardsFilter = (request, response) => {
         queryText += "subcourses.category_id=" + direction;
     }
 
-    if(course !== 0){
-        if(whereAdded){
-            queryText += " where ";
-        }else{
-            queryText += " and ";
-        }
-
-        queryText += "subcourses.course_id=" + course;
-    }
+    // if(course !== 0){
+    //     if(whereAdded){
+    //         queryText += " where ";
+    //     }else{
+    //         queryText += " and ";
+    //     }
+    //
+    //     queryText += "subcourses.course_id=" + course;
+    // }
 
     if(price !== "0"){
         if(whereAdded){
