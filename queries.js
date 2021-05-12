@@ -715,26 +715,63 @@ const createCallRequest = (request, response) => {
 
 const courseCardsFilter = (request, response) => {
     const { city, direction, course, price } = request.body;
-    let queryText = "";
-    switch(price){
-        case "0-20000":
-            queryText = "SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as \"course_id\", courses.title as \"course_title\", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where courses.city_id=$1 and subcourses.category_id=$2 and subcourses.course_id=$3 and (subcourses.price >= 0 and subcourses.price <= 20000)";
-            break;
-        case "20000-40000":
-            queryText = "SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as \"course_id\", courses.title as \"course_title\", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where courses.city_id=$1 and subcourses.category_id=$2 and subcourses.course_id=$3 and (subcourses.price >= 20000 and subcourses.price <= 40000)";
-            break;
-        case "40000-60000":
-            queryText = "SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as \"course_id\", courses.title as \"course_title\", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where courses.city_id=$1 and subcourses.category_id=$2 and subcourses.course_id=$3 and (subcourses.price >= 40000 and subcourses.price <= 60000)";
-            break;
-        case "60000-80000":
-            queryText = "SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as \"course_id\", courses.title as \"course_title\", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where courses.city_id=$1 and subcourses.category_id=$2 and subcourses.course_id=$3 and (subcourses.price >= 60000 and subcourses.price <= 80000)";
-            break;
-        case "80000-100000":
-            queryText = "SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as \"course_id\", courses.title as \"course_title\", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where courses.city_id=$1 and subcourses.category_id=$2 and subcourses.course_id=$3 and (subcourses.price >= 80000 and subcourses.price <= 100000)";
-            break;
-        case "100000":
-            queryText = "SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as \"course_id\", courses.title as \"course_title\", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where courses.city_id=$1 and subcourses.category_id=$2 and subcourses.course_id=$3 and subcourses.price >= 100000";
-            break;
+
+    let whereAdded = false;
+
+    let queryText = "SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as \"course_id\", courses.title as \"course_title\", courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id";
+
+    if(city !== 0){
+        whereAdded = true;
+        queryText += " where courses.city_id=" + city;
+    }
+
+    if(direction !== 0){
+        if(whereAdded){
+            queryText += " where ";
+        }else{
+            queryText += " and ";
+        }
+
+        queryText += "subcourses.category_id=" + direction;
+    }
+
+    if(course !== 0){
+        if(whereAdded){
+            queryText += " where ";
+        }else{
+            queryText += " and ";
+        }
+
+        queryText += "subcourses.course_id=" + course;
+    }
+
+    if(price !== 0){
+        if(whereAdded){
+            queryText += " where ";
+        }else{
+            queryText += " and ";
+        }
+
+        switch(price){
+            case "0-20000":
+                queryText += "(subcourses.price >= 0 and subcourses.price <= 20000)";
+                break;
+            case "20000-40000":
+                queryText += "(subcourses.price >= 20000 and subcourses.price <= 40000)";
+                break;
+            case "40000-60000":
+                queryText += "(subcourses.price >= 40000 and subcourses.price <= 60000)";
+                break;
+            case "60000-80000":
+                queryText += "(subcourses.price >= 60000 and subcourses.price <= 80000)";
+                break;
+            case "80000-100000":
+                queryText += "(subcourses.price >= 80000 and subcourses.price <= 100000)";
+                break;
+            case "100000":
+                queryText += "subcourses.price >= 100000";
+                break;
+        }
     }
 
     console.log("QUERY TEXT: " + queryText);
