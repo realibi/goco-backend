@@ -714,7 +714,7 @@ const createCallRequest = (request, response) => {
 //----------------------------------------------------------
 
 const courseCardsFilter = (request, response) => {
-    const { city, direction, course, price } = request.body;
+    const { city, direction, price } = request.body;
 
     let whereAdded = false;
 
