@@ -727,9 +727,9 @@ const courseCardsFilter = (request, response) => {
 
     if(direction !== 0){
         if(whereAdded){
-            queryText += " where ";
-        }else{
             queryText += " and ";
+        }else{
+            queryText += " where ";
         }
 
         queryText += "subcourses.category_id=" + direction;
@@ -747,9 +747,9 @@ const courseCardsFilter = (request, response) => {
 
     if(price !== "0"){
         if(whereAdded){
-            queryText += " where ";
-        }else{
             queryText += " and ";
+        }else{
+            queryText += " where ";
         }
 
         switch(price){
