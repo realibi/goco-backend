@@ -714,7 +714,7 @@ const createCallRequest = (request, response) => {
 //----------------------------------------------------------
 
 const courseCardsFilter = (request, response) => {
-    const { city, direction, price } = request.body;
+    const { city, direction, price, isOnline } = request.body;
 
     let whereAdded = false;
 
@@ -774,6 +774,19 @@ const courseCardsFilter = (request, response) => {
                 queryText += "subcourses.price >= 100000";
                 break;
         }
+    }
+
+    if(whereAdded){
+        queryText += " and ";
+    }else{
+        whereAdded = true;
+        queryText += " where ";
+    }
+
+    if(isOnline){
+        queryText += "subcourses.isOnline=true";
+    }else{
+        queryText += "subcourses.isOnline=false";
     }
 
     console.log("QUERY TEXT: " + queryText);
