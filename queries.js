@@ -700,9 +700,9 @@ const handlePaymentPost = (request, response) => {
 
 const createCallRequest = (request, response) => {
     const { phone } = request.body;
-    let currentDate = moment().format('LLLL');
+    let currentDate = moment().format();
 
-    sendCallRequestNotification({phone: phone, currentDate: currentDate});
+    sendCallRequestNotification({phone: phone, currentDate: moment().format('LLLL')});
 
     pool.query('INSERT INTO call_requests (phone, date) VALUES ($1, $2)', [phone, currentDate], (error, result) => {
         if (error) {
