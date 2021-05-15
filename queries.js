@@ -1,12 +1,10 @@
-import { init } from 'emailjs-com';
-import * as emailjs from "emailjs-com";
 import pg from 'pg';
 import TelegramBot from 'node-telegram-bot-api'
 import nodemailer from 'nodemailer';
 import moment from 'moment'
-moment.locale('ru');
+import TeleBot from 'telebot'
 
-const EMAIL_USER_ID = "user_ff1FMAT2kdXu57dcA5kiB";
+moment.locale('ru');
 
 const Pool = pg.Pool
 const pool = new Pool({
@@ -26,22 +24,27 @@ const production_token = "1618943992:AAEWsKDdD9_VWvpcPHNjGFs8WpQBDJ93JbA";
 const dev_token = "1782112572:AAFMbiHosVWH1TqKUXLmUUuiNV8q5Je0MPE";
 
 const current_token = process.env.PORT === undefined ? dev_token : production_token;
-const bot = new TelegramBot(current_token, { polling: true })
+//const bot = new TelegramBot(current_token, { polling: true })
+const teleBot = new TeleBot(current_token);
 
-bot.onText(/\/register/, (msg, match) => {
-    const chatId = msg.chat.id
-    const course_id = msg.text.split(' ').pop();
-    console.log('User with username ' + msg.chat.username + ' registered with course id ' + course_id.toLowerCase());
+teleBot.on('text', (msg) => msg.reply.text(msg.text));
 
-    pool.query('INSERT INTO telegram_bot_users (chat_id, first_name, username, course_id) VALUES ($1, $2, $3, $4)', [msg.chat.id, msg.chat.first_name, msg.chat.username, course_id], (error, result) => {
-        if (error) {
-            throw error
-        }
-    })
+teleBot.start();
 
-    //users.push(chatId)
-    bot.sendMessage(chatId, 'Done.')
-})
+// bot.onText(/\/register/, (msg, match) => {
+//     const chatId = msg.chat.id
+//     const course_id = msg.text.split(' ').pop();
+//     console.log('User with username ' + msg.chat.username + ' registered with course id ' + course_id.toLowerCase());
+//
+//     pool.query('INSERT INTO telegram_bot_users (chat_id, first_name, username, course_id) VALUES ($1, $2, $3, $4)', [msg.chat.id, msg.chat.first_name, msg.chat.username, course_id], (error, result) => {
+//         if (error) {
+//             throw error
+//         }
+//     })
+//
+//     //users.push(chatId)
+//     bot.sendMessage(chatId, 'Done.')
+// })
 
 const sendClientInfoNotification = (subcourse_id, client) => {
     pool.query('SELECT * FROM subcourses WHERE id = $1', [subcourse_id], (error, subcoursesResults) => {
@@ -59,7 +62,7 @@ const sendClientInfoNotification = (subcourse_id, client) => {
             for(let i = 0; i < usersResult.rows.length; i++){
                 let message =
                     `Поздравляем с новым студентом вашего образовательного центра "${client.center_name}"!\n\nКурс: ${client.subcourse_title}\nРасписание: ${client.subcourse_schedule}\nФИО: ${client.fullname}\nТелефон: ${client.phone}\nEmail: ${client.email}\nОплаченная сумма: ${client.pay_sum}\nДата записи на курс: ${client.date}\nКод студента: ${client.code}\n`;
-                bot.sendMessage(usersResult.rows[i]['chat_id'], message);
+                teleBot.sendMessage(usersResult.rows[i]['chat_id'], message);
             }
         })
     })
@@ -73,7 +76,7 @@ const sendCallRequestNotification = (client) => {
         for(let i = 0; i < usersResult.rows.length; i++){
             let message =
                 `Новый запрос на обратный звонок!\nТелефон: ${client.phone}\nВремя: ${client.currentDate}`;
-            bot.sendMessage(usersResult.rows[i]['chat_id'], message);
+            teleBot.sendMessage(usersResult.rows[i]['chat_id'], message);
         }
     })
 }
@@ -86,7 +89,7 @@ const sendPartnershipRequestNotification = (partner) => {
         for(let i = 0; i < usersResult.rows.length; i++){
             let message =
                 `У вас новая заявка на сотрудничество!\n\nНазвание компании: ${partner.company_name}\nФИО: ${partner.fullname}\nТелефон: ${partner.phone}\nПочта: ${partner.email}\n`;
-            bot.sendMessage(usersResult.rows[i]['chat_id'], message);
+            teleBot.sendMessage(usersResult.rows[i]['chat_id'], message);
         }
     })
 }
@@ -799,6 +802,8 @@ const courseCardsFilter = (request, response) => {
     })
 }
 
+//----------------------------------------------------------
+teleBot.start();
 //----------------------------------------------------------
 
 export default {
