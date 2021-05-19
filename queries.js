@@ -598,8 +598,6 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
             date: moment().add(4, 'hours').format('LLL')
         });
 
-
-
         let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
