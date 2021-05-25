@@ -521,7 +521,7 @@ const deleteTeacher = (request, response) => {
 //---------------------------------------------------------------------------------
 
 const getCourseCards = (request, response) => {
-    pool.query('SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id', [], (error, results) => {
+    pool.query('SELECT subcourses.id, subcourses.isonline, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id', [], (error, results) => {
         if (error) {
             throw error
         }
@@ -532,7 +532,7 @@ const getCourseCards = (request, response) => {
 const getCourseCardById = (request, response) => {
     const subcourseId = parseInt(request.params.subcourseId)
 
-    pool.query('SELECT subcourses.id, subcourses.isOnline, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.id=$1 order by subcourses.title', [subcourseId], (error, results) => {
+    pool.query('SELECT subcourses.id, subcourses.isonline, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.id=$1 order by subcourses.title', [subcourseId], (error, results) => {
         if (error) {
             throw error
         }
