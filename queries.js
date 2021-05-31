@@ -657,29 +657,6 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
                 console.log('Email sent: ' + info.response);
             }
         });
-
-        // await init(EMAIL_USER_ID);
-        //
-        // console.log("sent verification code: " + verificationCode);
-        // const templateParams = {
-        //     to_email: clientEmail,
-        //     fullname: clientFullname,
-        //     student_code: verificationCode,
-        //     subcourse_title: subcourseTitle,
-        //     description: subcourseDescription,
-        //     schedule: subcourseSchedule,
-        //     center_name: centerName
-        // };
-        //
-        // console.log("template params:");
-        // console.log(templateParams);
-        //
-        // await emailjs.send('service_rh2qval', 'template_tlyzyej', templateParams)
-        //     .then(function(response) {
-        //         console.log('SUCCESS!', response.status, response.text);
-        //     }, function(error) {
-        //         console.log('FAILED...', error);
-        //     });
     })
 }
 
@@ -781,18 +758,21 @@ const courseCardsFilter = (request, response) => {
         }
     }
 
-    if(whereAdded){
-        queryText += " and ";
-    }else{
-        whereAdded = true;
-        queryText += " where ";
+    if(isOnline !== "0"){
+        if(whereAdded){
+            queryText += " and ";
+        }else{
+            whereAdded = true;
+            queryText += " where ";
+        }
+
+        if(isOnline === "1"){
+            queryText += "subcourses.isOnline=true";
+        }else{
+            queryText += "subcourses.isOnline=false";
+        }
     }
 
-    if(isOnline){
-        queryText += "subcourses.isOnline=true";
-    }else{
-        queryText += "subcourses.isOnline=false";
-    }
 
     console.log("QUERY TEXT: " + queryText);
 
