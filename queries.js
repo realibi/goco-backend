@@ -276,9 +276,9 @@ const getCoursesByCategory = (request, response) => {
 }
 
 const createCourse = (request, response) => {
-    const { title, img_src, rating, subtitle, website_url, addresses, phones, description } = request.body
+    const { title, website_url, addresses, phones, login, password, city_id } = request.body
 
-    pool.query('INSERT INTO courses (title, img_src, rating, subtitle, website_url, addresses, phones, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [title, img_src, rating, subtitle, website_url, addresses, phones, description], (error, result) => {
+    pool.query('INSERT INTO courses (title, website_url, addresses, phones, login, password, city_id) VALUES ($1, $2, $3, $4, $5, $6, $7)', [title, website_url, addresses, phones, login, password, Number(city_id)], (error, result) => {
         if (error) {
             throw error
         }
