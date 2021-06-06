@@ -641,13 +641,13 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
             from: 'oilanedu@gmail.com',
             to: clientEmail,
             subject: 'Вы записались на курс!',
-            //text: mailText,
-            html:
-                `
-                    <body>
-                        <h1>html test</h1>
-                    </body>
-                `
+            text: mailText,
+            // html:
+            //     `
+            //         <body>
+            //             <h1>html test</h1>
+            //         </body>
+            //     `
         };
 
         transporter.sendMail(mailOptions, function(error, info){
@@ -788,7 +788,21 @@ const courseCardsFilter = (request, response) => {
 teleBot.start();
 //----------------------------------------------------------
 
+const logUserClick = (request, response) => {
+    const { datetime, courseTitle, subcourseTitle, eventName } = request.body
+
+    pool.query('INSERT INTO clicks_log (datetime, courseTitle, subcourseTitle, eventName) VALUES ($1, $2, $3, $4)', [datetime, courseTitle, subcourseTitle, eventName], (error, result) => {
+        if (error) {
+            throw error
+        }
+        response.status(201).send(`Click log added with ID: ${result.insertId}`)
+    })
+}
+
+//----------------------------------------------------------
+
 export default {
+    logUserClick,
     courseCardsFilter,
     createCallRequest,
     getCourseCards,
