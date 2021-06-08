@@ -571,8 +571,8 @@ const handlePayment = (request, response) => {
     handlePaymentPost(request, response);
 }
 
-const sendCodeToEmail = (reference_id, verificationCode) => {
-    pool.query('SELECT clients.id, clients.fullname, clients.subcourse_id, clients.date, clients.phone, clients.email, clients.pay_sum, clients.payment_reference_id, clients.paid, subcourses.id as "subcourse_id", subcourses.title as "subcourse_title", subcourses.schedule, subcourses.description, courses.title as "course_title" FROM clients inner join subcourses on clients.subcourse_id = subcourses.id inner join courses on subcourses.course_id = courses.id where payment_reference_id=$1', [reference_id], async (error, results) => {
+const sendEmailByReferenceId = (reference_id, verificationCode) => {
+    pool.query('SELECT clients.id, clients.fullname, clients.subcourse_id, clients.date, clients.phone, clients.email, clients.pay_sum, clients.payment_reference_id, clients.paid, subcourses.id as "subcourse_id", subcourses.title as "subcourse_title", subcourses.schedule, subcourses.description, courses.email as "course_email", courses.title as "course_title" FROM clients inner join subcourses on clients.subcourse_id = subcourses.id inner join courses on subcourses.course_id = courses.id where payment_reference_id=$1', [reference_id], async (error, results) => {
         if (error) {
             throw error
         }
@@ -585,6 +585,7 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
         let subcourseSchedule = results.rows[0]['schedule'];
         let subcourseDescription = results.rows[0]['description'];
         let centerName = results.rows[0]['course_title'];
+        let centerEmail = results.rows[0]['course_email'];
 
         sendClientInfoNotification(subcourseId, {
             center_name: centerName,
@@ -609,7 +610,7 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
         });
 
 
-        let mailText = `
+        let mailTextForClient = `
             Уважаемый(-ая) ${clientFullname}, благодарим вас за то, что записались на курс от образовательного центра ${centerName} через Oilan!
 
 
@@ -636,12 +637,41 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
             Или написать письмо по адресу: oilanedu@gmail.com
         `;
 
+        let mailTextForCenter = `
+            Уважаемые ${centerName}, к вам только что записался новый студент на пробный урок!
 
-        let mailOptions = {
+            Код студента: ${verificationCode}.
+            
+            Курс, на который записались: ${subcourseTitle}.
+            
+            Описание курса: ${subcourseDescription}.
+            
+            Расписание: ${subcourseSchedule}.  
+            
+            
+            
+            Данные о студенте:
+            
+            ФИО: ${clientFullname}.
+            Номер телефона: ${clientPhone}.
+            Email: ${clientEmail}.
+        
+            Свяжитесь с вашим новым студентом, и обсудите детали курса :)
+            
+            
+            Желаем вам плодотворной работы!
+            С уважением, команда Oilan.
+            
+            
+            Если возникли вопросы, можете позвонить по номеру: +7 (708) 800-71-77
+            Или написать письмо по адресу: oilanedu@gmail.com
+        `;
+
+        let mailOptionsForClient = {
             from: 'oilanedu@gmail.com',
             to: clientEmail,
             subject: 'Вы записались на курс!',
-            text: mailText,
+            text: mailTextForClient,
             // html:
             //     `
             //         <body>
@@ -650,7 +680,168 @@ const sendCodeToEmail = (reference_id, verificationCode) => {
             //     `
         };
 
-        transporter.sendMail(mailOptions, function(error, info){
+        let mailOptionsForCenter = {
+            from: 'oilanedu@gmail.com',
+            to: centerEmail,
+            subject: 'У вас новый клиент!',
+            text: mailTextForCenter,
+            // html:
+            //     `
+            //         <body>
+            //             <h1>html test</h1>
+            //         </body>
+            //     `
+        };
+
+        await transporter.sendMail(mailOptionsForClient, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+
+        await transporter.sendMail(mailOptionsForCenter, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+    })
+}
+
+const sendEmailByEmail = (email, verificationCode) => {
+    pool.query('SELECT clients.id, clients.fullname, clients.subcourse_id, clients.date, clients.phone, clients.email, clients.pay_sum, clients.payment_reference_id, clients.paid, subcourses.id as "subcourse_id", subcourses.title as "subcourse_title", subcourses.schedule, subcourses.description, courses.email as "course_email", courses.title as "course_title" FROM clients inner join subcourses on clients.subcourse_id = subcourses.id inner join courses on subcourses.course_id = courses.id where payment_reference_id=$1', [reference_id], async (error, results) => {
+        if (error) {
+            throw error
+        }
+        let clientEmail = results.rows[0]['email'];
+        let clientFullname = results.rows[0]['fullname'];
+        let clientPhone = results.rows[0]['phone'];
+        let clientPaySum = results.rows[0]['pay_sum'];
+        let subcourseId = results.rows[0]['subcourse_id'];
+        let subcourseTitle = results.rows[0]['subcourse_title'];
+        let subcourseSchedule = results.rows[0]['schedule'];
+        let subcourseDescription = results.rows[0]['description'];
+        let centerName = results.rows[0]['course_title'];
+        let centerEmail = results.rows[0]['course_email'];
+
+        sendClientInfoNotification(subcourseId, {
+            center_name: centerName,
+            subcourse_title: subcourseTitle,
+            fullname: clientFullname,
+            email: clientEmail,
+            phone: clientPhone,
+            pay_sum: clientPaySum,
+            subcourse_schedule: subcourseSchedule,
+            code: verificationCode,
+            date: moment().add(4, 'hours').format('LLL')
+        });
+
+        let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: 'oilanedu@gmail.com',
+                pass: 'dyvldkxooosevhon'
+            }
+        });
+
+
+        let mailTextForClient = `
+            Уважаемый(-ая) ${clientFullname}, благодарим вас за то, что записались на курс от образовательного центра ${centerName} через Oilan!
+
+
+            Ваш код студента: ${verificationCode}.
+            
+            Укажите данный код у ресепшена ${centerName}, чтобы подтвердить, что вы уже купили курс.
+            
+            
+            Курс, на который вы записались: ${subcourseTitle}.
+            
+            Описание курса: ${subcourseDescription}.
+            
+            Расписание: ${subcourseSchedule}.
+            
+            Образовательный центр: ${centerName}.
+            
+            
+            Желаем вам удачи в обучении!
+            
+            С уважением, команда Oilan.
+            
+            
+            Если возникли вопросы, можете позвонить по номеру: +7 (708) 800-71-77
+            Или написать письмо по адресу: oilanedu@gmail.com
+        `;
+
+        let mailTextForCenter = `
+            Уважаемые ${centerName}, к вам только что записался новый студент на пробный урок!
+
+            Код студента: ${verificationCode}.
+            
+            Курс, на который записались: ${subcourseTitle}.
+            
+            Описание курса: ${subcourseDescription}.
+            
+            Расписание: ${subcourseSchedule}.  
+            
+            
+            
+            Данные о студенте:
+            
+            ФИО: ${clientFullname}.
+            Номер телефона: ${clientPhone}.
+            Email: ${clientEmail}.
+        
+            Свяжитесь с вашим новым студентом, и обсудите детали курса :)
+            
+            
+            Желаем вам плодотворной работы!
+            С уважением, команда Oilan.
+            
+            
+            Если возникли вопросы, можете позвонить по номеру: +7 (708) 800-71-77
+            Или написать письмо по адресу: oilanedu@gmail.com
+        `;
+
+        let mailOptionsForClient = {
+            from: 'oilanedu@gmail.com',
+            to: clientEmail,
+            subject: 'Вы записались на курс!',
+            text: mailTextForClient,
+            // html:
+            //     `
+            //         <body>
+            //             <h1>html test</h1>
+            //         </body>
+            //     `
+        };
+
+        let mailOptionsForCenter = {
+            from: 'oilanedu@gmail.com',
+            to: centerEmail,
+            subject: 'У вас новый клиент!',
+            text: mailTextForCenter,
+            // html:
+            //     `
+            //         <body>
+            //             <h1>html test</h1>
+            //         </body>
+            //     `
+        };
+
+        await transporter.sendMail(mailOptionsForClient, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+
+        await transporter.sendMail(mailOptionsForCenter, function(error, info){
             if (error) {
                 console.log(error);
             } else {
@@ -669,12 +860,18 @@ const handlePaymentPost = (request, response) => {
         let verificationCode = (Math.floor(Math.random() * 999999) + 100000).toString();
         let reference_id = request.body.reference_id;
         setClientStatusOk(reference_id, verificationCode);
-        sendCodeToEmail(reference_id, verificationCode);
+        sendEmail(reference_id, verificationCode);
 
         response.redirect('https://www.oilan.io');
     } else{
         response.redirect('https://www.oilan.io/');
     }
+}
+
+const handleNewStudent = (request, response) => {
+    let studentEmail = request.body.studentEmail;
+    let verificationCode = (Math.floor(Math.random() * 999999) + 100000).toString();
+    sendEmail(studentEmail, verificationCode);
 }
 
 //----------------------------------------------------------
@@ -795,7 +992,7 @@ const logUserClick = (request, response) => {
         if (error) {
             throw error
         }
-        response.status(201).send(`Click log added with ID: ${result.insertId}`)
+        response.status(201).send(`Click log: ${eventName}`)
     })
 }
 
