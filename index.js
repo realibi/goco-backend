@@ -69,6 +69,7 @@ app.get('/handlePayment', db.handlePayment)
 app.post('/handlePayment', db.handlePaymentPost)
 app.post('/courseCardsFilter', db.courseCardsFilter)
 app.post('/logUserClick', db.logUserClick)
+app.post('/newStudent', db.handleNewStudent)
 
 let port = process.env.PORT === undefined ? 3001 : process.env.PORT;
 

@@ -711,16 +711,16 @@ const sendEmailByReferenceId = (reference_id, verificationCode) => {
     })
 }
 
-const sendEmailByEmail = (email, verificationCode) => {
+const sendEmailByEmail = (studentData, verificationCode) => {
     pool.query('SELECT clients.id, clients.fullname, clients.subcourse_id, clients.date, clients.phone, clients.email, clients.pay_sum, clients.payment_reference_id, clients.paid, subcourses.id as "subcourse_id", subcourses.title as "subcourse_title", subcourses.schedule, subcourses.description, courses.email as "course_email", courses.title as "course_title" FROM clients inner join subcourses on clients.subcourse_id = subcourses.id inner join courses on subcourses.course_id = courses.id where payment_reference_id=$1', [reference_id], async (error, results) => {
         if (error) {
             throw error
         }
-        let clientEmail = results.rows[0]['email'];
-        let clientFullname = results.rows[0]['fullname'];
-        let clientPhone = results.rows[0]['phone'];
-        let clientPaySum = results.rows[0]['pay_sum'];
-        let subcourseId = results.rows[0]['subcourse_id'];
+        let clientEmail = studentData['email'];
+        let clientFullname = studentData['fullname'];
+        let clientPhone = studentData['phone'];
+        let clientPaySum = studentData['pay_sum'];
+        let subcourseId = studentData['subcourse_id'];
         let subcourseTitle = results.rows[0]['subcourse_title'];
         let subcourseSchedule = results.rows[0]['schedule'];
         let subcourseDescription = results.rows[0]['description'];
@@ -789,7 +789,7 @@ const sendEmailByEmail = (email, verificationCode) => {
             Расписание: ${subcourseSchedule}.  
             
             
-            
+
             Данные о студенте:
             
             ФИО: ${clientFullname}.
@@ -869,9 +869,9 @@ const handlePaymentPost = (request, response) => {
 }
 
 const handleNewStudent = (request, response) => {
-    let studentEmail = request.body.studentEmail;
+    let studentData = request.body;
     let verificationCode = (Math.floor(Math.random() * 999999) + 100000).toString();
-    sendEmail(studentEmail, verificationCode);
+    sendEmailByEmail(studentData, verificationCode);
 }
 
 //----------------------------------------------------------
@@ -999,6 +999,7 @@ const logUserClick = (request, response) => {
 //----------------------------------------------------------
 
 export default {
+    handleNewStudent,
     logUserClick,
     courseCardsFilter,
     createCallRequest,
