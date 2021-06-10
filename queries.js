@@ -922,7 +922,7 @@ const courseCardsFilter = (request, response) => {
             queryText += " and ";
         }
 
-        queryText += "subcourses.course_id=" + course;
+        queryText += "subcourses.course_id=" + center;
     }
 
     if(price !== "0"){
