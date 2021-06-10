@@ -893,7 +893,7 @@ const createCallRequest = (request, response) => {
 //----------------------------------------------------------
 
 const courseCardsFilter = (request, response) => {
-    const { city, direction, price, isOnline } = request.body;
+    const { city, direction, price, center, isOnline } = request.body;
 
     let whereAdded = false;
 
@@ -915,15 +915,15 @@ const courseCardsFilter = (request, response) => {
         queryText += "subcourses.category_id=" + direction;
     }
 
-    // if(course !== 0){
-    //     if(whereAdded){
-    //         queryText += " where ";
-    //     }else{
-    //         queryText += " and ";
-    //     }
-    //
-    //     queryText += "subcourses.course_id=" + course;
-    // }
+    if(center !== 0){
+        if(whereAdded){
+            queryText += " where ";
+        }else{
+            queryText += " and ";
+        }
+
+        queryText += "subcourses.course_id=" + course;
+    }
 
     if(price !== "0"){
         if(whereAdded){
