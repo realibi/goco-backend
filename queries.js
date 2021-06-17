@@ -116,9 +116,9 @@ const getClientById = (request, response) => {
 }
 
 const createClient = (request, response) => {
-    const { fullname, subcourse_id, email, date, phone, pay_sum, payment_reference_id, paid } = request.body
+    const { fullname, subcourse_id, email, date, phone, pay_sum, payment_reference_id, paid, promocode } = request.body
 
-    pool.query('INSERT INTO clients (fullname, subcourse_id, email, date, phone, pay_sum, payment_reference_id, paid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)', [fullname, subcourse_id, email,  date, phone, pay_sum, payment_reference_id, paid], (error, result) => {
+    pool.query('INSERT INTO clients (fullname, subcourse_id, email, date, phone, pay_sum, payment_reference_id, paid, promocode) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)', [fullname, subcourse_id, email,  date, phone, pay_sum, payment_reference_id, paid, promocode], (error, result) => {
         if (error) {
             console.log(error)
             throw error
@@ -720,6 +720,7 @@ const sendEmailByEmail = (studentData, verificationCode) => {
         let clientFullname = studentData['fullname'];
         let clientPhone = studentData['phone'];
         let clientPaySum = studentData['pay_sum'];
+        let clientPromocode = studentData['promocode'];
         let subcourseId = studentData['subcourse_id'];
         let subcourseTitle = results.rows[0]['subcourse_title'];
         let subcourseSchedule = results.rows[0]['schedule'];
@@ -751,60 +752,61 @@ const sendEmailByEmail = (studentData, verificationCode) => {
 
 
         let mailTextForClient = `
-            Уважаемый(-ая) ${clientFullname}, благодарим вас за то, что записались на курс от образовательного центра ${centerName} через Oilan!
+        Уважаемый(-ая) ${clientFullname}, благодарим вас за то, что записались на курс от образовательного центра ${centerName} через Oilan!
 
 
-            Ваш код студента: ${verificationCode}.
-            
-            Укажите данный код у ресепшена ${centerName}, чтобы подтвердить, что вы уже купили курс.
-            
-            
-            Курс, на который вы записались: ${subcourseTitle}.
-            
-            Описание курса: ${subcourseDescription}.
-            
-            Расписание: ${subcourseSchedule}.
-            
-            Образовательный центр: ${centerName}.
-            
-            
-            Желаем вам удачи в обучении!
-            
-            С уважением, команда Oilan.
-            
-            
-            Если возникли вопросы, можете позвонить по номеру: +7 (708) 800-71-77
-            Или написать письмо по адресу: oilanedu@gmail.com
+        Ваш код студента: ${verificationCode}.
+        
+        Укажите данный код у ресепшена ${centerName}, чтобы подтвердить, что вы уже купили курс.
+        
+        
+        Курс, на который вы записались: ${subcourseTitle}.
+        
+        Описание курса: ${subcourseDescription}.
+        
+        Расписание: ${subcourseSchedule}.
+        
+        Образовательный центр: ${centerName}.
+        
+        
+        Желаем вам удачи в обучении!
+        
+        С уважением, команда Oilan.
+        
+        
+        Если возникли вопросы, можете позвонить по номеру: +7 (708) 800-71-77
+        Или написать письмо по адресу: oilanedu@gmail.com
         `;
 
         let mailTextForCenter = `
-            Уважаемые ${centerName}, к вам только что записался новый студент на пробный урок!
+        Уважаемые ${centerName}, к вам только что записался новый студент на пробный урок!
 
-            Код студента: ${verificationCode}.
-            
-            Курс, на который записались: ${subcourseTitle}.
-            
-            Описание курса: ${subcourseDescription}.
-            
-            Расписание: ${subcourseSchedule}.  
-            
-            
-
-            Данные о студенте:
-            
-            ФИО: ${clientFullname}.
-            Номер телефона: ${clientPhone}.
-            Email: ${clientEmail}.
+        Код студента: ${verificationCode}.
         
-            Свяжитесь с вашим новым студентом, и обсудите детали курса :)
-            
-            
-            Желаем вам плодотворной работы!
-            С уважением, команда Oilan.
-            
-            
-            Если возникли вопросы, можете позвонить по номеру: +7 (708) 800-71-77
-            Или написать письмо по адресу: oilanedu@gmail.com
+        Курс, на который записались: ${subcourseTitle}.
+        
+        Описание курса: ${subcourseDescription}.
+        
+        Расписание: ${subcourseSchedule}.  
+        
+        
+
+        Данные о студенте:
+        
+        ФИО: ${clientFullname}.
+        Номер телефона: ${clientPhone}.
+        Email: ${clientEmail}.
+        Введенный промокод: ${clientPromocode}.
+    
+        Свяжитесь с вашим новым студентом, и обсудите детали курса :)
+        
+        
+        Желаем вам плодотворной работы!
+        С уважением, команда Oilan.
+        
+        
+        Если возникли вопросы, можете позвонить по номеру: +7 (708) 800-71-77
+        Или написать письмо по адресу: oilanedu@gmail.com
         `;
 
         let mailOptionsForClient = {
