@@ -3,6 +3,13 @@ import bodyParser from 'body-parser'
 const app = express()
 import db from './queries.js'
 import cors from 'cors'
+import fs from"fs";
+import path from"path";
+import multer from "multer";
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 app.use(cors())
 
@@ -71,7 +78,59 @@ app.post('/courseCardsFilter', db.courseCardsFilter)
 app.post('/logUserClick', db.logUserClick)
 app.post('/newStudent', db.handleNewStudent)
 
-let port = process.env.PORT === undefined ? 3001 : process.env.PORT;
+
+
+
+
+app.use(express.static(__dirname + "dev\\goco-backend\\public"))
+
+const handleError = (err, res) => {
+    res
+        .status(500)
+        .contentType("text/plain")
+        .end("Oops! Something went wrong!");
+};
+
+const upload = multer({
+    dest: "./tempFiles"
+});
+
+app.get("/file", (request, response) => {
+    response.sendFile("C:\\dev\\goco-backend\\public\\index.html")
+});
+
+app.get("/file/:filename", (req, res) => {
+    let filename = req.params.filename;
+    res.sendFile(path.join(__dirname, "./uploads/" + filename));
+});
+
+app.post(
+    "/file/upload",
+    upload.single("file" /* name attribute of <file> element in your form */),
+    (req, res) => {
+        const tempPath = req.file.path;
+
+        let randomPostfix = (Math.floor(Math.random() * 1000000) + 1).toString();
+
+        let targetPathWithoutExt = path.join(__dirname, `./uploads/${randomPostfix}`);
+        let targetPath =  targetPathWithoutExt + path.extname(req.file.originalname);
+        fs.rename(tempPath, targetPath, err => {
+            if (err) return handleError(err, res);
+
+            res
+                .status(200)
+                .contentType("text/plain")
+                .end(targetPath);
+
+	    console.log("new uploaded file target path: " + targetPath);
+        });
+    }
+);
+
+
+
+
+let port = process.env.PORT === undefined ? 3030 : process.env.PORT;
 
 app.listen(port, () => {
     console.log(`Goco backend running on port ${port}.`)
