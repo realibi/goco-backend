@@ -919,9 +919,9 @@ const courseCardsFilter = (request, response) => {
 
     if(center !== 0){
         if(whereAdded){
-            queryText += " where ";
-        }else{
             queryText += " and ";
+        }else{
+            queryText += " where ";
         }
 
         queryText += "subcourses.course_id=" + center;
