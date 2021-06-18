@@ -1001,6 +1001,7 @@ const logUserClick = (request, response) => {
 //----------------------------------------------------------
 
 const login = (request, response) => {
+    console.log("login handler");
     const { login, password } = request.body
     let userFound = false;
     pool.query('SELECT id from courses where login=$1 and password=$2', [login, password], (error, results) => {
