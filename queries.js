@@ -1000,7 +1000,22 @@ const logUserClick = (request, response) => {
 
 //----------------------------------------------------------
 
+const login = (request, response) => {
+    const { login, password } = request.body
+    let userFound = false;
+    pool.query('SELECT id from courses where login=$1 and password=$2', [login, password], (error, results) => {
+        if (error) {
+            throw error
+        }
+        console.log("id: " + results.rows[0]['id'])
+        //response.status(200).json(results.rows[0]['id'])
+    })
+
+    response.send();
+}
+
 export default {
+    login,
     handleNewStudent,
     logUserClick,
     courseCardsFilter,
