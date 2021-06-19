@@ -1009,10 +1009,10 @@ const login = (request, response) => {
             throw error
         }
         console.log("id: " + results.rows[0]['id'])
-        //response.status(200).json(results.rows[0]['id'])
+        response.status(200).send(results.rows[0]['id'])
     })
 
-    response.send();
+    response.status(501).send();
 }
 
 export default {
