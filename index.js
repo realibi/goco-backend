@@ -42,7 +42,7 @@ app.put('/feedbacks/:id', db.updateFeedback)
 app.delete('/feedbacks/:id', db.deleteFeedback)
 app.get('/courses', db.getCourses)
 app.get('/courses/:id', db.getCourseById)
-app.get('/courses/:categoryId', db.getCoursesByCategory)
+//app.get('/courses/:categoryId', db.getCoursesByCategory)
 app.post('/courses/register', db.createCourse)
 app.put('/courses/:id', db.updateCourse)
 app.delete('/courses/:id', db.deleteCourse)
@@ -77,7 +77,14 @@ app.post('/handlePayment', db.handlePaymentPost)
 app.post('/courseCardsFilter', db.courseCardsFilter)
 app.post('/logUserClick', db.logUserClick)
 app.post('/newStudent', db.handleNewStudent)
+app.get('/cabinetInfo', db.getCabinetInfo);
+app.get('/adminCards', db.getAdminCards);
+app.get('/adminTeachers', db.getAdminTeachers);
 app.post('/login', db.login)
+app.post('/approveCard', db.approveCard)
+app.post('/declineCard', db.declineCard)
+app.post('/approveTeacher', db.approveTeacher)
+app.post('/declineTeacher', db.declineTeacher)
 
 
 

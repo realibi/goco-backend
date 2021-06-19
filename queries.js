@@ -459,7 +459,7 @@ const getTeachers = (request, response) => {
 const getCourseTeachers = (request, response) => {
     const id = parseInt(request.params.id)
 
-    pool.query('SELECT * FROM teachers where course_id = $1', [id], (error, results) => {
+    pool.query('SELECT * FROM teachers where course_id = $1 and approved=true', [id], (error, results) => {
         if (error) {
             throw error
         }
@@ -521,7 +521,7 @@ const deleteTeacher = (request, response) => {
 //---------------------------------------------------------------------------------
 
 const getCourseCards = (request, response) => {
-    pool.query('SELECT subcourses.id, subcourses.isonline, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.phones, courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id', [], (error, results) => {
+    pool.query('SELECT subcourses.id, subcourses.isonline, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.phones, courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.approved=true', [], (error, results) => {
         if (error) {
             throw error
         }
@@ -544,14 +544,14 @@ const getCourseCardsByCategoryId = (request, response) => {
     const categoryId = parseInt(request.params.categoryId)
 
     if(categoryId === 0){
-        pool.query('SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id', [], (error, results) => {
+        pool.query('SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.approved=true', [], (error, results) => {
             if (error) {
                 throw error
             }
             response.status(200).json(results.rows)
         })
     }else{
-        pool.query('SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.category_id = $1', [categoryId], (error, results) => {
+        pool.query('SELECT subcourses.id, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.category_id = $1 and subcourses.approved=true', [categoryId], (error, results) => {
             if (error) {
                 throw error
             }
@@ -1008,14 +1008,121 @@ const login = (request, response) => {
         if (error) {
             throw error
         }
-        console.log("id: " + results.rows[0]['id'])
-        response.status(200).send(results.rows[0]['id'])
+        if(results.rows[0] !== undefined){
+            response.status(200).send(results.rows[0]);
+        }
+        else{
+            response.sendStatus(401)
+        }
     })
+}
 
-    response.status(501).send();
+//----------------------------------------------------------
+
+const getCabinetInfo = (request, response) => {
+    console.log("getCabinetInfo handler");
+    const id = parseInt(request.params.id)
+
+    pool.query('SELECT id from courses where login=$1 and password=$2', [login, password], (error, results) => {
+        if (error) {
+            throw error
+        }
+        if(results.rows[0] !== undefined){
+            response.status(200).send(results.rows[0]);
+        }
+        else{
+            response.sendStatus(401)
+        }
+    })
+}
+
+//----------------------------------------------------------
+
+const getAdminCards = (request, response) => {
+    pool.query('SELECT subcourses.id, subcourses.isonline, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.phones, courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where approved=false and declined=false', [], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const getAdminTeachers = (request, response) => {
+    pool.query('SELECT * FROM teachers where approved=false and declined=false', (error, results) => {
+        if (error) {
+            throw error
+        }
+        console.log('partnership_requests sent');
+        response.status(200).json(results.rows)
+    })
+}
+
+//------------------------------------------------------------------
+
+const approveCard = (request, response) => {
+    const { cardId } = request.body
+    pool.query(
+        'UPDATE subcourses SET approved = true, declined = false WHERE id = $1',
+        [cardId],
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).send(`Card modified with ID: ${cardId}`)
+        }
+    )
+}
+
+const declineCard = (request, response) => {
+    const { cardId } = request.body
+    pool.query(
+        'UPDATE subcourses SET approved = false, declined = true WHERE id = $1',
+        [cardId],
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).send(`Card modified with ID: ${cardId}`)
+        }
+    )
+}
+
+const approveTeacher = (request, response) => {
+    const { cardId } = request.body
+    pool.query(
+        'UPDATE teachers SET approved = true, declined = false WHERE id = $1',
+        [cardId],
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).send(`teacher modified with ID: ${cardId}`)
+        }
+    )
+}
+
+const declineTeacher = (request, response) => {
+    const { cardId } = request.body
+    pool.query(
+        'UPDATE teachers SET approved = false, declined = true WHERE id = $1',
+        [cardId],
+        (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).send(`teacher modified with ID: ${cardId}`)
+        }
+    )
 }
 
 export default {
+    approveTeacher,
+    declineTeacher,
+    approveCard,
+    declineCard,
+    getAdminCards,
+    getAdminTeachers,
+    getCabinetInfo,
     login,
     handleNewStudent,
     logUserClick,
