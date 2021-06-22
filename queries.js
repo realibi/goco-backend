@@ -1115,7 +1115,20 @@ const declineTeacher = (request, response) => {
     )
 }
 
+//---------------------------------------------------------------------------
+
+const getCabinetCourseCards = (request, response) => {
+    const { courseId } = request.body
+    pool.query('SELECT subcourses.id, subcourses.isonline, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.phones, courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.course_id=$1 order by subcourses.title', [courseId], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 export default {
+    getCabinetCourseCards,
     approveTeacher,
     declineTeacher,
     approveCard,

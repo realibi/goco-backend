@@ -85,6 +85,7 @@ app.post('/approveCard', db.approveCard)
 app.post('/declineCard', db.declineCard)
 app.post('/approveTeacher', db.approveTeacher)
 app.post('/declineTeacher', db.declineTeacher)
+app.post('/cabinetCourseCards', db.getCabinetCourseCards)
 
 
 
