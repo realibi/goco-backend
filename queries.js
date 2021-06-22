@@ -1127,7 +1127,35 @@ const getCabinetCourseCards = (request, response) => {
     })
 }
 
+//---------------------------------------------------------------
+
+const createCourseCard = (request, response) => {
+    const {
+        courseId,
+        title,
+        description,
+        expectedResult,
+        startRequirements,
+        duration,
+        ages,
+        type,
+        isonline,
+        price,
+        currency,
+        unitOfTime,
+        schedule
+    } = request.body
+
+    pool.query('INSERT INTO subcourses (course_id, title, description, price, schedule, duration, ages, expected_result, start_requirements, type, isonline, approved, declined, currency, unit_of_time) VALUES ($1, $2, $3, $4)', [courseId, title, description, price, schedule, duration, ages, expectedResult, startRequirements, type, isonline, false, false, currency, unitOfTime], (error, result) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).send(`Subcourse added with ID: ${result.insertId}`)
+    })
+}
+
 export default {
+    createCourseCard,
     getCabinetCourseCards,
     approveTeacher,
     declineTeacher,
