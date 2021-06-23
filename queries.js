@@ -195,7 +195,7 @@ const getCourseSubcourses = (request, response) => {
 
     console.log("course id: " + courseId);
 
-    pool.query('SELECT * FROM subcourses WHERE course_id = $1', [courseId], (error, results) => {
+    pool.query('SELECT * FROM subcourses join courses on subcourses.course_id = courses.id WHERE course_id = $1', [courseId], (error, results) => {
         if (error) {
             throw error
         }
