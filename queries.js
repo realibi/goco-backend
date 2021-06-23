@@ -1154,7 +1154,19 @@ const createCourseCard = (request, response) => {
     })
 }
 
+const getCabinetCourseTeachers = () => {
+    const { courseId } = request.body
+    pool.query('SELECT * FROM teachers where course_id=$1', [ courseId ],  (error, results) => {
+        if (error) {
+            throw error
+        }
+        console.log('partnership_requests sent');
+        response.status(200).json(results.rows)
+    })
+}
+
 export default {
+    getCabinetCourseTeachers,
     createCourseCard,
     getCabinetCourseCards,
     approveTeacher,
