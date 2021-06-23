@@ -1146,7 +1146,7 @@ const createCourseCard = (request, response) => {
         schedule
     } = request.body
 
-    pool.query('INSERT INTO subcourses (course_id, title, description, price, schedule, duration, ages, expected_result, start_requirements, type, isonline, approved, declined, currency, unit_of_time) VALUES ($1, $2, $3, $4)', [courseId, title, description, price, schedule, duration, ages, expectedResult, startRequirements, type, isonline === "true", false, false, currency, unitOfTime], (error, result) => {
+    pool.query('INSERT INTO subcourses (course_id, title, description, price, schedule, duration, ages, expected_result, start_requirements, type, isonline, approved, declined, currency, unit_of_time) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)', [courseId, title, description, price, schedule, duration, ages, expectedResult, startRequirements, type, isonline === "true", false, false, currency, unitOfTime], (error, result) => {
         if (error) {
             throw error
         }
