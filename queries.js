@@ -1154,6 +1154,22 @@ const createCourseCard = (request, response) => {
     })
 }
 
+const createCourseTeacher = () => {
+    const {
+        fullname,
+        description,
+        img_url,
+        course_id
+    } = request.body
+
+    pool.query('INSERT INTO teachers (fullname, description, img_url, course_id, approved, declined) VALUES ($1, $2, $3, $4, $5, $6)', [fullname, description, img_url, course_id, false, false], (error, result) => {
+        if (error) {
+            throw error
+        }
+        response.status(201).send(`teacher added with ID: ${result.id}`)
+    })
+}
+
 const getCabinetCourseTeachers = () => {
     const { courseId } = request.body
     pool.query('SELECT * FROM teachers where course_id=$1', [ courseId ],  (error, results) => {
@@ -1166,6 +1182,7 @@ const getCabinetCourseTeachers = () => {
 }
 
 export default {
+    createCourseTeacher,
     getCabinetCourseTeachers,
     createCourseCard,
     getCabinetCourseCards,
