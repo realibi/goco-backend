@@ -1154,7 +1154,7 @@ const createCourseCard = (request, response) => {
     })
 }
 
-const createCourseTeacher = () => {
+const createCourseTeacher = (request, response) => {
     const {
         fullname,
         description,
