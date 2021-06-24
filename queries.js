@@ -1170,7 +1170,7 @@ const createCourseTeacher = (request, response) => {
     })
 }
 
-const getCabinetCourseTeachers = () => {
+const getCabinetCourseTeachers = (request, response) => {
     const { courseId } = request.body
     pool.query('SELECT * FROM teachers where course_id=$1', [ courseId ],  (error, results) => {
         if (error) {
