@@ -1181,7 +1181,32 @@ const getCabinetCourseTeachers = (request, response) => {
     })
 }
 
+const getFilters = (request, response) => {
+    let filtersArray = [];
+    pool.query('SELECT * FROM cities',  (error, results) => {
+        if (error) {
+            throw error
+        }
+        filtersArray.push(results.rows);
+    })
+    pool.query('SELECT * FROM course_categories',  (error, results) => {
+        if (error) {
+            throw error
+        }
+        filtersArray.push(results.rows);
+    })
+    pool.query('SELECT * FROM courses',  (error, results) => {
+        if (error) {
+            throw error
+        }
+        filtersArray.push(results.rows);
+    })
+
+    response.status(200).json(filtersArray)
+}
+
 export default {
+    getFilters,
     createCourseTeacher,
     getCabinetCourseTeachers,
     createCourseCard,

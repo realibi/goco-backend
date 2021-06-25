@@ -89,6 +89,7 @@ app.post('/cabinetCourseCards', db.getCabinetCourseCards)
 app.post('/cabinetCourseTeachers', db.getCabinetCourseTeachers)
 app.post('/createCourseCard', db.createCourseCard)
 app.post('/createCourseTeacher', db.createCourseTeacher)
+app.post('/filters', db.getFilters)
 
 
 
