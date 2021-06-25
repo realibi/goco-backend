@@ -1183,29 +1183,30 @@ const getCabinetCourseTeachers = (request, response) => {
 
 const getFilters = (request, response) => {
     let filtersArray = [];
-    pool.query('SELECT * FROM cities',  (error, results) => {
+    pool.query('SELECT * FROM cities',  (error, citiesResult) => {
+        console.log("cities select")
         if (error) {
             throw error
         }
-        console.log(`cities: ${JSON.stringify(results.rows)}`);
-        filtersArray.push(results.rows);
-    })
-    pool.query('SELECT * FROM course_categories',  (error, results) => {
-        if (error) {
-            throw error
-        }
-        console.log(`categories: ${JSON.stringify(results.rows)}`);
-        filtersArray.push(results.rows);
-    })
-    pool.query('SELECT * FROM courses',  (error, results) => {
-        if (error) {
-            throw error
-        }
-        console.log(`courses: ${JSON.stringify(results.rows)}`);
-        filtersArray.push(results.rows);
-    })
+        pool.query('SELECT * FROM course_categories',  (error, categoriesResult) => {
+            console.log("course_categories select")
+            if (error) {
+                throw error
+            }
+            pool.query('SELECT * FROM courses',  (error, coursesResult) => {
+                console.log("courses select")
+                if (error) {
+                    throw error
+                }
+                filtersArray.push(citiesResult.rows);
+                filtersArray.push(categoriesResult.rows);
+                filtersArray.push(coursesResult.rows);
 
-    response.status(200).json(filtersArray)
+                console.log(filtersArray);
+                response.status(200).json(filtersArray)
+            })
+        })
+    })
 }
 
 export default {
