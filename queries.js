@@ -1187,18 +1187,21 @@ const getFilters = (request, response) => {
         if (error) {
             throw error
         }
+        console.log(`cities: ${JSON.stringify(results.rows)}`);
         filtersArray.push(results.rows);
     })
     pool.query('SELECT * FROM course_categories',  (error, results) => {
         if (error) {
             throw error
         }
+        console.log(`categories: ${JSON.stringify(results.rows)}`);
         filtersArray.push(results.rows);
     })
     pool.query('SELECT * FROM courses',  (error, results) => {
         if (error) {
             throw error
         }
+        console.log(`courses: ${JSON.stringify(results.rows)}`);
         filtersArray.push(results.rows);
     })
 
