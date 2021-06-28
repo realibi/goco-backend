@@ -1209,7 +1209,16 @@ const getFilters = (request, response) => {
     })
 }
 
+//--------------------------------------------------------
+
+const registerTelegramUser = (request, response) => {
+    const { code, chat_id } = request.body;
+    const responseMessage = `Сервер принял code=${code}, chat_id=${chat_id}`;
+    response.status(200).send(responseMessage);
+}
+
 export default {
+    registerTelegramUser,
     getFilters,
     createCourseTeacher,
     getCabinetCourseTeachers,

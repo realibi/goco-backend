@@ -90,6 +90,7 @@ app.post('/cabinetCourseTeachers', db.getCabinetCourseTeachers)
 app.post('/createCourseCard', db.createCourseCard)
 app.post('/createCourseTeacher', db.createCourseTeacher)
 app.get('/filters', db.getFilters)
+app.post('/registerTelegramUser', db.registerTelegramUser)
 
 
 
