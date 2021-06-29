@@ -1198,17 +1198,14 @@ const getCabinetCourseTeachers = (request, response) => {
 const getFilters = (request, response) => {
     let filtersArray = [];
     pool.query('SELECT * FROM cities',  (error, citiesResult) => {
-        console.log("cities select")
         if (error) {
             throw error
         }
         pool.query('SELECT * FROM course_categories',  (error, categoriesResult) => {
-            console.log("course_categories select")
             if (error) {
                 throw error
             }
             pool.query('SELECT * FROM courses',  (error, coursesResult) => {
-                console.log("courses select")
                 if (error) {
                     throw error
                 }
@@ -1216,7 +1213,6 @@ const getFilters = (request, response) => {
                 filtersArray.push(categoriesResult.rows);
                 filtersArray.push(coursesResult.rows);
 
-                console.log(filtersArray);
                 response.status(200).json(filtersArray)
             })
         })
