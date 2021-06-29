@@ -1222,7 +1222,7 @@ const getFilters = (request, response) => {
 const registerTelegramUser = (request, response) => {
     const { code, chat_id } = request.body;
     const responseMessage = `Сервер принял code=${code}, chat_id=${chat_id}`;
-    sendTelegramMessage(chat_id, responseMessage);
+    sendTelegramMessage(chat_id, "lolo");
     response.status(200).send(responseMessage);
 }
 
