@@ -48,8 +48,13 @@ teleBot.on(['/register'], (msg, match) => {
 const sendTelegramMessage = (chat_id, message) => {
     const token = "1618943992:AAEWsKDdD9_VWvpcPHNjGFs8WpQBDJ93JbA";
     chat_id = "567414370";
-    let url_req = "https://api.telegram.org/bot" + token + "/sendMessage" + "?chat_id=" + chat_id + "&text=" + message;
-    axios.get(url_req).then(res => console.log("res: " + JSON.stringify(res)));
+    //let url_req = "https://api.telegram.org/bot" + token + "/sendMessage" + "?chat_id=" + chat_id + "&text=" + message;
+    let url_req = "https://api.telegram.org/bot" + token + "/sendMessage";
+    let data = {
+      chat_id: chat_id,
+      text: message
+    };
+    axios.post(url_req, data).then(res => console.log("res: " + JSON.stringify(res)));
 }
 
 const sendClientInfoNotification = (subcourse_id, client) => {
