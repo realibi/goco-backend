@@ -3,8 +3,7 @@ import TelegramBot from 'node-telegram-bot-api'
 import nodemailer from 'nodemailer';
 import moment from 'moment'
 import TeleBot from 'telebot'
-//import axios from "axios".default;
-const axios = require('axios').default;
+import axios from "axios";
 
 moment.locale('ru');
 
