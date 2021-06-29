@@ -54,7 +54,8 @@ const sendTelegramMessage = (chat_id, message) => {
       chat_id: chat_id,
       text: message
     };
-    axios.post(url_req, data).then(res => console.log("res: " + JSON.stringify(res)));
+    console.log("res:");
+    axios.post(url_req, data).then(res => console.log(res));
 }
 
 const sendClientInfoNotification = (subcourse_id, client) => {
