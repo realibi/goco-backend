@@ -91,6 +91,7 @@ app.post('/createCourseCard', db.createCourseCard)
 app.post('/createCourseTeacher', db.createCourseTeacher)
 app.get('/filters', db.getFilters)
 app.post('/registerTelegramUser', db.registerTelegramUser)
+app.post('/courseCategories', db.getCourseCategories);
 
 
 

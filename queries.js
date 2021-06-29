@@ -1232,7 +1232,17 @@ const registerTelegramUser = (request, response) => {
     response.status(200).send(responseMessage);
 }
 
+const getCourseCategories = (request, response) => {
+    pool.query('SELECT * FROM course_categories',  (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 export default {
+    getCourseCategories,
     registerTelegramUser,
     getFilters,
     createCourseTeacher,
