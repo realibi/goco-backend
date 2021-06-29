@@ -3,6 +3,7 @@ import TelegramBot from 'node-telegram-bot-api'
 import nodemailer from 'nodemailer';
 import moment from 'moment'
 import TeleBot from 'telebot'
+import axios from "axios";
 
 moment.locale('ru');
 
@@ -43,6 +44,13 @@ teleBot.on(['/register'], (msg, match) => {
     //users.push(chatId)
     teleBot.sendMessage(chatId, 'Done.')
 })
+
+const sendTelegramMessage = (chat_id, message) => {
+    const token = "1618943992:AAEWsKDdD9_VWvpcPHNjGFs8WpQBDJ93JbA";
+    chat_id = "567414370";
+    let url_req = "https://api.telegram.org/bot" + token + "/sendMessage" + "?chat_id=" + chat_id + "&text=" + message;
+    axios.get(url_req).then(res => console.log("res: " + JSON.stringify(res)));
+}
 
 const sendClientInfoNotification = (subcourse_id, client) => {
     pool.query('SELECT * FROM subcourses WHERE id = $1', [subcourse_id], (error, subcoursesResults) => {
@@ -1214,6 +1222,7 @@ const getFilters = (request, response) => {
 const registerTelegramUser = (request, response) => {
     const { code, chat_id } = request.body;
     const responseMessage = `Сервер принял code=${code}, chat_id=${chat_id}`;
+    sendTelegramMessage(chat_id, responseMessage);
     response.status(200).send(responseMessage);
 }
 
