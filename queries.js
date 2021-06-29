@@ -1233,6 +1233,7 @@ const registerTelegramUser = (request, response) => {
 }
 
 const getCourseCategories = (request, response) => {
+    console.log("getCouseCategories handler");
     pool.query('SELECT * FROM course_categories',  (error, results) => {
         if (error) {
             throw error
