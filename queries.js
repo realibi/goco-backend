@@ -920,6 +920,14 @@ const courseCardsFilter = (request, response) => {
         queryText += " where courses.city_id=" + city;
     }
 
+    if(whereAdded){
+        queryText += " and ";
+    }else{
+        whereAdded = true;
+        queryText += " where ";
+    }
+    queryText += "subcourses.approved=true";
+
     if(direction !== 0){
         if(whereAdded){
             queryText += " and ";
