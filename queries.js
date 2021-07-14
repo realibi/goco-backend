@@ -1247,7 +1247,34 @@ const getCourseCategories = (request, response) => {
     })
 }
 
+const sendEditCard = (request, response) => {
+    const {
+        id,
+        title,
+        description,
+        price,
+        schedule,
+        duration,
+        category_id,
+        ages,
+        format,
+        expected_result,
+        start_requirements,
+        type,
+        currency,
+        unit_of_time
+    } = request.body;
+
+    pool.query('INSERT INTO editing_coursecards (subcourse_id, title, description, price, schedule, duration, category_id, ages, format, expected_result, start_requirements, type, isonline, currency, unit_of_time) VALUES ($1, $2, $3, $4, $5, $6)', [id, title, description, price, schedule, duration, category_id, ages, format, expected_result, start_requirements, type, format === "Online", currency, unit_of_time], (error, result) => {
+        if (error) {
+            throw error
+        }
+        response.status(201).send(`editing_coursecards added with ID: ${result.id}`)
+    })
+}
+
 export default {
+    sendEditCard,
     getCourseCategories,
     registerTelegramUser,
     getFilters,
