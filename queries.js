@@ -1265,7 +1265,7 @@ const sendEditCard = (request, response) => {
         unit_of_time
     } = request.body;
 
-    pool.query('INSERT INTO editing_coursecards (subcourse_id, title, description, price, schedule, duration, category_id, ages, format, expected_result, start_requirements, type, isonline, currency, unit_of_time) VALUES ($1, $2, $3, $4, $5, $6)', [id, title, description, price, schedule, duration, category_id, ages, format, expected_result, start_requirements, type, format === "Online", currency, unit_of_time], (error, result) => {
+    pool.query('INSERT INTO editing_coursecards (subcourse_id, title, description, price, schedule, duration, category_id, ages, format, expected_result, start_requirements, type, isonline, currency, unit_of_time) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)', [id, title, description, price, schedule, duration, category_id, ages, format, expected_result, start_requirements, type, format === "Online", currency, unit_of_time], (error, result) => {
         if (error) {
             throw error
         }
