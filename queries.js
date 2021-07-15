@@ -1275,7 +1275,7 @@ const sendEditCard = (request, response) => {
 }
 
 const getEditCards = (request, response) => {
-    pool.query('SELECT id, subcourse_id, title as "course_title", description, price, schedule, duration, rating, category_id, ages, format, expected_result, start_requirements, type, isonline, approved, declined, currency, unit_of_time, course_id FROM editing_coursecards join courses on courses.id = editing_coursecards.course_id',  (error, results) => {
+    pool.query('SELECT id as "edit_card_id", subcourse_id, title as "course_title", description, price, schedule, duration, rating, category_id, ages, format, expected_result, start_requirements, type, isonline, approved, declined, currency, unit_of_time, course_id FROM editing_coursecards join courses on courses.id = editing_coursecards.course_id',  (error, results) => {
         if (error) {
             throw error
         }
