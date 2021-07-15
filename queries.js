@@ -1250,6 +1250,7 @@ const getCourseCategories = (request, response) => {
 const sendEditCard = (request, response) => {
     const {
         id,
+        course_id,
         title,
         description,
         price,
@@ -1265,7 +1266,7 @@ const sendEditCard = (request, response) => {
         unit_of_time
     } = request.body;
 
-    pool.query('INSERT INTO editing_coursecards (subcourse_id, title, description, price, schedule, duration, category_id, ages, format, expected_result, start_requirements, type, isonline, currency, unit_of_time) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)', [id, title, description, price, schedule, duration, category_id, ages, format, expected_result, start_requirements, type, format === "Online", currency, unit_of_time], (error, result) => {
+    pool.query('INSERT INTO editing_coursecards (subcourse_id, course_id, title, description, price, schedule, duration, category_id, ages, format, expected_result, start_requirements, type, isonline, currency, unit_of_time) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)', [id, course_id, title, description, price, schedule, duration, category_id, ages, format, expected_result, start_requirements, type, format === "Online", currency, unit_of_time], (error, result) => {
         if (error) {
             throw error
         }
@@ -1274,7 +1275,7 @@ const sendEditCard = (request, response) => {
 }
 
 const getEditCards = (request, response) => {
-    pool.query('SELECT editing_coursecards.subcourse_id , editing_coursecards.title , editing_coursecards.description , editing_coursecards.price , editing_coursecards.schedule , editing_coursecards.duration , editing_coursecards.rating , editing_coursecards.category_id , editing_coursecards. , editing_coursecards.ages , editing_coursecards.format , editing_coursecards.expected_result , editing_coursecards.start_requirements , editing_coursecards.type , editing_coursecards.isonline , editing_coursecards.approved , editing_coursecards.declined , editing_coursecards.currency , editing_coursecards.unit_of_time FROM editing_coursecards join subcourses on subcourses.id = subcourses.course_id join courses on courses.id = subcourses.course_id',  (error, results) => {
+    pool.query('SELECT * FROM editing_coursecards join subcourses on subcourses.id = subcourses.course_id join courses on courses.id = subcourses.course_id',  (error, results) => {
         if (error) {
             throw error
         }
