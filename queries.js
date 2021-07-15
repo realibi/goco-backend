@@ -1274,7 +1274,7 @@ const sendEditCard = (request, response) => {
 }
 
 const getEditCards = (request, response) => {
-    pool.query('SELECT * FROM editing_coursecards join subcourses on subcourses.id = subcourses.course_id join courses on courses.id = subcourses.course_id',  (error, results) => {
+    pool.query('SELECT editing_coursecards.subcourse_id , editing_coursecards.title , editing_coursecards.description , editing_coursecards.price , editing_coursecards.schedule , editing_coursecards.duration , editing_coursecards.rating , editing_coursecards.category_id , editing_coursecards. , editing_coursecards.ages , editing_coursecards.format , editing_coursecards.expected_result , editing_coursecards.start_requirements , editing_coursecards.type , editing_coursecards.isonline , editing_coursecards.approved , editing_coursecards.declined , editing_coursecards.currency , editing_coursecards.unit_of_time FROM editing_coursecards join subcourses on subcourses.id = subcourses.course_id join courses on courses.id = subcourses.course_id',  (error, results) => {
         if (error) {
             throw error
         }
