@@ -1273,7 +1273,17 @@ const sendEditCard = (request, response) => {
     })
 }
 
+const getEditCards = (request, response) => {
+    pool.query('SELECT * FROM editing_coursecards',  (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 export default {
+    getEditCards,
     sendEditCard,
     getCourseCategories,
     registerTelegramUser,

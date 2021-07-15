@@ -93,6 +93,7 @@ app.get('/filters', db.getFilters)
 app.post('/registerTelegramUser', db.registerTelegramUser)
 app.post('/courseCategories', db.getCourseCategories);
 app.post('/sendEditCard', db.sendEditCard)
+app.get('/editCards', db.getEditCards)
 
 
 
