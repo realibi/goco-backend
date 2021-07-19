@@ -1283,7 +1283,50 @@ const getEditCards = (request, response) => {
     })
 }
 
+const getClickStatistics = (request, response) => {
+    let { centerName } = request.body;
+
+    pool.query('SELECT \n' +
+        '\t(SELECT count(id)\n' +
+        '\tFROM public.clicks_log\n' +
+        '\tWHERE coursetitle=$1 and eventname=\'О курсе\') as "o_kurse",\n' +
+        '\t(\n' +
+        '\t\tSELECT \n' +
+        '\t\t((SELECT count(id)\n' +
+        '\t\tFROM public.clicks_log\n' +
+        '\t\tWHERE coursetitle=$1 and eventname=\'Записаться\') +\n' +
+        '\t\t(SELECT count(id)\n' +
+        '\t\tFROM public.clicks_log\n' +
+        '\t\tWHERE coursetitle=$1 and eventname=\'Отправить заявку\')) as "otpravit_zayavku"\n' +
+        '\t),\n' +
+        '\t(\n' +
+        '\t\tSELECT \n' +
+        '\t\t((SELECT count(id)\n' +
+        '\t\tFROM public.clicks_log\n' +
+        '\t\tWHERE coursetitle=$1 and eventname=\'Показать больше\') +\n' +
+        '\t\t(SELECT count(id)\n' +
+        '\t\tFROM public.clicks_log\n' +
+        '\t\tWHERE coursetitle=$1 and eventname=\'Подробнее\')) as "pokazat_bolshe"\n' +
+        '\t),\n' +
+        '\t(SELECT count(id)\n' +
+        '\tFROM public.clicks_log\n' +
+        '\tWHERE coursetitle=$1 and eventname=\'Номер телефона\') as "nomer_telefona",\n' +
+        '\t(SELECT count(id)\n' +
+        '\tFROM public.clicks_log\n' +
+        '\tWHERE coursetitle=$1 and eventname=\'Website\') as "website",\n' +
+        '\t(SELECT count(id)\n' +
+        '\tFROM public.clicks_log\n' +
+        '\tWHERE coursetitle=$1 and eventname=\'Instagram\') as "instagram"\n' +
+        '\t;', [centerName],  (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 export default {
+    getClickStatistics,
     getEditCards,
     sendEditCard,
     getCourseCategories,
