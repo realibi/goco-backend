@@ -1169,11 +1169,19 @@ const createCourseCard = (request, response) => {
         categoryId
     } = request.body
 
-    pool.query('INSERT INTO subcourses (course_id, title, description, price, schedule, duration, ages, expected_result, start_requirements, type, isonline, approved, declined, currency, unit_of_time, category_id, format) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)', [courseId, title, description, price, schedule, duration, ages, expectedResult, startRequirements, type, isonline === "true", false, false, currency, unitOfTime, categoryId, isonline === "true" ? "Online" : "Offline"], (error, result) => {
-        if (error) {
+    pool.query('SELECT * FROM subcourses where course_id=$1', [courseId], function(error, result){
+        if(error){
             throw error
         }
-        response.status(200).send(`Subcourse added with ID: ${result.insertId}`)
+
+        if(result.rows.length < 5){
+            pool.query('INSERT INTO subcourses (course_id, title, description, price, schedule, duration, ages, expected_result, start_requirements, type, isonline, approved, declined, currency, unit_of_time, category_id, format) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)', [courseId, title, description, price, schedule, duration, ages, expectedResult, startRequirements, type, isonline === "true", false, false, currency, unitOfTime, categoryId, isonline === "true" ? "Online" : "Offline"], (error, result) => {
+                if (error) {
+                    throw error
+                }
+                response.status(200).send(`Subcourse added with ID: ${result.insertId}`)
+            })
+        }
     })
 }
 
