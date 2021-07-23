@@ -909,7 +909,7 @@ const createCallRequest = (request, response) => {
 //----------------------------------------------------------
 
 const courseCardsFilter = (request, response) => {
-    const { city, direction, price, center, isOnline } = request.body;
+    const { city, direction, price, center, isOnline, individualLesson, sortType} = request.body;
 
     let whereAdded = false;
 
@@ -994,6 +994,9 @@ const courseCardsFilter = (request, response) => {
         }
     }
 
+    if(sortType !== "0"){
+        queryText += ` order by ${sortType}`;
+    }
 
     console.log("QUERY TEXT: " + queryText);
 
