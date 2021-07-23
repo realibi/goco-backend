@@ -1333,7 +1333,19 @@ const getClickStatistics = (request, response) => {
     })
 }
 
+const cardCreationPermission = (request, response) => {
+    const centerId = parseInt(request.params.centerId)
+
+    pool.query('select count(id) from subcourses where approved=true and course_id=$1', [centerId],  (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows[0].count)
+    })
+}
+
 export default {
+    cardCreationPermission,
     getClickStatistics,
     getEditCards,
     sendEditCard,
