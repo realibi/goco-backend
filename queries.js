@@ -1354,7 +1354,10 @@ const cardCreationPermission = (request, response) => {
                 permitted = true;
             }
 
-            response.status(200).json(permitted);
+            response.status(200).json({
+                permittedCardsCount: permittedCardsCount,
+                permitted: permitted
+            });
         })
     })
 }
