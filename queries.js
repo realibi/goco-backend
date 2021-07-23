@@ -1340,7 +1340,22 @@ const cardCreationPermission = (request, response) => {
         if (error) {
             throw error
         }
-        response.status(200).json(results.rows[0].count)
+        let currentCountOfCards = results.rows[0].count;
+
+        pool.query('select permitted_cards_count from courses where id=$1', [centerId],  (error, results) => {
+            if (error) {
+                throw error
+            }
+            let permittedCardsCount = results.rows[0].permitted_cards_count;
+
+            let permitted = false;
+
+            if(currentCountOfCards < permittedCardsCount){
+                permitted = true;
+            }
+
+            response.status(200).json(permitted);
+        })
     })
 }
 
