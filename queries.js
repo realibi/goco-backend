@@ -909,7 +909,9 @@ const createCallRequest = (request, response) => {
 //----------------------------------------------------------
 
 const courseCardsFilter = (request, response) => {
-    const { city, direction, price, center, isOnline, individualLesson, sortType} = request.body;
+    const { city, direction, price, center, isOnline, sortType} = request.body;
+
+    console.log("sort type: " + sortType);
 
     let whereAdded = false;
 
