@@ -96,6 +96,7 @@ app.post('/sendEditCard', db.sendEditCard)
 app.get('/editCards', db.getEditCards)
 app.post('/getClickStatistics', db.getClickStatistics)
 app.get('/cardCreationPermission/:centerId', db.cardCreationPermission)
+app.get('/loadCallCenterInfo', db.loadCallCenterInfo)
 
 
 

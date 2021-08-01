@@ -1367,7 +1367,20 @@ const cardCreationPermission = (request, response) => {
     })
 }
 
+//-----------------------------------------------------------------
+
+const loadCallCenterInfo = (request, response) => {
+    pool.query('SELECT id, call_center_user_id, center_name, contact_name, center_phone, center_email, first_call_date, first_call_time, first_call_comment, kp_send_date, second_call_date, second_call_time, second_call_comment, meeting_date, meeting_time, saller_user_id, meeting_comitted, meeting_comment, will_conclude_contract, contract_signing_start_date, data_collection_start_date, contarct_send_date, contract_send_comment, contract_agreed, contract_agreement_comment, contract_signed, contract_signed_comment, contract_sign_date, operation_personal_user_id FROM public.crm where center_name is not null', (error, results) => {
+        if (error) {
+            throw error
+        }
+
+        response.status(200).json(results.rows);
+    })
+}
+
 export default {
+    loadCallCenterInfo,
     cardCreationPermission,
     getClickStatistics,
     getEditCards,
