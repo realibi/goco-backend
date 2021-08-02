@@ -98,6 +98,7 @@ app.post('/getClickStatistics', db.getClickStatistics)
 app.get('/cardCreationPermission/:centerId', db.cardCreationPermission)
 app.get('/loadCallCenterInfo', db.loadCallCenterInfo)
 app.get('/loadSallerInfo', db.loadSallerInfo)
+app.post('/updateCallCenterRow', db.updateCallCenterRow)
 
 
 
