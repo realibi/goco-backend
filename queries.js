@@ -1432,7 +1432,7 @@ const updateCallCenterRow = (request, response) => {
                 response.status(200).json(true);
         })
     }else{
-        pool.query('UPDATE public.crm SET center_name=$2, contact_name=$4, center_phone=$3, center_email=$5, first_call_date=$11, first_call_time=$12, first_call_comment=$7, kp_send_date=$6, second_call_date=$14, second_call_time=$13, second_call_comment=$8 WHERE id=$1',
+        pool.query('UPDATE public.crm SET center_name=$2, contact_name=$4, center_phone=$3, center_email=$5, first_call_date=$9, first_call_time=$10, first_call_comment=$7, kp_send_date=$6, second_call_date=$12, second_call_time=$11, second_call_comment=$8 WHERE id=$1',
             [
                 id,
                 companyName,
@@ -1442,8 +1442,6 @@ const updateCallCenterRow = (request, response) => {
                 sendKPDate,
                 firstCallComment,
                 secondCallComment,
-                meetingDate,
-                meetingTime,
                 firstCall,
                 firstCallTime,
                 secondCallTime,
