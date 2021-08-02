@@ -1407,29 +1407,57 @@ const updateCallCenterRow = (request, response) => {
         secondCall
     } = request.body;
 
-    pool.query('UPDATE public.crm SET center_name=$1, contact_name=$4, center_phone=$3, center_email=$5, first_call_date=$11, first_call_time=$12, first_call_comment=$7, kp_send_date=$6, second_call_date=$14, second_call_time=$13, second_call_comment=$8, meeting_date=$9, meeting_time=$10 WHERE id=$1',
-        [
-            id,
-            companyName,
-            phone,
-            contactPerson,
-            mail,
-            sendKPDate,
-            firstCallComment,
-            secondCallComment,
-            meetingDate,
-            meetingTime,
-            firstCall,
-            firstCallTime,
-            secondCallTime,
-            secondCall
-        ], (error, results) => {
-        if (error) {
-            throw error
-        }
+    if(meetingDate !== null && meetingTime !== null){
+        pool.query('UPDATE public.crm SET center_name=$1, contact_name=$4, center_phone=$3, center_email=$5, first_call_date=$11, first_call_time=$12, first_call_comment=$7, kp_send_date=$6, second_call_date=$14, second_call_time=$13, second_call_comment=$8, meeting_date=$9, meeting_time=$10 WHERE id=$1',
+            [
+                id,
+                companyName,
+                phone,
+                contactPerson,
+                mail,
+                sendKPDate,
+                firstCallComment,
+                secondCallComment,
+                meetingDate,
+                meetingTime,
+                firstCall,
+                firstCallTime,
+                secondCallTime,
+                secondCall
+            ], (error, results) => {
+                if (error) {
+                    throw error
+                }
 
-        response.status(200).json(true);
-    })
+                response.status(200).json(true);
+        })
+    }else{
+        pool.query('UPDATE public.crm SET center_name=$1, contact_name=$4, center_phone=$3, center_email=$5, first_call_date=$11, first_call_time=$12, first_call_comment=$7, kp_send_date=$6, second_call_date=$14, second_call_time=$13, second_call_comment=$8 WHERE id=$1',
+            [
+                id,
+                companyName,
+                phone,
+                contactPerson,
+                mail,
+                sendKPDate,
+                firstCallComment,
+                secondCallComment,
+                meetingDate,
+                meetingTime,
+                firstCall,
+                firstCallTime,
+                secondCallTime,
+                secondCall
+            ], (error, results) => {
+                if (error) {
+                    throw error
+                }
+
+                response.status(200).json(true);
+        })
+    }
+
+
 }
 
 export default {
