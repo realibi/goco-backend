@@ -8,8 +8,8 @@ import path from"path";
 import multer from "multer";
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import authMiddleware from '../goco-backend/middleware/authMiddleware.js'
-import roleMiddleware from'../goco-backend/middleware/roleMiddleware.js'
+import authMiddleware from './middleware/authMiddleware.js'
+import roleMiddleware from'./middleware/roleMiddleware.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
