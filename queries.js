@@ -1540,7 +1540,7 @@ const updateSellerRow = (request, response) => {
         categoryId
     } = request.body;
 
-    pool.query('update crm set center_name=$1, contact_name=$2, center_phone=$3, center_email=$4, meeting_date=$5, meeting_time=$6, meeting_comitted=$7, meeting_comment=$8, will_conclude_contract=$9, contract_signing_start_date=$10, center_category_id=$11 where id=$1', [
+    pool.query('update crm set center_name=$2, contact_name=$3, center_phone=$4, center_email=$5, meeting_date=$6, meeting_time=$7, meeting_comitted=$8, meeting_comment=$9, will_conclude_contract=$10, contract_signing_start_date=$11, center_category_id=$12 where id=$1', [
         id,
         companyName,
         contactPerson,
