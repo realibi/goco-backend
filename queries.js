@@ -1524,9 +1524,47 @@ const loadOperationPersonal3Info = (request, response) => {
     })
 }
 
+const updateSellerRow = (request, response) => {
+    const {
+        id,
+        companyName,
+        contactPerson,
+        phone,
+        mail,
+        meetingDate,
+        meetingTime,
+        meetingComitted,
+        meetingComment,
+        contractStatus,
+        contractConclusionDate,
+        categoryId
+    } = request.body;
+
+    pool.query('update crm set center_name=$1, contact_name=$2, center_phone=$3, center_email=$4, meeting_date=$5, meeting_time=$6, meeting_comitted=$7, meeting_comment=$8, will_conclude_contract=$9, contract_signing_start_date=$10, center_category_id=$11 where id=$1', [
+        id,
+        companyName,
+        contactPerson,
+        phone,
+        mail,
+        meetingDate,
+        meetingTime,
+        meetingComitted,
+        meetingComment,
+        contractStatus,
+        contractConclusionDate,
+        categoryId
+    ], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(true)
+    })
+}
+
 export default {
     callCenterAddCenter,
     updateCallCenterRow,
+    updateSellerRow,
     loadSallerInfo,
     loadOperationPersonal1Info,
     loadOperationPersonal2Info,
