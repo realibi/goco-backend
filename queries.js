@@ -1498,7 +1498,7 @@ const getCrmCourseCategories = (request, response) => {
 }
 
 const loadOperationPersonal1Info = (request, response) => {
-    pool.query('SELECT * FROM crm_course_categories where will_conclude_contract=true and contract_signing_start_date is not null',  (error, results) => {
+    pool.query('SELECT * FROM crm where will_conclude_contract=true and contract_signing_start_date is not null',  (error, results) => {
         if (error) {
             throw error
         }
@@ -1507,7 +1507,7 @@ const loadOperationPersonal1Info = (request, response) => {
 }
 
 const loadOperationPersonal2Info = (request, response) => {
-    pool.query('SELECT * FROM crm_course_categories where contract_sign_date is not null',  (error, results) => {
+    pool.query('SELECT * FROM crm where contract_sign_date is not null',  (error, results) => {
         if (error) {
             throw error
         }
@@ -1516,7 +1516,7 @@ const loadOperationPersonal2Info = (request, response) => {
 }
 
 const loadOperationPersonal3Info = (request, response) => {
-    pool.query('SELECT * FROM crm_course_categories where contract_sign_date is not null',  (error, results) => {
+    pool.query('SELECT * FROM crm where contract_sign_date is not null',  (error, results) => {
         if (error) {
             throw error
         }
