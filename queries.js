@@ -4,6 +4,9 @@ import nodemailer from 'nodemailer';
 import moment from 'moment'
 import TeleBot from 'telebot'
 import axios from "axios";
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken'
+import {secret} from "./config.js"
 
 moment.locale('ru');
 
@@ -1027,19 +1030,29 @@ const logUserClick = (request, response) => {
 
 //----------------------------------------------------------
 
+const generateAccessToken = (userId, roleId, centerId) => {
+    const payload = {
+        userId,
+        roleId,
+        centerId
+    }
+    return jwt.sign(payload, secret, {expiresIn: "24h"} )
+}
+
 const login = (request, response) => {
     console.log("login handler");
     const { login, password } = request.body
-    let userFound = false;
-    pool.query('SELECT id from courses where login=$1 and password=$2', [login, password], (error, results) => {
+    pool.query('SELECT * from users where login=$1 and password=$2', [login, password], (error, results) => {
         if (error) {
             throw error
         }
         if(results.rows[0] !== undefined){
-            response.status(200).send(results.rows[0]);
+            let user = results.rows[0];
+            const token = generateAccessToken(user.id, user.role_id, user.center_id)
+            return response.status(200).json({token, centerId: user.center_id})
         }
         else{
-            response.sendStatus(401)
+            return response.status(400).json({message: `Пользователь ${login} не найден`})
         }
     })
 }
@@ -1370,7 +1383,7 @@ const cardCreationPermission = (request, response) => {
 //-----------------------------------------------------------------
 
 const loadCallCenterInfo = (request, response) => {
-    pool.query('SELECT id, call_center_user_id, center_name, contact_name, center_phone, center_email, first_call_date, first_call_time, first_call_comment, kp_send_date, second_call_date, second_call_time, second_call_comment, meeting_date, meeting_time, saller_user_id, meeting_comitted, meeting_comment, will_conclude_contract, contract_signing_start_date, data_collection_start_date, contarct_send_date, contract_send_comment, contract_agreed, contract_agreement_comment, contract_signed, contract_signed_comment, contract_sign_date, operation_personal_user_id FROM public.crm where center_name is not null', (error, results) => {
+    pool.query('SELECT id, center_category_id, call_center_user_id, center_name, contact_name, center_phone, center_email, first_call_date, first_call_time, first_call_comment, kp_send_date, second_call_date, second_call_time, second_call_comment, meeting_date, meeting_time, saller_user_id, meeting_comitted, meeting_comment, will_conclude_contract, contract_signing_start_date, data_collection_start_date, contarct_send_date, contract_send_comment, contract_agreed, contract_agreement_comment, contract_signed, contract_signed_comment, contract_sign_date, operation_personal_user_id FROM public.crm where center_name is not null', (error, results) => {
         if (error) {
             throw error
         }
@@ -1380,7 +1393,7 @@ const loadCallCenterInfo = (request, response) => {
 }
 
 const loadSallerInfo = (request, response) => {
-    pool.query('SELECT id, call_center_user_id, center_name, contact_name, center_phone, center_email, first_call_date, first_call_time, first_call_comment, kp_send_date, second_call_date, second_call_time, second_call_comment, meeting_date, meeting_time, saller_user_id, meeting_comitted, meeting_comment, will_conclude_contract, contract_signing_start_date, data_collection_start_date, contarct_send_date, contract_send_comment, contract_agreed, contract_agreement_comment, contract_signed, contract_signed_comment, contract_sign_date, operation_personal_user_id FROM public.crm where meeting_date is not null', (error, results) => {
+    pool.query('SELECT id, center_category_id, call_center_user_id, center_name, contact_name, center_phone, center_email, first_call_date, first_call_time, first_call_comment, kp_send_date, second_call_date, second_call_time, second_call_comment, meeting_date, meeting_time, saller_user_id, meeting_comitted, meeting_comment, will_conclude_contract, contract_signing_start_date, data_collection_start_date, contarct_send_date, contract_send_comment, contract_agreed, contract_agreement_comment, contract_signed, contract_signed_comment, contract_sign_date, operation_personal_user_id FROM public.crm where meeting_date is not null', (error, results) => {
         if (error) {
             throw error
         }
@@ -1454,19 +1467,77 @@ const updateCallCenterRow = (request, response) => {
                 response.status(200).json(true);
         })
     }
+}
 
+const callCenterAddCenter = (request, response) => {
+    const {
+        companyName,
+        categoryId,
+        phone,
+        contactPerson,
+        mail,
+    } = request.body;
 
+    pool.query('insert into crm(center_name, contact_name, center_phone, center_email, center_category_id) values($1, $2, $3, $4, $5)', [companyName, contactPerson, phone, mail, categoryId], (error, results) => {
+        if (error) {
+            throw error
+        }
+
+        response.status(200).json(true);
+    })
+}
+
+const getCrmCourseCategories = (request, response) => {
+    console.log("getCrmCourseCategories handler");
+    pool.query('SELECT * FROM crm_course_categories',  (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const loadOperationPersonal1Info = (request, response) => {
+    pool.query('SELECT * FROM crm_course_categories where (will_conclude_contract is not null and will_conclude_contract=true) and contract_signing_start_date is not null',  (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const loadOperationPersonal2Info = (request, response) => {
+    pool.query('SELECT * FROM crm_course_categories where contract_sign_date is not null',  (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
+const loadOperationPersonal3Info = (request, response) => {
+    pool.query('SELECT * FROM crm_course_categories where contract_sign_date is not null',  (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
 }
 
 export default {
+    callCenterAddCenter,
     updateCallCenterRow,
     loadSallerInfo,
+    loadOperationPersonal1Info,
+    loadOperationPersonal2Info,
+    loadOperationPersonal3Info,
     loadCallCenterInfo,
     cardCreationPermission,
     getClickStatistics,
     getEditCards,
     sendEditCard,
     getCourseCategories,
+    getCrmCourseCategories,
     registerTelegramUser,
     getFilters,
     createCourseTeacher,

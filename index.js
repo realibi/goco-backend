@@ -8,6 +8,8 @@ import path from"path";
 import multer from "multer";
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import authMiddleware from '../goco-backend/middleware/authMiddleware.js'
+import roleMiddleware from'../goco-backend/middleware/roleMiddleware.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -77,28 +79,33 @@ app.post('/handlePayment', db.handlePaymentPost)
 app.post('/courseCardsFilter', db.courseCardsFilter)
 app.post('/logUserClick', db.logUserClick)
 app.post('/newStudent', db.handleNewStudent)
-app.get('/cabinetInfo', db.getCabinetInfo);
-app.get('/adminCards', db.getAdminCards);
-app.get('/adminTeachers', db.getAdminTeachers);
+app.get('/cabinetInfo', roleMiddleware([5 || "5", 1 || "1"]), db.getCabinetInfo);
+app.get('/adminCards', roleMiddleware([1 || "1"]), db.getAdminCards);
+app.get('/adminTeachers', roleMiddleware([1 || "1"]), db.getAdminTeachers);
 app.post('/login', db.login)
-app.post('/approveCard', db.approveCard)
-app.post('/declineCard', db.declineCard)
-app.post('/approveTeacher', db.approveTeacher)
-app.post('/declineTeacher', db.declineTeacher)
-app.post('/cabinetCourseCards', db.getCabinetCourseCards)
-app.post('/cabinetCourseTeachers', db.getCabinetCourseTeachers)
-app.post('/createCourseCard', db.createCourseCard)
-app.post('/createCourseTeacher', db.createCourseTeacher)
+app.post('/approveCard', roleMiddleware([1 || "1"]), db.approveCard)
+app.post('/declineCard', roleMiddleware([1 || "1"]), db.declineCard)
+app.post('/approveTeacher', roleMiddleware([1 || "1"]), db.approveTeacher)
+app.post('/declineTeacher', roleMiddleware([1 || "1"]), db.declineTeacher)
+app.post('/cabinetCourseCards', roleMiddleware([5 || "5", 1 || "1"]), db.getCabinetCourseCards)
+app.post('/cabinetCourseTeachers', roleMiddleware([5 || "5", 1 || "1"]), db.getCabinetCourseTeachers)
+app.post('/createCourseCard', roleMiddleware([5 || "5", 1 || "1"]), db.createCourseCard)
+app.post('/createCourseTeacher', roleMiddleware([5 || "5", 1 || "1"]), db.createCourseTeacher)
 app.get('/filters', db.getFilters)
 app.post('/registerTelegramUser', db.registerTelegramUser)
 app.post('/courseCategories', db.getCourseCategories);
-app.post('/sendEditCard', db.sendEditCard)
-app.get('/editCards', db.getEditCards)
-app.post('/getClickStatistics', db.getClickStatistics)
+app.post('/crmCourseCategories', db.getCrmCourseCategories);
+app.post('/sendEditCard', roleMiddleware([5 || "5"], 1 || "1"), db.sendEditCard)
+app.get('/editCards', roleMiddleware([5 || "5", 1 || "1"]), db.getEditCards)
+app.post('/getClickStatistics', roleMiddleware([1 || "1"]), db.getClickStatistics)
 app.get('/cardCreationPermission/:centerId', db.cardCreationPermission)
-app.get('/loadCallCenterInfo', db.loadCallCenterInfo)
-app.get('/loadSallerInfo', db.loadSallerInfo)
-app.post('/updateCallCenterRow', db.updateCallCenterRow)
+app.get('/loadCallCenterInfo', roleMiddleware([1, 2]), db.loadCallCenterInfo)
+app.get('/loadSallerInfo', roleMiddleware([3 || "3", 1 || "1"]), db.loadSallerInfo)
+app.get('/loadOperationPersonal1Info', roleMiddleware([3 || "3", 1 || "1"]), db.loadOperationPersonal1Info)
+app.get('/loadOperationPersonal2Info', roleMiddleware([3 || "3", 1 || "1"]), db.loadOperationPersonal2Info)
+app.get('/loadOperationPersonal3Info', roleMiddleware([3 || "3", 1 || "1"]), db.loadOperationPersonal3Info)
+app.post('/updateCallCenterRow', roleMiddleware([2 || "2", 1 || "1"]), db.updateCallCenterRow)
+app.post('/callCenterAddCenter', roleMiddleware([2 || "2", 1 || "1"]), db.callCenterAddCenter)
 
 
 
