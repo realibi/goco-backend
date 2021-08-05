@@ -1507,7 +1507,7 @@ const loadOperationPersonal1Info = (request, response) => {
 }
 
 const loadOperationPersonal2Info = (request, response) => {
-    pool.query('SELECT * FROM crm where contract_sign_status is not null',  (error, results) => {
+    pool.query('SELECT * FROM crm where contract_sign_status=true',  (error, results) => {
         if (error) {
             throw error
         }
@@ -1516,7 +1516,7 @@ const loadOperationPersonal2Info = (request, response) => {
 }
 
 const loadOperationPersonal3Info = (request, response) => {
-    pool.query('SELECT * FROM crm where contract_sign_status is not null',  (error, results) => {
+    pool.query('SELECT * FROM crm where contract_sign_status=true',  (error, results) => {
         if (error) {
             throw error
         }
