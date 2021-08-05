@@ -106,6 +106,9 @@ app.get('/loadOperationPersonal2Info', roleMiddleware([3 || "3", 1 || "1"]), db.
 app.get('/loadOperationPersonal3Info', roleMiddleware([3 || "3", 1 || "1"]), db.loadOperationPersonal3Info)
 app.post('/updateCallCenterRow', roleMiddleware([2 || "2", 1 || "1"]), db.updateCallCenterRow)
 app.post('/updateSellerRow', roleMiddleware([3 || "3", 1 || "1"]), db.updateSellerRow)
+app.post('/updateOperationPersonal1Row', roleMiddleware([4 || "4", 1 || "1"]), db.updateOperationPersonal1Row)
+app.post('/updateOperationPersonal2Row', roleMiddleware([4 || "4", 1 || "1"]), db.updateOperationPersonal2Row)
+app.post('/updateOperationPersonal3Row', roleMiddleware([4 || "4", 1 || "1"]), db.updateOperationPersonal3Row)
 app.post('/callCenterAddCenter', roleMiddleware([2 || "2", 1 || "1"]), db.callCenterAddCenter)
 
 

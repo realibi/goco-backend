@@ -1562,7 +1562,92 @@ const updateSellerRow = (request, response) => {
     })
 }
 
+const updateOperationPersonal1Row = (request, response) => {
+    const {
+        id,
+        companyName,
+        categoryId,
+        contactPerson,
+        phone,
+        mail,
+        infoCollectionDate,
+        sendContractStatus,
+        sendContractComments,
+        contractAgreedStatus,
+        contractAgreedComments,
+        contractSignedStatus,
+        contractSignedComments,
+        contractSignedDate,
+    } = request.body;
+
+    pool.query('update crm set center_name=$2, center_category_id=$3 contact_name=$4, center_phone=$5, center_email=$6, data_collection_start_date=$7, contract_send_status=$8, contract_send_comment=$9, contract_agreed=$10, contract_agreement_comment=$11, contract_signed=$12, contract_signed_comment=$13, contract_sign_date=$14 where id=$1', [
+        id,
+        companyName,
+        categoryId,
+        contactPerson,
+        phone,
+        mail,
+        infoCollectionDate,
+        sendContractStatus,
+        sendContractComments,
+        contractAgreedStatus,
+        contractAgreedComments,
+        contractSignedStatus,
+        contractSignedComments,
+        contractSignedDate,
+    ], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(true)
+    })
+}
+
+const updateOperationPersonal2Row = (request, response) => {
+    const {
+        id,
+        companyName,
+        categoryId,
+        contactPerson,
+        phone,
+        mail,
+        infoCollectionDate,
+        sendContractStatus,
+        sendContractComments,
+        contractAgreedStatus,
+        contractAgreedComments,
+        contractSignedStatus,
+        contractSignedComments,
+        contractSignedDate,
+    } = request.body;
+
+    pool.query('update crm set center_name=$2, contact_name=$3, center_phone=$4, center_email=$5, data_collection_start_date=$6, contract_send_status=$7, contract_send_comment=$8, contract_agreed=$9, contract_agreement_comment=$10, contract_signed=$11, contract_signed_comment=$12, contract_sign_date=$13, where id=$1', [
+        id,
+        companyName,
+        categoryId,
+        contactPerson,
+        phone,
+        mail,
+        infoCollectionDate,
+        sendContractStatus,
+        sendContractComments,
+        contractAgreedStatus,
+        contractAgreedComments,
+        contractSignedStatus,
+        contractSignedComments,
+        contractSignedDate,
+    ], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(true)
+    })
+}
+
 export default {
+    updateOperationPersonal1Row,
+    updateOperationPersonal2Row,
+    updateOperationPersonal3Row,
     callCenterAddCenter,
     updateCallCenterRow,
     updateSellerRow,
