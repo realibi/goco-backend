@@ -1393,7 +1393,7 @@ const loadCallCenterInfo = (request, response) => {
 }
 
 const loadSallerInfo = (request, response) => {
-    pool.query('SELECT id, center_category_id, call_center_user_id, center_name, contact_name, center_phone, center_email, first_call_date, first_call_time, first_call_comment, kp_send_date, second_call_date, second_call_time, second_call_comment, meeting_date, meeting_time, saller_user_id, meeting_comitted, meeting_comment, will_conclude_contract, contract_signing_start_date, data_collection_start_date, contarct_send_date, contract_send_comment, contract_agreed, contract_agreement_comment, contract_signed, contract_signed_comment, contract_sign_date, operation_personal_user_id FROM public.crm where meeting_date is not null', (error, results) => {
+    pool.query('SELECT id, center_category_id, call_center_user_id, center_name, contact_name, center_phone, center_email, first_call_date, first_call_time, first_call_comment, kp_send_date, second_call_date, second_call_time, second_call_comment, meeting_date, meeting_time, saller_user_id, meeting_comitted, meeting_comment, will_conclude_contract, contract_signing_start_date, data_collection_start_date, contarct_send_status, contract_send_comment, contract_agreed, contract_agreement_comment, contract_signed, contract_signed_comment, contract_sign_date, operation_personal_user_id FROM public.crm where meeting_date is not null', (error, results) => {
         if (error) {
             throw error
         }
@@ -1507,7 +1507,7 @@ const loadOperationPersonal1Info = (request, response) => {
 }
 
 const loadOperationPersonal2Info = (request, response) => {
-    pool.query('SELECT * FROM crm where contract_sign_date is not null',  (error, results) => {
+    pool.query('SELECT * FROM crm where contract_sign_status is not null',  (error, results) => {
         if (error) {
             throw error
         }
@@ -1516,7 +1516,7 @@ const loadOperationPersonal2Info = (request, response) => {
 }
 
 const loadOperationPersonal3Info = (request, response) => {
-    pool.query('SELECT * FROM crm where contract_sign_date is not null',  (error, results) => {
+    pool.query('SELECT * FROM crm where contract_sign_status is not null',  (error, results) => {
         if (error) {
             throw error
         }
