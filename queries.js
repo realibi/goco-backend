@@ -1719,7 +1719,7 @@ const updateOperationPersonal3Row = (request, response) => {
 const deleteCourseCard = (request, response) => {
     const { courseCardId } = request.body;
 
-    pool.query('delete from subcourses where id=$1', [ courseCardId ], (error, results) => {
+    pool.query('update subcourses set title="test" where id=$1', [ courseCardId ], (error, results) => {
         if (error) {
             throw error
         }
