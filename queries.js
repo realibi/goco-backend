@@ -1669,8 +1669,51 @@ const updateOperationPersonal2Row = (request, response) => {
     })
 }
 
-const updateOperationPersonal3Row = () => {
+const updateOperationPersonal3Row = (request, response) => {
+    const {
+        id,
+        companyName,
+        categoryId,
+        contactPerson,
+        phone,
+        mail,
 
+        reportSendingDate,
+        firstCallComments,
+        secondCallComments,
+        conclusionPaymentStatus,
+        tariffPack,
+        sendingInvoiceForPaymentStatus,
+        paymentReminderComments,
+        receivingPaymentStatus,
+        providingAccessLKStatus,
+        paymentDate
+    } = request.body;
+
+    pool.query('update crm set center_name=$2, center_category_id=$3, contact_name=$4, center_phone=$5, center_email=$6, report_send_date=$7, final_call_comment=$8, repeated_final_call_comment=$9, will_pay=$10, payment_invoice_sent=$12, tariff_id=$11, payment_reminder_comment=$13, payment_received=$14, account_provided=$15, payment_date=$16 where id=$1', [
+        id,
+        companyName,
+        categoryId,
+        contactPerson,
+        phone,
+        mail,
+
+        reportSendingDate,
+        firstCallComments,
+        secondCallComments,
+        conclusionPaymentStatus,
+        tariffPack,
+        sendingInvoiceForPaymentStatus,
+        paymentReminderComments,
+        receivingPaymentStatus,
+        providingAccessLKStatus,
+        paymentDate
+    ], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(true)
+    })
 }
 
 export default {
