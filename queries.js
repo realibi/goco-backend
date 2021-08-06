@@ -1644,6 +1644,10 @@ const updateOperationPersonal2Row = (request, response) => {
     })
 }
 
+const updateOperationPersonal3Row = () => {
+
+}
+
 export default {
     updateOperationPersonal1Row,
     updateOperationPersonal2Row,
