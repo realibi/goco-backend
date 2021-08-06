@@ -1580,7 +1580,7 @@ const updateOperationPersonal1Row = (request, response) => {
         contractSignedDate,
     } = request.body;
 
-    pool.query('update crm set center_name=$2, center_category_id=$3 contact_name=$4, center_phone=$5, center_email=$6, data_collection_start_date=$7, contract_send_status=$8, contract_send_comment=$9, contract_agreed=$10, contract_agreement_comment=$11, contract_signed=$12, contract_signed_comment=$13, contract_sign_date=$14 where id=$1', [
+    pool.query('update crm set center_name=$2, center_category_id=$3, contact_name=$4, center_phone=$5, center_email=$6, data_collection_start_date=$7, contract_send_status=$8, contract_send_comment=$9, contract_agreed=$10, contract_agreement_comment=$11, contract_signed=$12, contract_signed_comment=$13, contract_sign_date=$14 where id=$1', [
         id,
         companyName,
         categoryId,
