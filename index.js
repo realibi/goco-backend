@@ -111,6 +111,7 @@ app.post('/updateOperationPersonal2Row', roleMiddleware([3, 1]), db.updateOperat
 app.post('/updateOperationPersonal3Row', roleMiddleware([3, 1]), db.updateOperationPersonal3Row)
 app.post('/callCenterAddCenter', roleMiddleware([2 || "2", 1 || "1"]), db.callCenterAddCenter)
 app.post('/deleteCourseCard', roleMiddleware([4 , 1]), db.deleteCourseCard)
+app.post('/deleteCourseTeacher', roleMiddleware([4 , 1]), db.deleteCourseTeacher)
 
 
 

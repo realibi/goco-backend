@@ -1221,7 +1221,7 @@ const createCourseTeacher = (request, response) => {
 
 const getCabinetCourseTeachers = (request, response) => {
     const { courseId } = request.body
-    pool.query('SELECT * FROM teachers where course_id=$1 and approved=true', [ courseId ],  (error, results) => {
+    pool.query(`SELECT * FROM teachers where course_id=$1 and approved=true and teachers.fullname != 'test'`, [ courseId ],  (error, results) => {
         if (error) {
             throw error
         }
@@ -1727,7 +1727,19 @@ const deleteCourseCard = (request, response) => {
     })
 }
 
+const deleteCourseTeacher = (request, response) => {
+    const { teacherId } = request.body;
+
+    pool.query(`update teachers set fullname='test' where id=$1`, [ courseCardId ], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(true)
+    })
+}
+
 export default {
+    deleteCourseTeacher,
     deleteCourseCard,
     updateOperationPersonal1Row,
     updateOperationPersonal2Row,
