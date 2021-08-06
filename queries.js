@@ -1730,7 +1730,7 @@ const deleteCourseCard = (request, response) => {
 const deleteCourseTeacher = (request, response) => {
     const { teacherId } = request.body;
 
-    pool.query(`update teachers set fullname='test' where id=$1`, [ courseCardId ], (error, results) => {
+    pool.query(`update teachers set fullname='test' where id=$1`, [ teacherId ], (error, results) => {
         if (error) {
             throw error
         }
