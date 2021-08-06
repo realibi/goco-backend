@@ -1716,7 +1716,19 @@ const updateOperationPersonal3Row = (request, response) => {
     })
 }
 
+const deleteCourseCard = (request, response) => {
+    const { courseCardId } = request.body;
+
+    pool.query('delete from subcourses where id=$1', [ courseCardId ], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(true)
+    })
+}
+
 export default {
+    deleteCourseCard,
     updateOperationPersonal1Row,
     updateOperationPersonal2Row,
     updateOperationPersonal3Row,
