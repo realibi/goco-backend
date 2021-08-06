@@ -79,7 +79,7 @@ app.post('/handlePayment', db.handlePaymentPost)
 app.post('/courseCardsFilter', db.courseCardsFilter)
 app.post('/logUserClick', db.logUserClick)
 app.post('/newStudent', db.handleNewStudent)
-app.get('/cabinetInfo', roleMiddleware([5 || "5", 1 || "1"]), db.getCabinetInfo);
+app.get('/cabinetInfo', roleMiddleware([4 || "4", 1 || "1"]), db.getCabinetInfo);
 app.get('/adminCards', roleMiddleware([1 || "1"]), db.getAdminCards);
 app.get('/adminTeachers', roleMiddleware([1 || "1"]), db.getAdminTeachers);
 app.post('/login', db.login)
@@ -87,16 +87,16 @@ app.post('/approveCard', roleMiddleware([1 || "1"]), db.approveCard)
 app.post('/declineCard', roleMiddleware([1 || "1"]), db.declineCard)
 app.post('/approveTeacher', roleMiddleware([1 || "1"]), db.approveTeacher)
 app.post('/declineTeacher', roleMiddleware([1 || "1"]), db.declineTeacher)
-app.post('/cabinetCourseCards', roleMiddleware([5 || "5", 1 || "1"]), db.getCabinetCourseCards)
-app.post('/cabinetCourseTeachers', roleMiddleware([5 || "5", 1 || "1"]), db.getCabinetCourseTeachers)
-app.post('/createCourseCard', roleMiddleware([5 || "5", 1 || "1"]), db.createCourseCard)
-app.post('/createCourseTeacher', roleMiddleware([5 || "5", 1 || "1"]), db.createCourseTeacher)
+app.post('/cabinetCourseCards', roleMiddleware([4 || "4", 1 || "1"]), db.getCabinetCourseCards)
+app.post('/cabinetCourseTeachers', roleMiddleware([5 || "4", 1 || "1"]), db.getCabinetCourseTeachers)
+app.post('/createCourseCard', roleMiddleware([4 || "4", 1 || "1"]), db.createCourseCard)
+app.post('/createCourseTeacher', roleMiddleware([4 || "4", 1 || "1"]), db.createCourseTeacher)
 app.get('/filters', db.getFilters)
 app.post('/registerTelegramUser', db.registerTelegramUser)
 app.post('/courseCategories', db.getCourseCategories);
 app.post('/crmCourseCategories', db.getCrmCourseCategories);
-app.post('/sendEditCard', roleMiddleware([5 || "5"], 1 || "1"), db.sendEditCard)
-app.get('/editCards', roleMiddleware([5 || "5", 1 || "1"]), db.getEditCards)
+app.post('/sendEditCard', roleMiddleware([4 || "4"], 1 || "1"), db.sendEditCard)
+app.get('/editCards', roleMiddleware([4 || "4", 1 || "1"]), db.getEditCards)
 app.post('/getClickStatistics', roleMiddleware([1 || "1"]), db.getClickStatistics)
 app.get('/cardCreationPermission/:centerId', db.cardCreationPermission)
 app.get('/loadCallCenterInfo', roleMiddleware([1, 2]), db.loadCallCenterInfo)
@@ -106,9 +106,9 @@ app.get('/loadOperationPersonal2Info', roleMiddleware([3 || "3", 1 || "1"]), db.
 app.get('/loadOperationPersonal3Info', roleMiddleware([3 || "3", 1 || "1"]), db.loadOperationPersonal3Info)
 app.post('/updateCallCenterRow', roleMiddleware([2 || "2", 1 || "1"]), db.updateCallCenterRow)
 app.post('/updateSellerRow', roleMiddleware([3 || "3", 1 || "1"]), db.updateSellerRow)
-app.post('/updateOperationPersonal1Row', roleMiddleware([4 || "4", 1 || "1"]), db.updateOperationPersonal1Row)
-app.post('/updateOperationPersonal2Row', roleMiddleware([4 || "4", 1 || "1"]), db.updateOperationPersonal2Row)
-app.post('/updateOperationPersonal3Row', roleMiddleware([4 || "4", 1 || "1"]), db.updateOperationPersonal3Row)
+app.post('/updateOperationPersonal1Row', roleMiddleware([3 || "3", 1 || "1"]), db.updateOperationPersonal1Row)
+app.post('/updateOperationPersonal2Row', roleMiddleware([3 || "3", 1 || "1"]), db.updateOperationPersonal2Row)
+app.post('/updateOperationPersonal3Row', roleMiddleware([3 || "3", 1 || "1"]), db.updateOperationPersonal3Row)
 app.post('/callCenterAddCenter', roleMiddleware([2 || "2", 1 || "1"]), db.callCenterAddCenter)
 
 
