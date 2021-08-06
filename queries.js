@@ -1629,12 +1629,12 @@ const updateOperationPersonal2Row = (request, response) => {
         centerFacebook,
         centerWebsite,
         centerPhone,
-        centerMail,
+        //centerMail,
         centerLogo,
         placementDate
     } = request.body;
 
-    pool.query('update crm set center_name=$2, center_category_id=$3, contact_name=$4, center_phone=$5, center_email=$6, data_collection_date=$7, expected_result=$8, start_requirements=$9, duration=$10, ages=$11, type=$12, format=$13, course_description=$14, price=$15, schedule=$16, title=$17, center_description=$18, address=$19, instagram=$20, facebook=$21, website=$22, phone=$23, center_email=$24, img_src=$25, placement_date=$26 where id=$1', [
+    pool.query('update crm set center_name=$2, center_category_id=$3, contact_name=$4, center_phone=$5, center_email=$6, data_collection_date=$7, expected_result=$8, start_requirements=$9, duration=$10, ages=$11, type=$12, format=$13, course_description=$14, price=$15, schedule=$16, title=$17, center_description=$18, address=$19, instagram=$20, facebook=$21, website=$22, phone=$23, img_src=$24, placement_date=$25 where id=$1', [
         id,
         companyName,
         categoryId,
@@ -1658,7 +1658,7 @@ const updateOperationPersonal2Row = (request, response) => {
         centerFacebook,
         centerWebsite,
         centerPhone,
-        centerMail,
+        //centerMail,
         centerLogo,
         placementDate
     ], (error, results) => {
