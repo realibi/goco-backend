@@ -1354,7 +1354,7 @@ const getClickStatistics = (request, response) => {
 const cardCreationPermission = (request, response) => {
     const centerId = parseInt(request.params.centerId)
 
-    pool.query('select count(id) from subcourses where approved=true and course_id=$1', [centerId],  (error, results) => {
+    pool.query(`select count(id) from subcourses where approved=true and title!='test' and course_id=$1`, [centerId],  (error, results) => {
         if (error) {
             throw error
         }
