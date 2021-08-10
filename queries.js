@@ -10,8 +10,7 @@ import {secret} from "./config.js"
 
 moment.locale('ru');
 
-const Pool = pg.Pool
-const pool = new Pool({
+const devPoolOptions = {
     user: 'hyhdsfgcsfgtko',
     host: 'ec2-54-229-68-88.eu-west-1.compute.amazonaws.com',
     database: 'dfjq5clee4ahv4',
@@ -19,8 +18,20 @@ const pool = new Pool({
     port: 5432,
     ssl: {
         rejectUnauthorized: false
-    },
-})
+    }
+};
+
+const productionPoolOptions = {
+    user: 'postgres',
+    host: '127.0.0.1',
+    database: 'oilan_db',
+    password: 'root',
+    port: 5432,
+    ssl: false
+};
+
+const Pool = pg.Pool
+const pool = new Pool(productionPoolOptions);
 
 //--------------------------------------------------------------
 
