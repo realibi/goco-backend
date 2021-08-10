@@ -80,8 +80,8 @@ app.post('/courseCardsFilter', db.courseCardsFilter)
 app.post('/logUserClick', db.logUserClick)
 app.post('/newStudent', db.handleNewStudent)
 app.get('/cabinetInfo', roleMiddleware([4 || "4", 1 || "1"]), db.getCabinetInfo);
-app.get('/adminCards', roleMiddleware([1 || "1"]), db.getAdminCards);
-app.get('/adminTeachers', roleMiddleware([1 || "1"]), db.getAdminTeachers);
+app.get('/adminCards', roleMiddleware([1]), db.getAdminCards);
+app.get('/adminTeachers', roleMiddleware([1]), db.getAdminTeachers);
 app.post('/login', db.login)
 app.post('/approveCard', roleMiddleware([1 || "1"]), db.approveCard)
 app.post('/declineCard', roleMiddleware([1 || "1"]), db.declineCard)
@@ -115,9 +115,10 @@ app.post('/deleteCourseTeacher', roleMiddleware([4 , 1]), db.deleteCourseTeacher
 
 
 
+let devPublicRoute = "dev\\goco-backend\\public";
+let productionPublicRoute = "/root/goco-backend/public";
 
-
-app.use(express.static(__dirname + "dev\\goco-backend\\public"))
+app.use(express.static(__dirname + productionPublicRoute))
 
 const handleError = (err, res) => {
     res
@@ -130,8 +131,11 @@ const upload = multer({
     dest: "./tempFiles"
 });
 
+let devIndexRoute = "C:\\dev\\goco-backend\\public\\index.html";
+let productionRoute = "/root/goco-backend/public/index.html";
+
 app.get("/file", (request, response) => {
-    response.sendFile("C:\\dev\\goco-backend\\public\\index.html")
+    response.sendFile(productionRoute)
 });
 
 app.get("/file/:filename", (req, res) => {
@@ -165,7 +169,7 @@ app.post(
 
 
 
-let port = process.env.PORT === undefined ? 3030 : process.env.PORT;
+let port = 3000;
 
 app.listen(port, () => {
     console.log(`Goco backend running on port ${port}.`)
