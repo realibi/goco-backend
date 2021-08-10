@@ -1434,7 +1434,7 @@ const updateCallCenterRow = (request, response) => {
 
     if (meetingDate !== null && meetingTime !== null) {
 
-        let query = `SELECT count(id) FROM public.crm where meeting_date='${meetingDate}' and (time '${meetingTime}') - '01:00' < meeting_time and (time '${meetingTime}') + '1 hour' > meeting_time`;
+        let query = `SELECT count(id) FROM public.crm where meeting_date='${meetingDate}' and (time '${meetingTime}') - '01:00' < meeting_time and (time '${meetingTime}') + '1 hour' > meeting_time and id!=${id}`;
         console.log(query);
 
         pool.query(query, (error, results) => {
