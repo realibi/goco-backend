@@ -1842,6 +1842,8 @@ const filterCallCenterRows = (request, response) => {
         if (error) {
             throw error
         }
+        console.log("Result");
+        console.log(results.rows);
         response.status(200).json(results.rows)
     })
 }
