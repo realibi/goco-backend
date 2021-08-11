@@ -1763,7 +1763,85 @@ const deleteCourseTeacher = (request, response) => {
     })
 }
 
+const filterCallCenterRows = (request, response) => {
+    const {
+        centerTitleSearchText,
+        directionId,
+        firstCallDate,
+        kpSendDate,
+        secondCallDate,
+        meetingDate
+    } = request.body;
+
+    let queryText = "select * from crm";
+
+    let whereAdded = false;
+
+    if(centerTitleSearchText !== ''){
+        queryText += ` where (center_name like '${centerTitleSearchText}%' or center_name like '%${centerTitleSearchText}%' or center_name like '%${centerTitleSearchText}')`;
+        whereAdded = true;
+    }
+
+    if(directionId !== 0){
+        if(whereAdded){
+            queryText += ` and `;
+        }else{
+            queryText += ` where `;
+        }
+
+        queryText += `center_category_id=${directionId}`;
+    }
+
+    if(firstCallDate !== null){
+        if(whereAdded){
+            queryText += ` and `;
+        }else{
+            queryText += ` where `;
+        }
+
+        queryText += `first_call_date='${firstCallDate}'`;
+    }
+
+    if(kpSendDate !== null){
+        if(whereAdded){
+            queryText += ` and `;
+        }else{
+            queryText += ` where `;
+        }
+
+        queryText += `kp_send_date='${kpSendDate}'`;
+    }
+
+    if(secondCallDate !== null){
+        if(whereAdded){
+            queryText += ` and `;
+        }else{
+            queryText += ` where `;
+        }
+
+        queryText += `second_call_date='${secondCallDate}'`;
+    }
+
+    if(meetingDate !== null){
+        if(whereAdded){
+            queryText += ` and `;
+        }else{
+            queryText += ` where `;
+        }
+
+        queryText += `meeting_date='${meetingDate}'`;
+    }
+
+    pool.query(queryText, (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows)
+    })
+}
+
 export default {
+    filterCallCenterRows,
     deleteCourseTeacher,
     deleteCourseCard,
     updateOperationPersonal1Row,
