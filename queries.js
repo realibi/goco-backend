@@ -1782,6 +1782,8 @@ const filterCallCenterRows = (request, response) => {
         whereAdded = true;
     }
 
+    console.log("ТИП directionId: " + typeof(directionId));
+
     if(directionId !== 0){
         if(whereAdded){
             queryText += ` and `;
