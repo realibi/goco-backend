@@ -1764,7 +1764,7 @@ const deleteCourseTeacher = (request, response) => {
 }
 
 const filterCallCenterRows = (request, response) => {
-    const {
+    let {
         centerTitleSearchText,
         directionId,
         firstCallDate,
@@ -1778,7 +1778,8 @@ const filterCallCenterRows = (request, response) => {
     let whereAdded = false;
 
     if(centerTitleSearchText !== ''){
-        queryText += ` where (center_name like '${centerTitleSearchText}%' or center_name like '%${centerTitleSearchText}%' or center_name like '%${centerTitleSearchText}')`;
+        centerTitleSearchText = centerTitleSearchText.toLowerCase();
+        queryText += ` where (lower(center_name) like '${centerTitleSearchText}%' or lower(center_name) like '%${centerTitleSearchText}%' or lower(center_name) like '%${centerTitleSearchText}')`;
         whereAdded = true;
     }
 
