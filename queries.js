@@ -1832,6 +1832,9 @@ const filterCallCenterRows = (request, response) => {
         queryText += `meeting_date='${meetingDate}'`;
     }
 
+    console.log("ЗАПРОС ДЛЯ ФИЛЬТРА КОЛЛ_ЦЕНТРА");
+    console.log(queryText);
+
     pool.query(queryText, (error, results) => {
         if (error) {
             throw error
