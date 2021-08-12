@@ -1471,21 +1471,8 @@ const updateCallCenterRow = (request, response) => {
             }
         })
     } else {
-        pool.query('UPDATE public.crm SET center_name=$2, center_category_id=$13, contact_name=$4, center_phone=$3, center_email=$5, first_call_date=$9, first_call_time=$10, first_call_comment=$7, kp_send_date=$6, second_call_date=$12, second_call_time=$11, second_call_comment=$8 WHERE id=$1', [
-            id,
-            companyName,
-            phone,
-            contactPerson,
-            mail,
-            sendKPDate,
-            firstCallComment,
-            secondCallComment,
-            firstCall,
-            firstCallTime,
-            secondCallTime,
-            secondCall,
-            categoryId
-        ], (error, results) => {
+        let query = `UPDATE public.crm SET center_name='${companyName}', center_category_id=${categoryId}, contact_name='${contactPerson}', center_phone='${phone}', center_email='${mail}', first_call_date='${firstCall}', first_call_time='${firstCallTime}', first_call_comment='${firstCallComment}', kp_send_date='${sendKPDate}', second_call_date='${secondCall}', second_call_time='${secondCallTime}', second_call_comment='${secondCallComment}' WHERE id=${id}`;
+        pool.query(query, (error, results) => {
             if (error) {
                 throw error
             }
