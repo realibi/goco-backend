@@ -1785,7 +1785,8 @@ const filterCallCenterRows = (request, response) => {
         whereAdded = true;
     }
 
-    console.log("ТИП directionId: " + typeof(directionId));
+    console.log("kpSend: " + kpSend);
+    console.log("ТИП kpSend: " + typeof(kpSend));
 
     if(directionId !== '0'){
         if(whereAdded){
