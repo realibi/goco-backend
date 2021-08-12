@@ -1399,7 +1399,7 @@ const loadCallCenterInfo = (request, response) => {
             throw error
         }
 
-        response.status(200).json(results.rows);
+        response.status(200).json({rows: results.rows, length: results.rows.length});
     })
 }
 
@@ -1858,7 +1858,7 @@ const filterCallCenterRows = (request, response) => {
         }
         console.log("Result");
         console.log(results.rows);
-        response.status(200).json(results.rows)
+        response.status(200).json({rows: results.rows, length: results.rows.length});
     })
 }
 
