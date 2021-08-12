@@ -1475,6 +1475,7 @@ const updateCallCenterRow = (request, response) => {
     } else {
         console.log("update без указания встречи");
         let query = `UPDATE public.crm SET center_name='${companyName}', center_category_id=${categoryId}, contact_name='${contactPerson}', center_phone='${phone}', center_email='${mail}', first_call_date='${firstCall}', first_call_time='${firstCallTime}', first_call_comment='${firstCallComment}', kp_send_date='${sendKPDate}', second_call_date='${secondCall}', second_call_time='${secondCallTime}', second_call_comment='${secondCallComment}' WHERE id=${id}`;
+        console.log(query)
         pool.query(query, (error, results) => {
             if (error) {
                 throw error
