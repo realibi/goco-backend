@@ -1770,7 +1770,9 @@ const filterCallCenterRows = (request, response) => {
         firstCallDate,
         kpSendDate,
         secondCallDate,
-        meetingDate
+        meetingDate,
+        kpSend,
+        meetingSet
     } = request.body;
 
     let queryText = "select * from crm";
@@ -1833,6 +1835,26 @@ const filterCallCenterRows = (request, response) => {
         }
 
         queryText += `meeting_date='${meetingDate}'`;
+    }
+
+    if(kpSend !== false){
+        if(whereAdded){
+            queryText += ` and `;
+        }else{
+            queryText += ` where `;
+        }
+
+        queryText += `kp_send_date!=null`;
+    }
+
+    if(meetingSet !== false){
+        if(whereAdded){
+            queryText += ` and `;
+        }else{
+            queryText += ` where `;
+        }
+
+        queryText += `meeting_date!=null and meeting_time!=null`;
     }
 
     console.log("ЗАПРОС ДЛЯ ФИЛЬТРА КОЛЛ_ЦЕНТРА");
