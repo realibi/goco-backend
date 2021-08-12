@@ -487,7 +487,7 @@ const getTeachers = (request, response) => {
 const getCourseTeachers = (request, response) => {
     const id = parseInt(request.params.id)
 
-    pool.query('SELECT * FROM teachers where course_id = $1 and approved=true', [id], (error, results) => {
+    pool.query(`SELECT * FROM teachers where course_id = $1 and approved=true and fullname!='test'`, [id], (error, results) => {
         if (error) {
             throw error
         }
