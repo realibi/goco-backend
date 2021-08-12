@@ -1836,7 +1836,7 @@ const filterCallCenterRows = (request, response) => {
             queryText += ` where `;
         }
 
-        queryText += `kp_send_date!=null`;
+        queryText += `kp_send_date is not null`;
     }
 
     if(meetingSet !== false){
@@ -1846,7 +1846,7 @@ const filterCallCenterRows = (request, response) => {
             queryText += ` where `;
         }
 
-        queryText += `meeting_date!=null and meeting_time!=null`;
+        queryText += `meeting_date is not null and meeting_time is not null`;
     }
 
     console.log("ЗАПРОС ДЛЯ ФИЛЬТРА КОЛЛ_ЦЕНТРА");
