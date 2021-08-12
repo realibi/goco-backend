@@ -1766,7 +1766,7 @@ const filterCallCenterRows = (request, response) => {
         meetingSet
     } = request.body;
 
-    let queryText = "select * from crm";
+    let queryText = "SELECT id, center_category_id, call_center_user_id, center_name, contact_name, center_phone, center_email, to_char( first_call_date , 'YYYY-mm-dd') as \"first_call_date\", first_call_time, first_call_comment, to_char( kp_send_date , \'YYYY-mm-dd\') as \"kp_send_date\", to_char( second_call_date , \'YYYY-mm-dd\') as \"second_call_date\", second_call_time, second_call_comment, to_char( meeting_date , 'YYYY-mm-dd') as \"meeting_date\", meeting_time, saller_user_id, meeting_comitted, meeting_comment, will_conclude_contract, to_char( contract_signing_start_date , \'YYYY-mm-dd\') as \"contract_signing_start_date\", to_char( data_collection_start_date , \'YYYY-mm-dd\') as \"data_collection_start_date\", contract_send_status, contract_send_comment, contract_agreed, contract_agreement_comment, contract_signed, contract_signed_comment, to_char( contract_sign_date , 'YYYY-mm-dd') as \"contract_sign_date\", operation_personal_user_id FROM public.crm";
 
     let whereAdded = false;
 
