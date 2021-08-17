@@ -1060,7 +1060,7 @@ const login = (request, response) => {
         if(results.rows[0] !== undefined){
             let user = results.rows[0];
             const token = generateAccessToken(user.id, user.role_id, user.center_id)
-            return response.status(200).json({token, centerId: user.center_id, roleId: user.role_id})
+            return response.status(200).json({token, centerId: user.center_id, roleId: user.role_id, userId: user.id})
         }
         else{
             return response.status(400).json({message: `Пользователь ${login} не найден`})
