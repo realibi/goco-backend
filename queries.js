@@ -223,7 +223,7 @@ const getCourseSubcourses = (request, response) => {
 
     console.log("course id: " + courseId);
 
-    pool.query('SELECT subcourses.id, course_id, subcourses.title as "subcourse_title", courses.title as "course_title", courses.website_url, courses.instagram, courses.img_src, courses.background_image_url, courses.phones, courses.url, subcourses.description as "subcourse_description", price, schedule, duration, subcourses.rating as "subcourses_rating", category_id, ages, format, expected_result, start_requirements, type, isonline, approved, declined, currency, unit_of_time, order_coefficient, published_date, courses.id as "course_id" FROM subcourses join courses on subcourses.course_id = courses.id WHERE course_id = $1 and approved=true', [courseId], (error, results) => {
+    pool.query('SELECT subcourses.id, course_id, subcourses.title as "title", courses.title as "course_title", courses.website_url, courses.instagram, courses.img_src, courses.background_image_url, courses.phones, courses.url, subcourses.description as "subcourse_description", price, schedule, duration, subcourses.rating as "subcourses_rating", category_id, ages, format, expected_result, start_requirements, type, isonline, approved, declined, currency, unit_of_time, order_coefficient, published_date, courses.id as "course_id" FROM subcourses join courses on subcourses.course_id = courses.id WHERE course_id = $1 and approved=true', [courseId], (error, results) => {
         if (error) {
             throw error
         }
