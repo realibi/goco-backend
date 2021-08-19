@@ -344,8 +344,8 @@ const deleteCourse = (request, response) => {
 //---------------------------------------------------------------------------------
 
 const getFeedbacks = (request, response) => {
-
-    pool.query('SELECT * FROM feedbacks ORDER BY datetime DESC', (error, results) => {
+    const centerId = parseInt(request.params.id)
+    pool.query('SELECT * FROM feedbacks join subcourses on subcourses.id = feedbacks.id ORDER BY datetime DESC', (error, results) => {
         if (error) {
             throw error
         }
@@ -364,14 +364,28 @@ const getFeedbackById = (request, response) => {
     })
 }
 
-const createFeedback = (request, response) => {
-    const { fullname, text, datetime } = request.body
+const getCurrentDate = () => {
+    let currentDate = new Date();
 
-    pool.query('INSERT INTO feedbacks (fullname, text, datetime) VALUES ($1, $2, $3)', [fullname, text, datetime], (error, result) => {
+    let dd = currentDate.getDate();
+    if(dd < 10) dd = '0' + dd;
+
+    let mm = currentDate.getMonth()+1;
+    if(mm < 10) mm = '0' + mm;
+
+    let yy = currentDate.getFullYear();
+
+    return yy + "-" + mm + "-" + dd;
+}
+
+const createFeedback = (request, response) => {
+    const { fullname, message, rating, subcourse_id } = request.body
+
+    pool.query('INSERT INTO feedbacks (fullname, date, message, rating, subcourse_id) VALUES ($1, $2, $3)', [fullname, getCurrentDate(), message, rating, subcourse_id], (error, result) => {
         if (error) {
             throw error
         }
-        response.status(201).send(`User added with ID: ${result.insertId}`)
+        response.status(201).send(`feedback added with ID: ${result.insertId}`)
     })
 }
 
