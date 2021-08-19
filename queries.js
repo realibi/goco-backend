@@ -381,7 +381,7 @@ const getCurrentDate = () => {
 const createFeedback = (request, response) => {
     const { fullname, message, rating, subcourse_id } = request.body
 
-    pool.query('INSERT INTO feedbacks (fullname, date, message, rating, subcourse_id) VALUES ($1, $2, $3)', [fullname, getCurrentDate(), message, rating, subcourse_id], (error, result) => {
+    pool.query('INSERT INTO feedbacks (fullname, date, message, rating, subcourse_id) VALUES ($1, $2, $3, $4, $5)', [fullname, getCurrentDate(), message, rating, subcourse_id], (error, result) => {
         if (error) {
             throw error
         }
