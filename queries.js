@@ -344,8 +344,8 @@ const deleteCourse = (request, response) => {
 //---------------------------------------------------------------------------------
 
 const getFeedbacks = (request, response) => {
-    const centerId = parseInt(request.params.id)
-    pool.query('SELECT * FROM feedbacks join subcourses on subcourses.id = feedbacks.id ORDER BY datetime DESC', (error, results) => {
+    const subcourseId = parseInt(request.params.subcourseId)
+    pool.query('SELECT * FROM feedbacks where feedbacks.subcourse_id = $1 ORDER BY feedbacks.id DESC', [subcourseId], (error, results) => {
         if (error) {
             throw error
         }

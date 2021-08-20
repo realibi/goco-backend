@@ -37,8 +37,8 @@ app.get('/', (request, response) => {
     response.json({ info: 'Node.js, Express, and Postgres API' })
 })
 
-app.get('/feedbacks', db.getFeedbacks)
-app.get('/feedbacks/:id', db.getFeedbackById)
+app.get('/feedbacks/:subcourseId', db.getFeedbacks)
+//app.get('/feedbacks/:id', db.getFeedbackById)
 app.post('/feedbacks', db.createFeedback)
 app.put('/feedbacks/:id', db.updateFeedback)
 app.delete('/feedbacks/:id', db.deleteFeedback)
