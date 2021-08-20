@@ -345,7 +345,7 @@ const deleteCourse = (request, response) => {
 
 const getFeedbacks = (request, response) => {
     const subcourseId = parseInt(request.params.subcourseId)
-    pool.query('SELECT * FROM feedbacks where feedbacks.subcourse_id = $1 ORDER BY feedbacks.id DESC', [subcourseId], (error, results) => {
+    pool.query('SELECT * FROM feedbacks where subcourse_id = $1 ORDER BY id DESC', [subcourseId], (error, results) => {
         if (error) {
             throw error
         }
