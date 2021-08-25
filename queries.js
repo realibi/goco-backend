@@ -1885,7 +1885,7 @@ const createCourseNotification = (request, response) => {
         message
     } = request.body
 
-    pool.query('INSERT INTO center_account_notifications (center_id, message, checked, datetime) VALUES ($1, $2, $3, current_timestamp)', [center_id, message, false, getCurrentDate()], (error, result) => {
+    pool.query('INSERT INTO center_account_notifications (center_id, message, checked, datetime) VALUES ($1, $2, $3, current_timestamp)', [center_id, message, false], (error, result) => {
         if (error) {
             throw error
         }
