@@ -1239,7 +1239,7 @@ const createCourseTeacher = (request, response) => {
 
 const getCabinetCourseTeachers = (request, response) => {
     const { courseId } = request.body
-    pool.query(`SELECT * FROM teachers where course_id=$1 and approved=true and teachers.fullname != 'test'`, [ courseId ],  (error, results) => {
+    pool.query(`SELECT * FROM teachers where course_id=$1 and declined=false and teachers.fullname != 'test'`, [ courseId ],  (error, results) => {
         if (error) {
             throw error
         }
