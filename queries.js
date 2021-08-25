@@ -1105,7 +1105,7 @@ const getCabinetInfo = (request, response) => {
 //----------------------------------------------------------
 
 const getAdminCards = (request, response) => {
-    pool.query('SELECT subcourses.id, subcourses.isonline, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, subcourses.currency, subcourses.unit_of_time, courses.id as "course_id", courses.title as "course_title", courses.phones, courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where approved=false and declined=false', [], (error, results) => {
+    pool.query('SELECT subcourses.id, subcourses.isonline, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, subcourses.currency, subcourses.unit_of_time, subcourses.approved, subcourses.declined, courses.id as "course_id", courses.title as "course_title", courses.phones, courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where approved=false and declined=false', [], (error, results) => {
         if (error) {
             throw error
         }
@@ -1185,7 +1185,7 @@ const declineTeacher = (request, response) => {
 
 const getCabinetCourseCards = (request, response) => {
     const { courseId } = request.body
-    pool.query(`SELECT subcourses.id, course_categories.name as "category_name", subcourses.isonline, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.phones, courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url, currency, unit_of_time, subcourses.rating, published_date from subcourses join courses on subcourses.course_id = courses.id join course_categories on subcourses.category_id = course_categories.id where subcourses.course_id=$1 and subcourses.approved=true and subcourses.title!='test'`, [courseId], (error, results) => {
+    pool.query(`SELECT subcourses.id, course_categories.name as "category_name", subcourses.isonline, subcourses.title, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, subcourses.approved, subcourses.declined, courses.id as "course_id", courses.title as "course_title", courses.phones, courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url, currency, unit_of_time, subcourses.rating, published_date from subcourses join courses on subcourses.course_id = courses.id join course_categories on subcourses.category_id = course_categories.id where subcourses.course_id=$1 and subcourses.title!='test'`, [courseId], (error, results) => {
         if (error) {
             throw error
         }
