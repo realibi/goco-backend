@@ -1889,11 +1889,25 @@ const createCourseNotification = (request, response) => {
         if (error) {
             throw error
         }
+        response.status(200).json(result);
+    })
+}
+
+const getCourseNotification = (request, response) => {
+    const {
+        center_id
+    } = request.body
+
+    pool.query('select * from center_account_notifications where center_id=$1', [center_id], (error, result) => {
+        if (error) {
+            throw error
+        }
         response.status(201).send(`center_account_notifications added with ID: ${result.id}`)
     })
 }
 
 export default {
+    getCourseNotification,
     createCourseNotification,
     filterCallCenterRows,
     deleteCourseTeacher,
