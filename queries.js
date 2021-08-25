@@ -1889,7 +1889,7 @@ const createCourseNotification = (request, response) => {
         if (error) {
             throw error
         }
-        response.status(200).json(result);
+        response.status(201).send(`center_account_notifications added with ID: ${result.id}`)
     })
 }
 
@@ -1902,7 +1902,7 @@ const getCourseNotification = (request, response) => {
         if (error) {
             throw error
         }
-        response.status(201).send(`center_account_notifications added with ID: ${result.id}`)
+        response.status(200).json(result);
     })
 }
 
