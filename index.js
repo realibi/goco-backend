@@ -113,6 +113,7 @@ app.post('/callCenterAddCenter', roleMiddleware([2 || "2", 1 || "1"]), db.callCe
 app.post('/deleteCourseCard', roleMiddleware([4 , 1]), db.deleteCourseCard)
 app.post('/deleteCourseTeacher', roleMiddleware([4 , 1]), db.deleteCourseTeacher)
 app.post('/filterCallCenterRows', roleMiddleware([2 , 1]), db.filterCallCenterRows)
+app.post('/createCourseNotification', roleMiddleware([1]), db.createCourseNotification)
 
 
 

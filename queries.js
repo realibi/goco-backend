@@ -1879,7 +1879,22 @@ const filterCallCenterRows = (request, response) => {
     })
 }
 
+const createCourseNotification = (request, response) => {
+    const {
+        center_id,
+        message
+    } = request.body
+
+    pool.query('INSERT INTO center_account_notifications (center_id, message, checked, datetime) VALUES ($1, $2, $3, $4)', [center_id, message, false, getCurrentDate()], (error, result) => {
+        if (error) {
+            throw error
+        }
+        response.status(201).send(`center_account_notifications added with ID: ${result.id}`)
+    })
+}
+
 export default {
+    createCourseNotification,
     filterCallCenterRows,
     deleteCourseTeacher,
     deleteCourseCard,
