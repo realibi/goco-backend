@@ -912,11 +912,11 @@ const handlePaymentPost = (request, response) => {
         console.log("payment payload")
         console.log(paymentPayload)
 
-        pool.query('UPDATE public.courses\n' +
-                    '\tSET permitted_cards_count=$1, \n' +
-                    '\tlast_payment_date=current_date, \n' +
-                    '\tnext_payment_date=current_date + interval \'$2 month\'\n' +
-                    '\tWHERE id=$3;',
+        pool.query(`UPDATE public.courses\n` +
+                    `\tSET permitted_cards_count=${cardsCount}, \n` +
+                    `\tlast_payment_date=current_date, \n` +
+                    `\tnext_payment_date=current_date + interval \'${monthCount} month\'\n` +
+                    `\tWHERE id=${centerId}`,
             [
                 cardsCount,
                 monthCount,
