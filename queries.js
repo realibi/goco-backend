@@ -198,7 +198,7 @@ const setClientStatusOk = (reference_id, code) => {
 //---------------------------------------------------------------------------------
 
 const getSubcourses = (request, response) => {
-    pool.query('SELECT * FROM subcourses', (error, results) => {
+    pool.query('SELECT * FROM subcourses order by order_coefficient desc', (error, results) => {
         if (error) {
             throw error
         }
