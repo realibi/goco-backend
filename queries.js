@@ -917,11 +917,6 @@ const handlePaymentPost = (request, response) => {
                     `\tlast_payment_date=current_date, \n` +
                     `\tnext_payment_date=current_date + interval \'${monthCount} month\'\n` +
                     `\tWHERE id=${centerId}`,
-            [
-                cardsCount,
-                monthCount,
-                centerId
-            ],
             (error, results) => {
                 if (error) {
                     throw error
