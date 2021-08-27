@@ -907,7 +907,7 @@ const handlePaymentPost = (request, response) => {
         let paymentPayload = JSON.parse(request.body.description);
         let centerId = paymentPayload.centerId;
         let cardsCount = paymentPayload.cardsCount;
-        let monthCount = paymentPayload.monthCount;
+        let monthCount = Number(paymentPayload.monthCount);
 
         console.log("payment payload")
         console.log(paymentPayload)
