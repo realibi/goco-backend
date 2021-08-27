@@ -912,6 +912,24 @@ const handlePaymentPost = (request, response) => {
         console.log("payment payload")
         console.log(paymentPayload)
 
+        pool.query('UPDATE public.courses\n' +
+                    '\tSET permitted_cards_count=$1, \n' +
+                    '\tlast_payment_date=current_date, \n' +
+                    '\tnext_payment_date=current_date + interval "$2 month"\n' +
+                    '\tWHERE id=$3;',
+            [
+                cardsCount,
+                monthCount,
+                centerId
+            ],
+            (error, results) => {
+                if (error) {
+                    throw error
+                }
+
+                response.status(200).json(true);
+        })
+
         response.redirect('https://www.oilan.io');
     } else{
         response.redirect('https://www.oilan.io/');
