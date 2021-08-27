@@ -901,11 +901,14 @@ const handlePaymentPost = (request, response) => {
 
     //bot.sendMessage(receiver_chat_id, `Hello`)
 
+    console.log(request.body)
+
     if(request.body.status === 1){
         let verificationCode = (Math.floor(Math.random() * 999999) + 100000).toString();
         let reference_id = request.body.reference_id;
-        setClientStatusOk(reference_id, verificationCode);
-        sendEmail(reference_id, verificationCode);
+
+        //setClientStatusOk(reference_id, verificationCode);
+        //sendEmail(reference_id, verificationCode);
 
         response.redirect('https://www.oilan.io');
     } else{
