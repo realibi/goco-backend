@@ -915,7 +915,7 @@ const handlePaymentPost = (request, response) => {
         pool.query('UPDATE public.courses\n' +
                     '\tSET permitted_cards_count=$1, \n' +
                     '\tlast_payment_date=current_date, \n' +
-                    '\tnext_payment_date=current_date + interval "$2 month"\n' +
+                    '\tnext_payment_date=current_date + interval \'$2 month\'\n' +
                     '\tWHERE id=$3;',
             [
                 cardsCount,
