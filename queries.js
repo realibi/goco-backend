@@ -923,12 +923,10 @@ const handlePaymentPost = (request, response) => {
                 if (error) {
                     throw error
                 }
-
-                return response.status(200).json(true);
         })
-    } else{
-        return response.redirect('https://www.oilan.io/cabinet');
     }
+
+    return response.redirect('https://www.oilan.io/cabinet');
 }
 
 const handleNewStudent = (request, response) => {
