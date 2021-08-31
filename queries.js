@@ -364,13 +364,13 @@ const getFeedbackById = (request, response) => {
     })
 }
 
-const getCurrentDate = () => {
+const getCurrentDate = (monthOffset = 0) => {
     let currentDate = new Date();
 
     let dd = currentDate.getDate();
     if(dd < 10) dd = '0' + dd;
 
-    let mm = currentDate.getMonth()+1;
+    let mm = currentDate.getMonth() + monthOffset + 1;
     if(mm < 10) mm = '0' + mm;
 
     let yy = currentDate.getFullYear();
@@ -923,6 +923,7 @@ const handlePaymentPost = (request, response) => {
                 if (error) {
                     throw error
                 }
+                axios.post('/createCourseNotification', {centerId: centerId, message: `Вы успешно продлили подписку до ${getCurrentDate(monthCount)}`})
         })
     }
 
