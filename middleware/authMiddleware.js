@@ -15,7 +15,7 @@ export default function authMiddleware (req, res, next) {
         req.user = jwt.verify(token, secret)
         next()
     } catch (e) {
-        console.log(e)
+        res.redirect("/login");
         return res.status(403).json({message: "Пользователь не авторизован"})
     }
 };
