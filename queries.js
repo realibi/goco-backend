@@ -7,7 +7,6 @@ import axios from "axios";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import {secret} from "./config.js"
-import globals from "../goco/src/globals";
 
 moment.locale('ru');
 
