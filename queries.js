@@ -804,8 +804,6 @@ const handleNewStudent = (request, response) => {
     let studentData = request.body;
     let verificationCode = (Math.floor(Math.random() * 999999) + 100000).toString();
 
-    sendEmailByEmail(studentData, verificationCode);
-
     pool.query('SELECT subcourses.id, subcourses.course_id, subcourses.title as "subcourse_title", courses.title as "course_title", courses.email as "course_email", subcourses.description, subcourses.price, subcourses.schedule, subcourses.duration, subcourses.rating, subcourses.category_id, subcourses.ages, subcourses.format, subcourses.expected_result, subcourses.start_requirements, subcourses.type, subcourses.isonline FROM subcourses JOIN courses ON subcourses.course_id = courses.id WHERE subcourses.id = $1', [studentData.subcourse_id], async (error, results) => {
         if (error) {
             throw error
