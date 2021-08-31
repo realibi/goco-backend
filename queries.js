@@ -1942,7 +1942,7 @@ const checkCourseNotification = (request, response) => {
     })
 }
 
-const createTechSupportTicket = (request, response) => {
+const createTechSupportTicket = async (request, response) => {
     const {
         center_id,
         phone,
@@ -1955,6 +1955,42 @@ const createTechSupportTicket = (request, response) => {
         }
         response.status(200).json(true)
     })
+
+    await pool.query(`select * from courses where id=${center_id}`, async (error, results) => {
+        if (error) {
+            throw error
+        }
+        let centerTitle = results.rows[0].title;
+        let mailMessage = `Центр: ${centerTitle}\nПочта отправителя: ${email}\nНомер телефона отправителя: ${phone}\nСообщение отправителя: ${message}`;
+        await sendEmail('oilanedu@gmail.com', 'Обращение в тех. поддержку', mailMessage);
+    })
+}
+
+const sendEmail = async (emailTo, title, message) => {
+    let transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'oilanedu@gmail.com',
+            pass: 'dyvldkxooosevhon'
+        }
+    });
+
+    let mailOptions = {
+        from: 'oilanedu@gmail.com',
+        to: emailTo,
+        subject: title,
+        text: message,
+    };
+
+    await transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
 }
 
 export default {
