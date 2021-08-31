@@ -925,16 +925,11 @@ const handlePaymentPost = async (request, response) => {
                     throw error
                 }
 
-                await axios({
-                    method: 'post',
-                    url: `https://realibi.kz/createCourseNotification`,
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem("auth token")}`
-                    },
-                    data: {
-                        center_id: centerId,
-                        message: `Вы успешно продлили подписку на ${cardsCount} карточек до ${getCurrentDate(monthCount)}!`
+                pool.query('INSERT INTO center_account_notifications (center_id, message, checked, datetime) VALUES ($1, $2, $3, current_timestamp)', [centerId, `Вы успешно продлили подписку на ${cardsCount} карточек до ${getCurrentDate(monthCount)}!`, false], (error, result) => {
+                    if (error) {
+                        throw error
                     }
+                    response.status(201).send(`center_account_notifications added with ID: ${result.id}`)
                 })
         })
     }
