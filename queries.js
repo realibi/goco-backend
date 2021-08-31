@@ -1962,11 +1962,11 @@ const createTechSupportTicket = async (request, response) => {
         }
         let centerTitle = results.rows[0].title;
         let mailMessage = `Центр: ${centerTitle}\nПочта отправителя: ${email}\nНомер телефона отправителя: ${phone}\nСообщение отправителя: ${message}`;
-        await sendEmail('oilanedu@gmail.com', 'Обращение в тех. поддержку', mailMessage);
+        await sendEmail(['reallibi@gmail.com', 'zane.css34@gmail.com'], 'Oilan. Обращение в тех. поддержку', mailMessage);
     })
 }
 
-const sendEmail = async (emailTo, title, message) => {
+const sendEmail = async (emailsTo, title, message) => {
     let transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
@@ -1977,20 +1977,22 @@ const sendEmail = async (emailTo, title, message) => {
         }
     });
 
-    let mailOptions = {
-        from: 'oilanedu@gmail.com',
-        to: emailTo,
-        subject: title,
-        text: message,
-    };
+    for(let i = 0; i < emailsTo.length; i++){
+        let mailOptions = {
+            from: 'oilanedu@gmail.com',
+            to: emailsTo[i],
+            subject: title,
+            text: message,
+        };
 
-    await transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-    });
+        await transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+    }
 }
 
 export default {
