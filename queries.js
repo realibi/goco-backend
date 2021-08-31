@@ -7,6 +7,7 @@ import axios from "axios";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import {secret} from "./config.js"
+import globals from "../goco/src/globals";
 
 moment.locale('ru');
 
@@ -898,7 +899,7 @@ const sendEmailByEmail = (studentData, verificationCode) => {
     })
 }
 
-const handlePaymentPost = (request, response) => {
+const handlePaymentPost = async (request, response) => {
     console.log("handle payment POST:");
 
     //bot.sendMessage(receiver_chat_id, `Hello`)
@@ -914,16 +915,27 @@ const handlePaymentPost = (request, response) => {
         console.log("payment payload")
         console.log(paymentPayload)
 
-        pool.query(`UPDATE public.courses\n` +
+        await pool.query(`UPDATE public.courses\n` +
                     `\tSET permitted_cards_count=${cardsCount}, \n` +
                     `\tlast_payment_date=current_date, \n` +
                     `\tnext_payment_date=current_date + interval \'${monthCount} month\'\n` +
                     `\tWHERE id=${centerId}`,
-            (error, results) => {
+            async (error, results) => {
                 if (error) {
                     throw error
                 }
-                axios.post('/createCourseNotification', {center_id: centerId, message: `Вы успешно продлили подписку на ${cardsCount} карточек до ${getCurrentDate(monthCount)}!`})
+
+                await axios({
+                    method: 'post',
+                    url: `${globals.productionServerDomain}/createCourseNotification`,
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem("auth token")}`
+                    },
+                    data: {
+                        center_id: centerId,
+                        message: `Вы успешно продлили подписку на ${cardsCount} карточек до ${getCurrentDate(monthCount)}!`
+                    }
+                })
         })
     }
 
