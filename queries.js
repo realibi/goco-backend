@@ -757,6 +757,55 @@ const sendEmailByReferenceId = (reference_id, verificationCode) => {
 }
 
 const sendEmailByEmail = (studentData, verificationCode) => {
+
+}
+
+const handlePaymentPost = async (request, response) => {
+    console.log("handle payment POST:");
+
+    //bot.sendMessage(receiver_chat_id, `Hello`)
+
+    console.log(request.body)
+
+    if(request.body.status === 1){
+        let paymentPayload = JSON.parse(request.body.description);
+        let centerId = paymentPayload.centerId;
+        let cardsCount = paymentPayload.cardsCount;
+        let monthCount = Number(paymentPayload.monthCount);
+
+        console.log("payment payload")
+        console.log(paymentPayload)
+
+        await pool.query(`UPDATE public.courses\n` +
+                    `\tSET permitted_cards_count=${cardsCount}, \n` +
+                    `\tlast_payment_date=current_date, \n` +
+                    `\tnext_payment_date=current_date + interval \'${monthCount} month\'\n` +
+                    `\tWHERE id=${centerId}`,
+            async (error, results) => {
+                if (error) {
+                    throw error
+                }
+
+                pool.query('INSERT INTO center_account_notifications (center_id, message, checked, datetime) VALUES ($1, $2, $3, current_timestamp)',
+                    [centerId, `Вы успешно продлили подписку для ${cardsCount} карточек на ${monthCount} месяцев!`, false],
+                    (error, result) => {
+                    if (error) {
+                        throw error
+                    }
+                    //response.status(201).send(`center_account_notifications added with ID: ${result.id}`)
+                })
+        })
+    }
+
+    return response.redirect('https://www.oilan.io/cabinet');
+}
+
+const handleNewStudent = (request, response) => {
+    let studentData = request.body;
+    let verificationCode = (Math.floor(Math.random() * 999999) + 100000).toString();
+
+    sendEmailByEmail(studentData, verificationCode);
+
     pool.query('SELECT subcourses.id, subcourses.course_id, subcourses.title as "subcourse_title", courses.title as "course_title", courses.email as "course_email", subcourses.description, subcourses.price, subcourses.schedule, subcourses.duration, subcourses.rating, subcourses.category_id, subcourses.ages, subcourses.format, subcourses.expected_result, subcourses.start_requirements, subcourses.type, subcourses.isonline FROM subcourses JOIN courses ON subcourses.course_id = courses.id WHERE subcourses.id = $1', [studentData.subcourse_id], async (error, results) => {
         if (error) {
             throw error
@@ -895,53 +944,43 @@ const sendEmailByEmail = (studentData, verificationCode) => {
                 console.log('Email sent: ' + info.response);
             }
         });
+
+        let emailNotificationMessage =`
+        Название центра: ${centerName}.
+        
+        Курс, на который записались: ${subcourseTitle}.
+        
+        Описание курса: ${subcourseDescription}.
+        
+        Расписание: ${subcourseSchedule}.  
+        
+        
+
+        Данные о студенте:
+        
+        ФИО: ${clientFullname}.
+        Номер телефона: ${clientPhone}.
+        Email: ${clientEmail}.
+        Введенный промокод: ${clientPromocode}.
+    
+        Свяжитесь с вашим новым студентом, и обсудите детали курса :)
+        `;
+
+        await sendEmail(
+            [
+                'reallibi@gmail.com',
+                'kakimadiya@gmail.com',
+                'kakimadina2002@gmail.com',
+                'zane.css34@gmail.com',
+                '205047@astanait.edu.kz',
+                'd.dybyspayeva@gmail.com'
+            ],
+            'Новый студент!',
+            emailNotificationMessage
+        )
     })
-}
 
-const handlePaymentPost = async (request, response) => {
-    console.log("handle payment POST:");
 
-    //bot.sendMessage(receiver_chat_id, `Hello`)
-
-    console.log(request.body)
-
-    if(request.body.status === 1){
-        let paymentPayload = JSON.parse(request.body.description);
-        let centerId = paymentPayload.centerId;
-        let cardsCount = paymentPayload.cardsCount;
-        let monthCount = Number(paymentPayload.monthCount);
-
-        console.log("payment payload")
-        console.log(paymentPayload)
-
-        await pool.query(`UPDATE public.courses\n` +
-                    `\tSET permitted_cards_count=${cardsCount}, \n` +
-                    `\tlast_payment_date=current_date, \n` +
-                    `\tnext_payment_date=current_date + interval \'${monthCount} month\'\n` +
-                    `\tWHERE id=${centerId}`,
-            async (error, results) => {
-                if (error) {
-                    throw error
-                }
-
-                pool.query('INSERT INTO center_account_notifications (center_id, message, checked, datetime) VALUES ($1, $2, $3, current_timestamp)',
-                    [centerId, `Вы успешно продлили подписку для ${cardsCount} карточек на ${monthCount} месяцев!`, false],
-                    (error, result) => {
-                    if (error) {
-                        throw error
-                    }
-                    //response.status(201).send(`center_account_notifications added with ID: ${result.id}`)
-                })
-        })
-    }
-
-    return response.redirect('https://www.oilan.io/cabinet');
-}
-
-const handleNewStudent = (request, response) => {
-    let studentData = request.body;
-    let verificationCode = (Math.floor(Math.random() * 999999) + 100000).toString();
-    sendEmailByEmail(studentData, verificationCode);
 }
 
 //----------------------------------------------------------
