@@ -1942,7 +1942,23 @@ const checkCourseNotification = (request, response) => {
     })
 }
 
+const createTechSupportTicket = (request, response) => {
+    const {
+        center_id,
+        phone,
+        email,
+        message
+    } = request.body;
+    pool.query(`INSERT INTO public.tech_support_tickets(center_id, phone, email, message, datetime) VALUES ($1, $2, $3, $4, current_timestamp)`, [ center_id, phone, email, message ], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(true)
+    })
+}
+
 export default {
+    createTechSupportTicket,
     checkCourseNotification,
     getCourseNotification,
     createCourseNotification,
