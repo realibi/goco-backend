@@ -924,7 +924,9 @@ const handlePaymentPost = async (request, response) => {
                     throw error
                 }
 
-                pool.query('INSERT INTO center_account_notifications (center_id, message, checked, datetime) VALUES ($1, $2, $3, current_timestamp)', [centerId, `Вы успешно продлили подписку на ${cardsCount} карточек до ${getCurrentDate(monthCount)}!`, false], (error, result) => {
+                pool.query('INSERT INTO center_account_notifications (center_id, message, checked, datetime) VALUES ($1, $2, $3, current_timestamp)',
+                    [centerId, `Вы успешно продлили подписку для ${cardsCount} карточек на ${monthCount} месяцев!`, false],
+                    (error, result) => {
                     if (error) {
                         throw error
                     }
