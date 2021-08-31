@@ -923,7 +923,7 @@ const handlePaymentPost = (request, response) => {
                 if (error) {
                     throw error
                 }
-                axios.post('/createCourseNotification', {centerId: centerId, message: `Вы успешно продлили подписку до ${getCurrentDate(monthCount)}`})
+                axios.post('/createCourseNotification', {center_id: centerId, message: `Вы успешно продлили подписку на ${cardsCount} карточек до ${getCurrentDate(monthCount)}!`})
         })
     }
 
