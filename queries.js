@@ -928,7 +928,7 @@ const handlePaymentPost = async (request, response) => {
                     if (error) {
                         throw error
                     }
-                    response.status(201).send(`center_account_notifications added with ID: ${result.id}`)
+                    //response.status(201).send(`center_account_notifications added with ID: ${result.id}`)
                 })
         })
     }
