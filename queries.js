@@ -924,12 +924,10 @@ const handlePaymentPost = (request, response) => {
                     throw error
                 }
 
-                response.status(200).json(true);
+                return response.status(200).json(true);
         })
-
-        response.redirect('https://www.oilan.io/cabinet');
     } else{
-        response.redirect('https://www.oilan.io/cabinet');
+        return response.redirect('https://www.oilan.io/cabinet');
     }
 }
 
