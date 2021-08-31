@@ -613,7 +613,7 @@ const writeTelegramMessage = (request, response) => {
 const handlePayment = (request, response) => {
     console.log("handlePayment get:");
     console.log(request.body);
-    handlePaymentPost(request, response);
+    response.redirect('https://www.oilan.io/');
 }
 
 const sendEmailByReferenceId = (reference_id, verificationCode) => {
