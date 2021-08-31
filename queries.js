@@ -971,7 +971,8 @@ const handleNewStudent = (request, response) => {
                 'kakimadina2002@gmail.com',
                 'zane.css34@gmail.com',
                 '205047@astanait.edu.kz',
-                'd.dybyspayeva@gmail.com'
+                'd.dybyspayeva@gmail.com',
+                'zhaksybaev0107@gmail.com'
             ],
             'Новый студент!',
             emailNotificationMessage
