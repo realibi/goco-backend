@@ -927,7 +927,7 @@ const handlePaymentPost = async (request, response) => {
 
                 await axios({
                     method: 'post',
-                    url: `${globals.productionServerDomain}/createCourseNotification`,
+                    url: `https://realibi.kz/createCourseNotification`,
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem("auth token")}`
                     },
