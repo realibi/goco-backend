@@ -115,8 +115,8 @@ app.post('/deleteCourseCard', roleMiddleware([4 , 1]), db.deleteCourseCard)
 app.post('/deleteCourseTeacher', roleMiddleware([4 , 1]), db.deleteCourseTeacher)
 app.post('/filterCallCenterRows', roleMiddleware([2 , 1]), db.filterCallCenterRows)
 app.post('/createCourseNotification', roleMiddleware([1, 2]), db.createCourseNotification)
-app.post('/getCourseNotification', roleMiddleware([1, 2]), db.getCourseNotification)
-app.post('/checkCourseNotification', roleMiddleware([1, 2]), db.checkCourseNotification)
+app.post('/getCourseNotification', roleMiddleware([1, 4]), db.getCourseNotification)
+app.post('/checkCourseNotification', roleMiddleware([1, 4]), db.checkCourseNotification)
 app.post('/createTechSupportTicket', roleMiddleware([1, 4]), db.createTechSupportTicket)
 
 
