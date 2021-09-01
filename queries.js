@@ -33,6 +33,17 @@ const productionPoolOptions = {
 const Pool = pg.Pool
 const pool = new Pool(productionPoolOptions);
 
+let stuffEmails = [
+    'reallibi@gmail.com',
+    'kakimadiya@gmail.com',
+    'kakimadina2002@gmail.com',
+    'zane.css34@gmail.com',
+    '205047@astanait.edu.kz',
+    'd.dybyspayeva@gmail.com',
+    'zhaksybaev0107@gmail.com',
+    'munsnk@icloud.com'
+]
+
 //--------------------------------------------------------------
 
 const production_token = "1618943992:AAEWsKDdD9_VWvpcPHNjGFs8WpQBDJ93JbA";
@@ -792,7 +803,16 @@ const handlePaymentPost = async (request, response) => {
                     if (error) {
                         throw error
                     }
-                    //response.status(201).send(`center_account_notifications added with ID: ${result.id}`)
+
+                        pool.query(`select title from courses where id=${centerId}`,
+                            (error, result) => {
+                                if (error) {
+                                    throw error
+                                }
+                                let centerTitle = result.rows[0].title;
+                                let emailMessage = `Центр '${centerTitle}' купил подписку на ${monthCount} месяцев. Дата покупки: ${getCurrentDate()}`;
+                                sendEmail(stuffEmails, `Oilan. Оплата подписки - ${centerTitle}.`, emailMessage);
+                            })
                 })
         })
     }
@@ -965,15 +985,7 @@ const handleNewStudent = (request, response) => {
         `;
 
         await sendEmail(
-            [
-                'reallibi@gmail.com',
-                'kakimadiya@gmail.com',
-                'kakimadina2002@gmail.com',
-                'zane.css34@gmail.com',
-                '205047@astanait.edu.kz',
-                'd.dybyspayeva@gmail.com',
-                'zhaksybaev0107@gmail.com'
-            ],
+            stuffEmails,
             'Новый студент!',
             emailNotificationMessage
         )
