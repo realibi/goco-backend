@@ -2088,20 +2088,12 @@ const createCourseSearchTicket = async (request, response) => {
                         throw error
                     }
                     directionName = categoriesResult.rows[0].name;
-                    let mailMessage = `Имя пользователя: ${name}.\n
-                    Телефон: ${phone}.\n
-                    Выбранный город:${cityName}\n
-                    Выбранное направление: ${direction_id}\n
-                    Минимальная цена: ${min_price} KZT\n
-                    Максимальная цена: ${max_price} KZT\n
-                    Сообщение: ${message}`;
+                    let mailMessage = `Имя пользователя: ${name}.\nТелефон: ${phone}.\nВыбранный город:${cityName}\nВыбранное направление: ${directionName}\nМинимальная цена: ${min_price} KZT\nМаксимальная цена: ${max_price} KZT\nСообщение: ${message}`;
                     await sendEmail(stuffEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
                 }
             )
         }
     )
-
-
 }
 
 export default {
