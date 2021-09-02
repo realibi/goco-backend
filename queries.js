@@ -2051,7 +2051,9 @@ const createCourseSearchTicket = async (request, response) => {
         direction_id,
         name,
         phone,
-        message
+        message,
+        min_price,
+        max_price
     } = request.body;
     await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, name, phone, message, datetime) VALUES ($1, $2, $3, $4, $5, current_timestamp)`,
         [
@@ -2059,7 +2061,9 @@ const createCourseSearchTicket = async (request, response) => {
             direction_id,
             name,
             phone,
-            message
+            message,
+            min_price,
+            max_price
         ],
         (error, results) => {
         if (error) {
@@ -2079,18 +2083,25 @@ const createCourseSearchTicket = async (request, response) => {
             cityName = citiesResult.rows[0].name;
 
             await pool.query(`select name from course_categories where id=${direction_id}`,
-                (error, categoriesResult) => {
+                async (error, categoriesResult) => {
                     if (error) {
                         throw error
                     }
                     directionName = categoriesResult.rows[0].name;
+                    let mailMessage = `Имя пользователя: ${name}.\n
+                    Телефон: ${phone}.\n
+                    Выбранный город:${cityName}\n
+                    Выбранное направление: ${direction_id}\n
+                    Минимальная цена: ${min_price} KZT\n
+                    Максимальная цена: ${max_price} KZT\n
+                    Сообщение: ${message}`;
+                    await sendEmail(stuffEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
                 }
             )
         }
     )
 
-    let mailMessage = `Имя пользователя: ${name}.\nТелефон: ${phone}.\nВыбранный город:${cityName}\nВыбранное направление: ${direction_id}\nСообщение: ${message}.`;
-    await sendEmail(stuffEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
+
 }
 
 export default {
