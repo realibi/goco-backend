@@ -2045,7 +2045,56 @@ const sendEmail = async (emailsTo, title, message) => {
     }
 }
 
+const createCourseSearchTicket = async (request, response) => {
+    const {
+        city_id,
+        direction_id,
+        name,
+        phone,
+        message
+    } = request.body;
+    await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, name, phone, message, datetime) VALUES ($1, $2, $3, $4, $5, current_timestamp)`,
+        [
+            city_id,
+            direction_id,
+            name,
+            phone,
+            message
+        ],
+        (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(true)
+    })
+
+    let cityName = "";
+    let directionName = "";
+
+    await pool.query(`select name from cities where id=${city_id}`,
+        async (error, citiesResult) => {
+            if (error) {
+                throw error
+            }
+            cityName = citiesResult.rows[0].name;
+
+            await pool.query(`select name from course_categories where id=${direction_id}`,
+                (error, categoriesResult) => {
+                    if (error) {
+                        throw error
+                    }
+                    directionName = categoriesResult.rows[0].name;
+                }
+            )
+        }
+    )
+
+    let mailMessage = `Имя пользователя: ${name}.\nТелефон: ${phone}.\nВыбранный город:${cityName}\nВыбранное направление: ${direction_id}\nСообщение: ${message}.`;
+    await sendEmail(stuffEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
+}
+
 export default {
+    createCourseSearchTicket,
     createTechSupportTicket,
     checkCourseNotification,
     getCourseNotification,
