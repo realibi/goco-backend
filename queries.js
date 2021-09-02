@@ -2055,7 +2055,7 @@ const createCourseSearchTicket = async (request, response) => {
         min_price,
         max_price
     } = request.body;
-    await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, name, phone, message, datetime, min_price, max_price) VALUES ($1, $2, $3, $4, $5, current_timestamp, min_price, max_price)`,
+    await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, name, phone, message, datetime, min_price, max_price) VALUES ($1, $2, $3, $4, $5, current_timestamp, $6, $7)`,
         [
             city_id,
             direction_id,
