@@ -1995,11 +1995,9 @@ const checkCourseNotification = (request, response) => {
 const createTechSupportTicket = async (request, response) => {
     const {
         center_id,
-        phone,
-        email,
         message
     } = request.body;
-    pool.query(`INSERT INTO public.tech_support_tickets(center_id, phone, email, message, datetime) VALUES ($1, $2, $3, $4, current_timestamp)`, [ center_id, phone, email, message ], (error, results) => {
+    pool.query(`INSERT INTO public.tech_support_tickets(center_id, message, datetime) VALUES ($1, $2, current_timestamp)`, [ center_id, message ], (error, results) => {
         if (error) {
             throw error
         }
@@ -2011,8 +2009,8 @@ const createTechSupportTicket = async (request, response) => {
             throw error
         }
         let centerTitle = results.rows[0].title;
-        let mailMessage = `Центр: ${centerTitle}\nПочта отправителя: ${email}\nНомер телефона отправителя: ${phone}\nСообщение отправителя: ${message}`;
-        await sendEmail(['reallibi@gmail.com', 'zane.css34@gmail.com'], 'Oilan. Обращение в тех. поддержку', mailMessage);
+        let mailMessage = `Центр: ${centerTitle}\nСообщение отправителя: ${message}`;
+        await sendEmail(stuffEmails, 'Oilan. Обращение в тех. поддержку', mailMessage);
     })
 }
 
