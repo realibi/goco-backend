@@ -2075,23 +2075,14 @@ const createCourseSearchTicket = async (request, response) => {
     let cityName = "";
     let directionName = "";
 
-    await pool.query(`select name from cities where id=${city_id}`,
-        async (error, citiesResult) => {
+    await pool.query(`select name from course_categories where id=${direction_id}`,
+        async (error, categoriesResult) => {
             if (error) {
                 throw error
             }
-            cityName = citiesResult.rows[0].name;
-
-            await pool.query(`select name from course_categories where id=${direction_id}`,
-                async (error, categoriesResult) => {
-                    if (error) {
-                        throw error
-                    }
-                    directionName = categoriesResult.rows[0].name;
-                    let mailMessage = `Имя пользователя: ${name}.\nТелефон: ${phone}.\nВыбранный город:${cityName}\nВыбранное направление: ${directionName}\nМинимальная цена: ${min_price} KZT\nМаксимальная цена: ${max_price} KZT\nСообщение: ${message}`;
-                    await sendEmail(stuffEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
-                }
-            )
+            directionName = categoriesResult.rows[0].name;
+            let mailMessage = `Имя пользователя: ${name}.\nТелефон: ${phone}.\nВыбранное направление: ${directionName}\nМинимальная цена: ${min_price} KZT\nМаксимальная цена: ${max_price} KZT\nСообщение: ${message}`;
+            await sendEmail(stuffEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
         }
     )
 }

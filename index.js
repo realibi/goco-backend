@@ -123,6 +123,9 @@ app.post('/courseCardsWithPagination', db.courseCardsWithPagination)
 
 
 
+
+
+
 let devPublicRoute = "dev\\goco-backend\\public";
 let productionPublicRoute = "/root/goco-backend/public";
 
