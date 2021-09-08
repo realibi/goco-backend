@@ -1973,7 +1973,7 @@ const getCourseNotification = (request, response) => {
         center_id
     } = request.body
 
-    pool.query('select * from center_account_notifications where center_id=$1 and checked=false', [center_id], (error, result) => {
+    pool.query('select * from center_account_notifications where center_id=$1', [center_id], (error, result) => {
         if (error) {
             throw error
         }
