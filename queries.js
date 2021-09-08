@@ -1973,7 +1973,7 @@ const getCourseNotification = (request, response) => {
         center_id
     } = request.body
 
-    pool.query('SELECT id, center_id, message, checked, datetime, (select count(id) from center_Account_notifications where checked=false) as "new_notifications_count" from center_account_notifications where center_id=$1', [center_id], (error, result) => {
+    pool.query('SELECT id, center_id, message, checked, datetime, (select count(id) from center_Account_notifications where checked=false and center_id=$1) as "new_notifications_count" from center_account_notifications where center_id=$1', [center_id], (error, result) => {
         if (error) {
             throw error
         }
