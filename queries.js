@@ -1119,13 +1119,35 @@ teleBot.start();
 //----------------------------------------------------------
 
 const logUserClick = (request, response) => {
-    const { datetime, courseTitle, subcourseTitle, eventName } = request.body
+    const { datetime, courseTitle, courseId, subcourseTitle, eventName } = request.body
 
-    pool.query('INSERT INTO clicks_log (datetime, courseTitle, subcourseTitle, eventName) VALUES ($1, $2, $3, $4)', [datetime, courseTitle, subcourseTitle, eventName], (error, result) => {
+    pool.query('INSERT INTO clicks_log (datetime, courseTitle, subcourseTitle, eventName, course_id) VALUES ($1, $2, $3, $4, $5)', [datetime, courseTitle, subcourseTitle, eventName, courseId], (error, result) => {
         if (error) {
             throw error
         }
-        response.status(201).send(`Click log: ${eventName}`)
+
+    })
+
+    pool.query(`select views from subcourses where id=${courseId}`, (error, result) => {
+        if (error) {
+            throw error
+        }
+        let viewsCount = result.rows[0].views;
+        if((viewsCount + 1) % 3 === 0){
+            pool.query(`select max(order_coefficient) as "max" from subcourses`, (error, orderResult) => {
+                if (error) {
+                    throw error
+                }
+                let maxOrderCoefficient = orderResult.rows[0].max;
+
+                pool.query(`update subcourses set views=${viewsCount+1}, order_coefficient=${maxOrderCoefficient+0.1}`, (error, updateResult) => {
+                    if (error) {
+                        throw error
+                    }
+                    response.status(200).json({event: `Click log: ${eventName}`, order_coefficient: maxOrderCoefficient+0.1});
+                })
+            })
+        }
     })
 }
 
