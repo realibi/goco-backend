@@ -2165,7 +2165,21 @@ const archiveCard = (request, response) => {
     })
 }
 
+const unarchiveCard = (request, response) => {
+    const {
+        card_id
+    } = request.body;
+
+    pool.query(`update subcourses set is_archived=false where id=${card_id}`, [], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(`card id ${card_id} unarchived!`);
+    })
+}
+
 export default {
+    unarchiveCard,
     archiveCard,
     courseCardsWithPagination,
     createCourseSearchTicket,
