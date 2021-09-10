@@ -2,7 +2,7 @@ import pg from 'pg';
 import TelegramBot from 'node-telegram-bot-api'
 import nodemailer from 'nodemailer';
 import moment from 'moment'
-import TeleBot from 'telebot'
+//import TeleBot from 'telebot'
 import axios from "axios";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
@@ -23,7 +23,7 @@ const devPoolOptions = {
 
 const productionPoolOptions = {
     user: 'postgres',
-    host: '127.0.0.1',
+    host: '91.201.215.148',
     database: 'oilan_db',
     password: 'root',
     port: 5432,
@@ -46,29 +46,29 @@ let stuffEmails = [
 
 //--------------------------------------------------------------
 
-const production_token = "1618943992:AAEWsKDdD9_VWvpcPHNjGFs8WpQBDJ93JbA";
-const dev_token = "1782112572:AAFMbiHosVWH1TqKUXLmUUuiNV8q5Je0MPE";
+// const production_token = "1618943992:AAEWsKDdD9_VWvpcPHNjGFs8WpQBDJ93JbA";
+// const dev_token = "1782112572:AAFMbiHosVWH1TqKUXLmUUuiNV8q5Je0MPE";
 
-const current_token = process.env.PORT === undefined ? dev_token : production_token;
-//const bot = new TelegramBot(current_token, { polling: true })
-const teleBot = new TeleBot(current_token);
+// const current_token = process.env.PORT === undefined ? dev_token : production_token;
+// const bot = new TelegramBot(current_token, { polling: true })
+// const teleBot = new TeleBot(current_token);
 
-teleBot.on('text', (msg) => msg.reply.text(msg.text));
+// teleBot.on('text', (msg) => msg.reply.text(msg.text));
 
-teleBot.on(['/register'], (msg, match) => {
-    const chatId = msg.chat.id
-    const course_id = msg.text.split(' ').pop();
-    console.log('User with username ' + msg.chat.username + ' registered with course id ' + course_id.toLowerCase());
-
-    pool.query('INSERT INTO telegram_bot_users (chat_id, first_name, username, course_id) VALUES ($1, $2, $3, $4)', [msg.chat.id, msg.chat.first_name, msg.chat.username, course_id], (error, result) => {
-        if (error) {
-            throw error
-        }
-    })
-
-    //users.push(chatId)
-    teleBot.sendMessage(chatId, 'Done.')
-})
+// teleBot.on(['/register'], (msg, match) => {
+//     const chatId = msg.chat.id
+//     const course_id = msg.text.split(' ').pop();
+//     console.log('User with username ' + msg.chat.username + ' registered with course id ' + course_id.toLowerCase());
+//
+//     pool.query('INSERT INTO telegram_bot_users (chat_id, first_name, username, course_id) VALUES ($1, $2, $3, $4)', [msg.chat.id, msg.chat.first_name, msg.chat.username, course_id], (error, result) => {
+//         if (error) {
+//             throw error
+//         }
+//     })
+//
+//     //users.push(chatId)
+//     teleBot.sendMessage(chatId, 'Done.')
+// })
 
 const sendTelegramMessage = (chat_id, message) => {
     const token = "1618943992:AAEWsKDdD9_VWvpcPHNjGFs8WpQBDJ93JbA";
@@ -91,44 +91,44 @@ const sendClientInfoNotification = (subcourse_id, client) => {
 
         const course_id = subcoursesResults.rows[0]['course_id'];
 
-        pool.query('SELECT * FROM telegram_bot_users WHERE course_id = $1 or course_id = 0', [course_id], (error, usersResult) => {
-            if (error) {
-                throw error
-            }
-            console.log("Users count: " + usersResult.rows.length);
-            for(let i = 0; i < usersResult.rows.length; i++){
-                let message =
-                    `Поздравляем с новым студентом вашего образовательного центра "${client.center_name}"!\n\nКурс: ${client.subcourse_title}\nРасписание: ${client.subcourse_schedule}\nФИО: ${client.fullname}\nТелефон: ${client.phone}\nEmail: ${client.email}\nОплаченная сумма: ${client.pay_sum}\nДата записи на курс: ${client.date}\nКод студента: ${client.code}\n`;
-                teleBot.sendMessage(usersResult.rows[i]['chat_id'], message);
-            }
-        })
+        // pool.query('SELECT * FROM telegram_bot_users WHERE course_id = $1 or course_id = 0', [course_id], (error, usersResult) => {
+        //     if (error) {
+        //         throw error
+        //     }
+        //     console.log("Users count: " + usersResult.rows.length);
+        //     for(let i = 0; i < usersResult.rows.length; i++){
+        //         let message =
+        //             `Поздравляем с новым студентом вашего образовательного центра "${client.center_name}"!\n\nКурс: ${client.subcourse_title}\nРасписание: ${client.subcourse_schedule}\nФИО: ${client.fullname}\nТелефон: ${client.phone}\nEmail: ${client.email}\nОплаченная сумма: ${client.pay_sum}\nДата записи на курс: ${client.date}\nКод студента: ${client.code}\n`;
+        //         teleBot.sendMessage(usersResult.rows[i]['chat_id'], message);
+        //     }
+        // })
     })
 }
 
 const sendCallRequestNotification = (client) => {
-    pool.query('SELECT * FROM telegram_bot_users WHERE course_id = 0', [], (error, usersResult) => {
-        if (error) {
-            throw error
-        }
-        for(let i = 0; i < usersResult.rows.length; i++){
-            let message =
-                `Новый запрос на обратный звонок!\nТелефон: ${client.phone}\nВремя: ${client.currentDate}`;
-            teleBot.sendMessage(usersResult.rows[i]['chat_id'], message);
-        }
-    })
+    // pool.query('SELECT * FROM telegram_bot_users WHERE course_id = 0', [], (error, usersResult) => {
+    //     if (error) {
+    //         throw error
+    //     }
+    //     for(let i = 0; i < usersResult.rows.length; i++){
+    //         let message =
+    //             `Новый запрос на обратный звонок!\nТелефон: ${client.phone}\nВремя: ${client.currentDate}`;
+    //         teleBot.sendMessage(usersResult.rows[i]['chat_id'], message);
+    //     }
+    // })
 }
 
 const sendPartnershipRequestNotification = (partner) => {
-    pool.query('SELECT * FROM telegram_bot_users WHERE course_id = 0', [], (error, usersResult) => {
-        if (error) {
-            throw error
-        }
-        for(let i = 0; i < usersResult.rows.length; i++){
-            let message =
-                `У вас новая заявка на сотрудничество!\n\nНазвание компании: ${partner.company_name}\nФИО: ${partner.fullname}\nТелефон: ${partner.phone}\nПочта: ${partner.email}\n`;
-            teleBot.sendMessage(usersResult.rows[i]['chat_id'], message);
-        }
-    })
+    // pool.query('SELECT * FROM telegram_bot_users WHERE course_id = 0', [], (error, usersResult) => {
+    //     if (error) {
+    //         throw error
+    //     }
+    //     for(let i = 0; i < usersResult.rows.length; i++){
+    //         let message =
+    //             `У вас новая заявка на сотрудничество!\n\nНазвание компании: ${partner.company_name}\nФИО: ${partner.fullname}\nТелефон: ${partner.phone}\nПочта: ${partner.email}\n`;
+    //         teleBot.sendMessage(usersResult.rows[i]['chat_id'], message);
+    //     }
+    // })
 }
 
 //------------------------------------------------------------
@@ -575,7 +575,7 @@ const deleteTeacher = (request, response) => {
 //---------------------------------------------------------------------------------
 
 const getCourseCards = (request, response) => {
-    pool.query('SELECT subcourses.id, subcourses.isonline, subcourses.title, courses.website_url, subcourses.currency, subcourses.unit_of_time, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.phones, courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.approved=true order by order_coefficient desc', [], (error, results) => {
+    pool.query('SELECT subcourses.id, subcourses.isonline, subcourses.title, courses.website_url, subcourses.currency, subcourses.unit_of_time, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.phones, courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.approved=true order by order_coefficient asc', [], (error, results) => {
         if (error) {
             throw error
         }
@@ -618,7 +618,7 @@ const getCourseCardsByCategoryId = (request, response) => {
 
 const writeTelegramMessage = (request, response) => {
     const { receiver_chat_id, student } = request.body
-    teleBot.sendMessage(receiver_chat_id, `Hello`)
+    //teleBot.sendMessage(receiver_chat_id, `Hello`)
 }
 
 const handlePayment = (request, response) => {
@@ -1115,7 +1115,7 @@ const courseCardsFilter = (request, response) => {
 }
 
 //----------------------------------------------------------
-teleBot.start();
+//teleBot.start();
 //----------------------------------------------------------
 
 const logUserClick = (request, response) => {
@@ -1125,30 +1125,47 @@ const logUserClick = (request, response) => {
         if (error) {
             throw error
         }
-        response.status(201).send('ok')
+        //response.status(201).send('ok')
     })
 
-    // pool.query(`select views from subcourses where id=${courseId}`, (error, result) => {
-    //     if (error) {
-    //         throw error
-    //     }
-    //     let viewsCount = result.rows[0].views;
-    //     if((viewsCount + 1) % 3 === 0){
-    //         pool.query(`select max(order_coefficient) as "max" from subcourses`, (error, orderResult) => {
-    //             if (error) {
-    //                 throw error
-    //             }
-    //             let maxOrderCoefficient = orderResult.rows[0].max;
-    //
-    //             pool.query(`update subcourses set views=${viewsCount+1}, order_coefficient=${maxOrderCoefficient+0.1}`, (error, updateResult) => {
-    //                 if (error) {
-    //                     throw error
-    //                 }
-    //                 response.status(200).json({event: `Click log: ${eventName}`, order_coefficient: maxOrderCoefficient+0.1});
-    //             })
-    //         })
-    //     }
-    // })
+    let viewsQuery = `select subcourses.views from subcourses where subcourses.id=${courseId}`;
+    console.log(viewsQuery);
+
+    pool.query(viewsQuery, (error, result) => {
+        if (error) {
+            throw error
+        }
+        let viewsCount = result.rows[0].views;
+        if((viewsCount + 1) % 3 === 0){
+            let maxOrderCoefficientQuery = `select max(order_coefficient) as "max" from subcourses`;
+            console.log(maxOrderCoefficientQuery);
+            pool.query(maxOrderCoefficientQuery, (error, orderResult) => {
+                if (error) {
+                    throw error
+                }
+                let maxOrderCoefficient = orderResult.rows[0].max;
+                console.log('maxOrderCoefficient: ' + maxOrderCoefficient);
+
+                let updateViewsAndOrderCoefficientQuery = `update subcourses set views=${viewsCount+1}, order_coefficient=${maxOrderCoefficient+0.1} where id=${courseId}`;
+                console.log(updateViewsAndOrderCoefficientQuery);
+                pool.query(updateViewsAndOrderCoefficientQuery, (error, updateResult) => {
+                    if (error) {
+                        throw error
+                    }
+                    response.status(200).json({event: `Click log: ${eventName}`, order_coefficient: maxOrderCoefficient+0.1});
+                })
+            })
+        }else{
+            let updateViewsAndOrderCoefficientQuery = `update subcourses set views=${viewsCount+1} where id=${courseId}`;
+            console.log(updateViewsAndOrderCoefficientQuery);
+            pool.query(updateViewsAndOrderCoefficientQuery, (error, updateResult) => {
+                if (error) {
+                    throw error
+                }
+                response.status(200).json({event: `Click log: ${eventName}`});
+            })
+        }
+    })
 }
 
 //----------------------------------------------------------
@@ -1999,7 +2016,14 @@ const getCourseNotification = (request, response) => {
         if (error) {
             throw error
         }
-        response.status(200).json({data: result.rows, new_notifications_count: result.rows[0].new_notifications_count});
+
+        let new_notifications_count = 0;
+
+        if(result.rows.length > 0) {
+            new_notifications_count = result.rows[0].new_notifications_count;
+        }
+
+        response.status(200).json({data: result.rows, new_notifications_count: new_notifications_count});
     })
 }
 
