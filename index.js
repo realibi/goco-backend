@@ -180,7 +180,7 @@ app.post(
 
 
 
-let port = 3030;
+let port = 3000;
 
 app.listen(port, () => {
     console.log(`Goco backend running on port ${port}.`)
