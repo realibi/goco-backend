@@ -2152,7 +2152,21 @@ const courseCardsWithPagination = async (request, response) => {
     })
 }
 
+const archiveCard = (request, response) => {
+    const {
+        card_id
+    } = request.body;
+
+    pool.query(`update subcourses set is_archived=true where id=${card_id}`, [], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(`card id ${card_id} archived!`);
+    })
+}
+
 export default {
+    archiveCard,
     courseCardsWithPagination,
     createCourseSearchTicket,
     createTechSupportTicket,

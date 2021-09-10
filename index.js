@@ -120,7 +120,7 @@ app.post('/checkCourseNotification', roleMiddleware([1, 4]), db.checkCourseNotif
 app.post('/createTechSupportTicket', roleMiddleware([1, 4]), db.createTechSupportTicket)
 app.post('/createCourseSearchTicket', db.createCourseSearchTicket)
 app.post('/courseCardsWithPagination', db.courseCardsWithPagination)
-app.post('/archiveCard', db.courseCardsWithPagination)
+app.post('/archiveCard', roleMiddleware([1, 4]), db.archiveCard)
 
 
 
