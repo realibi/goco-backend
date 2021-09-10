@@ -815,6 +815,13 @@ const handlePaymentPost = async (request, response) => {
                             })
                 })
         })
+
+        await pool.query(`update subcourses set is_archived=true where course_id=${centerId}`,
+            (error, result) => {
+                if (error) {
+                    throw error
+                }
+        })
     }
 
     return response.redirect('https://www.oilan.io/cabinet');
@@ -1486,8 +1493,8 @@ const getClickStatistics = (request, response) => {
 const cardCreationPermission = (request, response) => {
     const centerId = parseInt(request.params.centerId)
 
-    pool.query(`select count(id) from subcourses where approved=true and title!='test' and course_id=$1`, [centerId],  (error, results) => {
-        if (error) {
+    pool.query(`select count(id) from subcourses where approved=true and is_archived=false and title!='test' and course_id=$1`, [centerId],  (error, results) => {
+        if (error)  {
             throw error
         }
         let currentCountOfCards = results.rows[0].count;
@@ -1496,7 +1503,7 @@ const cardCreationPermission = (request, response) => {
             if (error) {
                 throw error
             }
-            let permittedCardsCount = results.rows[0].permitted_cards_count;
+            let permittedCardsCount = results.rows[0].permitted_cards_count === null ? 0 : results.rows[0].permitted_cards_count;
 
             let permitted = false;
 
