@@ -127,7 +127,6 @@ app.post('/unarchiveCard', roleMiddleware([1, 4]), db.unarchiveCard)
 
 
 
-
 let devPublicRoute = "dev\\goco-backend\\public";
 let productionPublicRoute = "/root/goco-backend/public";
 

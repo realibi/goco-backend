@@ -1107,6 +1107,15 @@ const courseCardsFilter = (request, response) => {
         }
     }
 
+    if(whereAdded){
+        queryText += " and ";
+    }else{
+        whereAdded = true;
+        queryText += " where ";
+    }
+    queryText += 'subcourses.is_archived=false'
+
+
     if(sortType !== "0"){
         queryText += ` order by ${sortType}`;
     }
