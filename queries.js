@@ -798,7 +798,12 @@ const handlePaymentPost = async (request, response) => {
                 }
 
                 pool.query('INSERT INTO center_account_notifications (center_id, message, checked, datetime) VALUES ($1, $2, $3, current_timestamp)',
-                    [centerId, `Вы успешно продлили подписку для ${cardsCount} карточек на ${monthCount} месяцев!`, false],
+                    [
+                        centerId,
+                        `Вы успешно продлили подписку для ${cardsCount} карточек на ${monthCount} месяцев!
+                        Все ваши карточки были переведены в архив. Пожалуйста, активируйте заново нужные карточки.
+                        Напоминаем, что вы можете активировать только ${cardsCount} карточек!`,
+                        false],
                     (error, result) => {
                     if (error) {
                         throw error
