@@ -1398,9 +1398,33 @@ const getFilters = (request, response) => {
                 if (error) {
                     throw error
                 }
-                filtersArray.push(citiesResult.rows);
-                filtersArray.push(categoriesResult.rows);
-                filtersArray.push(coursesResult.rows);
+                filtersArray.push(citiesResult.rows.sort(function ( a, b ) {
+                    if ( a.name < b.name ){
+                        return -1;
+                    }
+                    if ( a.name > b.name ){
+                        return 1;
+                    }
+                    return 0;
+                }));
+                filtersArray.push(categoriesResult.rows.sort(function ( a, b ) {
+                    if ( a.name < b.name ){
+                        return -1;
+                    }
+                    if ( a.name > b.name ){
+                        return 1;
+                    }
+                    return 0;
+                }));
+                filtersArray.push(coursesResult.rows.sort(function ( a, b ) {
+                    if ( a.title < b.title ){
+                        return -1;
+                    }
+                    if ( a.title > b.title ){
+                        return 1;
+                    }
+                    return 0;
+                }));
 
                 response.status(200).json(filtersArray)
             })
@@ -2149,6 +2173,23 @@ const createCourseSearchTicket = async (request, response) => {
             directionName = categoriesResult.rows[0].name;
             let mailMessage = `Имя пользователя: ${name}.\nТелефон: ${phone}.\nВыбранное направление: ${directionName}\nСообщение: ${message}`;
             await sendEmail(stuffEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
+
+            pool.query(`select email from courses where direction_id=${direction_id}`,
+                async (error, coursesResult) => {
+                    if (error) {
+                        throw error
+                    }
+                    let coursesEmails = [];
+
+                    for (let i = 0; i < coursesResult.rows.length; i++){
+                        coursesEmails.push(coursesResult.rows[i]);
+                    }
+
+                    for(let i = 0; i < coursesEmails.length; i++){
+                        await sendEmail(coursesEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
+                    }
+                }
+            )
         }
     )
 }
