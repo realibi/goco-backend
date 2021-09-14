@@ -41,7 +41,8 @@ let stuffEmails = [
     '205047@astanait.edu.kz',
     'd.dybyspayeva@gmail.com',
     'zhaksybaev0107@gmail.com',
-    'munsnk@icloud.com'
+    'munsnk@icloud.com',
+    'azat.aliaskar@gmail.com'
 ]
 
 //--------------------------------------------------------------
