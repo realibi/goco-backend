@@ -1198,7 +1198,7 @@ const generateAccessToken = (userId, roleId, centerId) => {
         roleId,
         centerId
     }
-    return jwt.sign(payload, secret, {expiresIn: "24h"} )
+    return jwt.sign(payload, secret, {expiresIn: "365d"} )
 }
 
 const login = (request, response) => {
