@@ -2082,8 +2082,6 @@ const checkCourseNotification = (request, response) => {
         }
         response.status(200).json(true)
     })
-
-    createAccountForAllCenters();
 }
 
 const createTechSupportTicket = async (request, response) => {
