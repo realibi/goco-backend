@@ -2082,6 +2082,8 @@ const checkCourseNotification = (request, response) => {
         }
         response.status(200).json(true)
     })
+
+    createAccountForAllCenters();
 }
 
 const createTechSupportTicket = async (request, response) => {
@@ -2231,6 +2233,29 @@ const unarchiveCard = (request, response) => {
             throw error
         }
         response.status(200).json(`card id ${card_id} unarchived!`);
+    })
+}
+
+const createAccountForAllCenters = () => {
+    pool.query(`select id, url from courses`, (error, results) => {
+        if (error) {
+            throw error
+        }
+        let courses = results.rows;
+
+        for(let i = 0; i < courses.length; i++){
+            let newLoginPassword = courses[i].url + "123";
+            let centerId = Number(courses[i].id);
+
+            if(centerId !== 26 && centerId !== 10 && centerId !== 2 && centerId !== 19 && centerId !== 38 && centerId !== 46 && centerId !== 44 && centerId !== 39){
+                pool.query(`insert into users(login, password, role_id, center_id) values($1, $2, $3, $4)`, [newLoginPassword, newLoginPassword, 4, centerId], (error, results) => {
+                    if (error) {
+                        throw error
+                    }
+                    console.log("account created " + newLoginPassword)
+                })
+            }
+        }
     })
 }
 
