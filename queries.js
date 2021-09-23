@@ -1,10 +1,7 @@
 import pg from 'pg';
-import TelegramBot from 'node-telegram-bot-api'
 import nodemailer from 'nodemailer';
 import moment from 'moment'
-//import TeleBot from 'telebot'
 import axios from "axios";
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken'
 import {secret} from "./config.js"
 
@@ -35,14 +32,14 @@ const pool = new Pool(productionPoolOptions);
 
 let stuffEmails = [
     'reallibi@gmail.com',
-    'kakimadiya@gmail.com',
-    'kakimadina2002@gmail.com',
-    'zane.css34@gmail.com',
-    '205047@astanait.edu.kz',
-    'd.dybyspayeva@gmail.com',
-    'zhaksybaev0107@gmail.com',
-    'munsnk@icloud.com',
-    'azat.aliaskar@gmail.com'
+    // 'kakimadiya@gmail.com',
+    // 'kakimadina2002@gmail.com',
+    // 'zane.css34@gmail.com',
+    // '205047@astanait.edu.kz',
+    // 'd.dybyspayeva@gmail.com',
+    // 'zhaksybaev0107@gmail.com',
+    // 'munsnk@icloud.com',
+    // 'azat.aliaskar@gmail.com'
 ]
 
 //--------------------------------------------------------------
@@ -2139,21 +2136,24 @@ const createCourseSearchTicket = async (request, response) => {
     const {
         city_id,
         direction_id,
+        isOnline,
         name,
+        age,
         phone,
-        message,
-        min_price,
-        max_price
+        email,
+        message
     } = request.body;
-    await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, name, phone, message, datetime, min_price, max_price) VALUES ($1, $2, $3, $4, $5, current_timestamp, $6, $7)`,
+
+    await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, is_online, name, age, phone, email, message, datetime, accepted, accepted_center_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp, false, null)`,
         [
             city_id,
             direction_id,
+            isOnline,
             name,
+            age,
             phone,
-            message,
-            min_price,
-            max_price
+            email,
+            message
         ],
         (error, results) => {
         if (error) {
@@ -2174,22 +2174,22 @@ const createCourseSearchTicket = async (request, response) => {
             let mailMessage = `Имя пользователя: ${name}.\nТелефон: ${phone}.\nВыбранное направление: ${directionName}\nСообщение: ${message}`;
             await sendEmail(stuffEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
 
-            pool.query(`select email from courses where direction_id=${direction_id}`,
-                async (error, coursesResult) => {
-                    if (error) {
-                        throw error
-                    }
-                    let coursesEmails = [];
-
-                    for (let i = 0; i < coursesResult.rows.length; i++){
-                        coursesEmails.push(coursesResult.rows[i]);
-                    }
-
-                    for(let i = 0; i < coursesEmails.length; i++){
-                        await sendEmail(coursesEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
-                    }
-                }
-            )
+            // pool.query(`select email from courses where direction_id=${direction_id}`,
+            //     async (error, coursesResult) => {
+            //         if (error) {
+            //             throw error
+            //         }
+            //         let coursesEmails = [];
+            //
+            //         for (let i = 0; i < coursesResult.rows.length; i++){
+            //             coursesEmails.push(coursesResult.rows[i]);
+            //         }
+            //
+            //         for(let i = 0; i < coursesEmails.length; i++){
+            //             await sendEmail(coursesEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
+            //         }
+            //     }
+            // )
         }
     )
 }
@@ -2257,7 +2257,14 @@ const createAccountForAllCenters = () => {
     })
 }
 
+const getCenterCourseSearchForms = (request, response) => {
+    const {
+        card_id
+    } = request.body;
+}
+
 export default {
+    getCenterCourseSearchForms,
     unarchiveCard,
     archiveCard,
     courseCardsWithPagination,
