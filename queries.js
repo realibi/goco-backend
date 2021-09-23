@@ -2257,14 +2257,14 @@ const createAccountForAllCenters = () => {
     })
 }
 
-const getCenterCourseSearchForms = (request, response) => {
+const getCenterCourseSearchApplications = (request, response) => {
     const {
         card_id
     } = request.body;
 }
 
 export default {
-    getCenterCourseSearchForms,
+    getCenterCourseSearchApplications,
     unarchiveCard,
     archiveCard,
     courseCardsWithPagination,
