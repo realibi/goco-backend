@@ -122,7 +122,7 @@ app.post('/createCourseSearchTicket', db.createCourseSearchTicket)
 app.post('/courseCardsWithPagination', db.courseCardsWithPagination)
 app.post('/archiveCard', roleMiddleware([1, 4]), db.archiveCard)
 app.post('/unarchiveCard', roleMiddleware([1, 4]), db.unarchiveCard)
-app.post('/getCenterCourseSearchForms', roleMiddleware([1, 4]), db.getCenterCourseSearchForms)
+//app.post('/getCenterCourseSearchApplications', roleMiddleware([1, 4]), db.getCenterCourseSearchApplications)
 
 
 
@@ -182,7 +182,7 @@ app.post(
 
 
 
-let port = 3030;
+let port = 3000;
 
 app.listen(port, () => {
     console.log(`Goco backend running on port ${port}.`)
