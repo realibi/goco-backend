@@ -124,6 +124,7 @@ app.post('/archiveCard', roleMiddleware([1, 4]), db.archiveCard)
 app.post('/unarchiveCard', roleMiddleware([1, 4]), db.unarchiveCard)
 app.post('/getCourseSearchApplications', roleMiddleware([1, 4]), db.getCourseSearchApplications)
 app.post('/getCourseSearchApplication', db.getCourseSearchApplication)
+app.post('/responseToSearchApplication', roleMiddleware([1, 4]), db.responseToSearchApplication)
 
 
 
