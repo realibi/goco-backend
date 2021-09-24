@@ -2329,6 +2329,8 @@ const getApplicationResponses = (request, response) => {
         let cardsIdsString = cardsIds.join(',');
         console.log("cardsIdsString: ")
         console.log(cardsIdsString);
+        console.log("application id: ")
+        console.log(application_id);
     })
 }
 
