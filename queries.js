@@ -4,6 +4,7 @@ import moment from 'moment'
 import axios from "axios";
 import jwt from 'jsonwebtoken'
 import {secret} from "./config.js"
+import { v4 as uuidv4 } from 'uuid';
 
 moment.locale('ru');
 
@@ -2144,7 +2145,7 @@ const createCourseSearchTicket = async (request, response) => {
         message
     } = request.body;
 
-    await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, is_online, name, age, phone, email, message, datetime, accepted, accepted_center_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp, false, null)`,
+    await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, is_online, name, age, phone, email, message, datetime, isActive, uuid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp, true, uuid.stringify())`,
         [
             city_id,
             direction_id,
