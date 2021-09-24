@@ -2145,7 +2145,7 @@ const createCourseSearchTicket = async (request, response) => {
         message
     } = request.body;
 
-    await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, is_online, name, age, phone, email, message, datetime, is_active, uuid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp, true, uuid.stringify())`,
+    await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, is_online, name, age, phone, email, message, datetime, is_active, uuid_string) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp, true, uuid.stringify())`,
         [
             city_id,
             direction_id,
@@ -2272,7 +2272,7 @@ const getCourseSearchApplication = (request, response) => {
         applicationUuid
     } = request.body;
 
-    pool.query(`select * from course_search_tickets where uuid=${applicationUuid}`, [], (error, results) => {
+    pool.query(`select * from course_search_tickets where uuid_string=${applicationUuid}`, [], (error, results) => {
         if (error) {
             throw error
         }
