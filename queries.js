@@ -2285,7 +2285,33 @@ const getCourseSearchApplication = (request, response) => {
     })
 }
 
+const responseToSearchApplication = (request, response) => {
+    const {
+        application_id,
+        subcourse_id,
+        center_name,
+        center_id
+    } = request.body;
+
+    pool.query(`insert into application_responses(application_id, subcourse_id, center_name, accepted, center_id) values($1, $2, $3, $4, $5)`,
+        [
+            application_id,
+            subcourse_id,
+            center_name,
+            false,
+            center_id
+        ],
+        (error, results) => {
+        if (error) {
+            throw error
+        }
+        console.log(`application response created by center ${center_name} to application id: ${application_id}`);
+        response.status(201).json(true);
+    })
+}
+
 export default {
+    responseToSearchApplication,
     getCourseSearchApplication,
     getCourseSearchApplications,
     unarchiveCard,
