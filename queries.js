@@ -2315,7 +2315,7 @@ const getApplicationResponses = (request, response) => {
         application_id
     } = request.body;
 
-    pool.query(`select * from application_responses where id=$1`, [application_id], (error, results) => {
+    pool.query(`select * from application_responses where application_id=$1`, [application_id], (error, results) => {
         if (error) {
             throw error
         }
