@@ -123,7 +123,7 @@ app.post('/courseCardsWithPagination', db.courseCardsWithPagination)
 app.post('/archiveCard', roleMiddleware([1, 4]), db.archiveCard)
 app.post('/unarchiveCard', roleMiddleware([1, 4]), db.unarchiveCard)
 app.post('/getCourseSearchApplications', roleMiddleware([1, 4]), db.getCourseSearchApplications)
-app.post('/getCourseSearchApplication', roleMiddleware([1, 4]), db.getCourseSearchApplication)
+app.post('/getCourseSearchApplication', db.getCourseSearchApplication)
 
 
 
