@@ -2361,7 +2361,7 @@ const deactivateSearchApplication = (request, response) => {
         application_id
     } = request.body;
 
-    pool.query(`update course_search_tickets set is_active=false`, (error, cardsResults) => {
+    pool.query(`update course_search_tickets set is_active=false where id=${application_id}`, (error, cardsResults) => {
         if (error) {
             throw error
         }
