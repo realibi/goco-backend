@@ -2266,7 +2266,21 @@ const getCourseSearchApplications = (request, response) => {
     })
 }
 
+const getCourseSearchApplication = (request, response) => {
+    const {
+        applicationUuid
+    } = request.body;
+
+    pool.query(`select * from course_search_tickets where uuid=${applicationUuid}`, [], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows[0]);
+    })
+}
+
 export default {
+    getCourseSearchApplication,
     getCourseSearchApplications,
     unarchiveCard,
     archiveCard,
