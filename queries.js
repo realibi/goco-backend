@@ -2275,6 +2275,8 @@ const getCourseSearchApplication = (request, response) => {
         uuid_string
     } = request.body;
 
+    console.log("uuid:" + uuid_string)
+
     pool.query(`select * from course_search_tickets where uuid_string=${uuid_string}`, [], (error, results) => {
         if (error) {
             throw error
