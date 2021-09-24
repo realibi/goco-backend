@@ -2164,6 +2164,16 @@ const createCourseSearchTicket = async (request, response) => {
             throw error
         }
         response.status(200).json({uuid: uuidString});
+
+        let link = 'https://oilan.io/application/' + uuidString;
+        let message = `${name}, вы оставили заявку на поиск курса на платформе Oilan!
+Ваша заявка отправлена всем подходящим образовательным центрам на платформе!
+Пройдя по этой ссылке, вы сможете видеть, какой центр откликнулся на вашу заявку:
+${link}
+Заходите в любой момент и выбирайте понравившийся курс из откликнувшихся!
+С уважением, команда Oilan!
+`
+        sendEmail([email], 'Oilan. Ваша заявка на поиск курса!', message);
     })
 
     let cityName = "";
