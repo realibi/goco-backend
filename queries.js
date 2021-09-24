@@ -2147,7 +2147,7 @@ const createCourseSearchTicket = async (request, response) => {
 
     let uuidString = uuidv4();
 
-    await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, is_online, name, age, phone, email, message, datetime, is_active, uuid_string) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp, true, uuidString)`,
+    await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, is_online, name, age, phone, email, message, datetime, is_active, uuid_string) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp, true, $9)`,
         [
             city_id,
             direction_id,
@@ -2156,13 +2156,14 @@ const createCourseSearchTicket = async (request, response) => {
             age,
             phone,
             email,
-            message
+            message,
+            uuidString
         ],
         (error, results) => {
         if (error) {
             throw error
         }
-        response.status(200).json()
+        response.status(200).json({uuid: uuidString});
     })
 
     let cityName = "";
