@@ -2327,8 +2327,8 @@ const getApplicationResponses = (request, response) => {
         })
 
         let cardsIdsString = cardsIds.join(',');
-        let cardsFetchQuery = `select * from subcourses where id in (${cardsIdsString})`
-
+        //let cardsFetchQuery = `select * from subcourses where id in (${cardsIdsString})`
+        let cardsFetchQuery = `SELECT subcourses.id, subcourses.isonline, subcourses.title, courses.website_url, subcourses.currency, subcourses.unit_of_time, subcourses.description, subcourses.ages, subcourses.type, subcourses.format, subcourses.price, subcourses.schedule, subcourses.expected_result, subcourses.start_requirements, subcourses.duration, subcourses.rating, courses.id as "course_id", courses.title as "course_title", courses.phones, courses.instagram, courses.latitude, courses.longitude, courses.url, courses.img_src, courses.background_image_url from subcourses inner join courses on subcourses.course_id = courses.id where subcourses.id in (${cardsIdsString}) and subcourses.approved=true and subcourses.is_archived=false order by order_coefficient asc`;
         pool.query(cardsFetchQuery, (error, cardsResults) => {
             if (error) {
                 throw error
