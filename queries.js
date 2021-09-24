@@ -2310,7 +2310,30 @@ const responseToSearchApplication = (request, response) => {
     })
 }
 
+const getApplicationResponses = (request, response) => {
+    const {
+        application_id
+    } = request.body;
+
+    pool.query(`select * from application_responses where id=$1`, [application_id], (error, results) => {
+        if (error) {
+            throw error
+        }
+        let applicationResponses = results.rows;
+        let cardsIds = [];
+
+        applicationResponses.map(item => {
+            cardsIds.push(item.subcourse_id);
+        })
+
+        let cardsIdsString = cardsIds.join(',');
+        console.log("cardsIdsString: ")
+        console.log(cardsIdsString);
+    })
+}
+
 export default {
+    getApplicationResponses,
     responseToSearchApplication,
     getCourseSearchApplication,
     getCourseSearchApplications,
