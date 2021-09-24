@@ -2272,10 +2272,10 @@ const getCourseSearchApplications = (request, response) => {
 
 const getCourseSearchApplication = (request, response) => {
     const {
-        applicationUuid
+        uuid_string
     } = request.body;
 
-    pool.query(`select * from course_search_tickets where uuid_string=${applicationUuid}`, [], (error, results) => {
+    pool.query(`select * from course_search_tickets where uuid_string=${uuid_string}`, [], (error, results) => {
         if (error) {
             throw error
         }
