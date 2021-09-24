@@ -2257,14 +2257,17 @@ const createAccountForAllCenters = () => {
     })
 }
 
-const getCenterCourseSearchApplications = (request, response) => {
-    const {
-        card_id
-    } = request.body;
+const getCourseSearchApplications = (request, response) => {
+    pool.query(`select * from course_search_tickets`, [], (error, results) => {
+        if (error) {
+            throw error
+        }
+        response.status(200).json(results.rows);
+    })
 }
 
 export default {
-    getCenterCourseSearchApplications,
+    getCourseSearchApplications,
     unarchiveCard,
     archiveCard,
     courseCardsWithPagination,

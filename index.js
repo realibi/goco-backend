@@ -122,7 +122,7 @@ app.post('/createCourseSearchTicket', db.createCourseSearchTicket)
 app.post('/courseCardsWithPagination', db.courseCardsWithPagination)
 app.post('/archiveCard', roleMiddleware([1, 4]), db.archiveCard)
 app.post('/unarchiveCard', roleMiddleware([1, 4]), db.unarchiveCard)
-//app.post('/getCenterCourseSearchApplications', roleMiddleware([1, 4]), db.getCenterCourseSearchApplications)
+app.post('/getCourseSearchApplications', roleMiddleware([1, 4]), db.getCourseSearchApplications)
 
 
 
