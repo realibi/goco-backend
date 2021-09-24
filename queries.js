@@ -2339,7 +2339,22 @@ const getApplicationResponses = (request, response) => {
     })
 }
 
+const deactivateSearchApplication = (request, response) => {
+    const {
+        application_id
+    } = request.body;
+
+    pool.query(`update course_search_tickets set is_active=false`, (error, cardsResults) => {
+        if (error) {
+            throw error
+        }
+        console.log(`search application ${application_id} deactivated`);
+        response.status(200).json(true);
+    })
+}
+
 export default {
+    deactivateSearchApplication,
     getApplicationResponses,
     responseToSearchApplication,
     getCourseSearchApplication,

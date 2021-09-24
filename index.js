@@ -126,6 +126,7 @@ app.post('/getCourseSearchApplications', roleMiddleware([1, 4]), db.getCourseSea
 app.post('/getCourseSearchApplication', db.getCourseSearchApplication)
 app.post('/responseToSearchApplication', roleMiddleware([1, 4]), db.responseToSearchApplication)
 app.post('/getApplicationResponses', db.getApplicationResponses)
+app.post('/deactivateSearchApplication', db.deactivateSearchApplication)
 
 
 
