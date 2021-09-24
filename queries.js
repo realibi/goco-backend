@@ -2334,7 +2334,7 @@ const getApplicationResponses = (request, response) => {
                 throw error
             }
             console.log(cardsResults)
-            response.status(200).json({data: cardsResults});
+            response.status(200).json({data: cardsResults.rows});
         })
     })
 }
