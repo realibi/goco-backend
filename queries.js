@@ -2327,10 +2327,15 @@ const getApplicationResponses = (request, response) => {
         })
 
         let cardsIdsString = cardsIds.join(',');
-
         let cardsFetchQuery = `select * from subcourses where id in (${cardsIdsString})`
-        console.log(cardsFetchQuery);
 
+        pool.query(cardsFetchQuery, (error, cardsResults) => {
+            if (error) {
+                throw error
+            }
+
+            response.status(200).json({data: cardsResults});
+        })
     })
 }
 
