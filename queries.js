@@ -2145,7 +2145,7 @@ const createCourseSearchTicket = async (request, response) => {
         message
     } = request.body;
 
-    await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, is_online, name, age, phone, email, message, datetime, isActive, uuid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp, true, uuid.stringify())`,
+    await pool.query(`INSERT INTO public.course_search_tickets(city_id, direction_id, is_online, name, age, phone, email, message, datetime, is_active, uuid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, current_timestamp, true, uuid.stringify())`,
         [
             city_id,
             direction_id,
