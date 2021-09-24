@@ -2165,7 +2165,7 @@ const createCourseSearchTicket = async (request, response) => {
         }
         response.status(200).json({uuid: uuidString});
 
-        let link = 'https://oilan.io/application/' + uuidString;
+        let link = 'http://localhost:3000/application/' + uuidString;
         let message = `${name}, вы оставили заявку на поиск курса на платформе Oilan!
 Ваша заявка отправлена всем подходящим образовательным центрам на платформе!
 Пройдя по этой ссылке, вы сможете видеть, какой центр откликнулся на вашу заявку:
