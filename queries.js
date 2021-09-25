@@ -2163,7 +2163,6 @@ const createCourseSearchTicket = async (request, response) => {
         if (error) {
             throw error
         }
-        response.status(200).json({uuid: uuidString});
 
         let link = 'http://localhost:3000/application/' + uuidString;
         let message = `${name}, вы оставили заявку на поиск курса на платформе Oilan!
@@ -2208,10 +2207,12 @@ ${link}
 Проверьте ваш личный кабинет Oilan, чтобы откликнуться на нее!
 Ссылка на личный кабинет: ${accountLink}`
                     for(let i = 0; i < coursesEmails.length; i++){
-                        await sendEmail(coursesEmails, 'Oilan. Новая заявка на поиск курса!', messageForCenter);
+                        await sendEmail(coursesEmails, 'Oilan. Новая заявка по вашему направлению!', messageForCenter);
                     }
                 }
             )
+
+            response.status(200).json({uuid: uuidString});
         }
     )
 }
