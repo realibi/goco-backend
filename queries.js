@@ -2207,7 +2207,7 @@ ${link}
 Проверьте ваш личный кабинет Oilan, чтобы откликнуться на нее!
 Ссылка на личный кабинет: ${accountLink}`
 
-                    await sendEmail(coursesEmails, 'Oilan. Новая заявка по вашему направлению!', messageForCenter);
+                    await sendEmail(['reallibi@gmail.com'], 'Oilan. Новая заявка по вашему направлению!', messageForCenter);
                 }
             )
 
