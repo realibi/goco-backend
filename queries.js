@@ -2159,7 +2159,7 @@ const createCourseSearchTicket = async (request, response) => {
             message,
             uuidString
         ],
-        (error, results) => {
+        async (error, results) => {
         if (error) {
             throw error
         }
@@ -2172,7 +2172,7 @@ ${link}
 Заходите в любой момент и выбирайте понравившийся курс из откликнувшихся!
 С уважением, команда Oilan!
 `
-        sendEmail([email], 'Oilan. Ваша заявка на поиск курса!', message);
+        await sendEmail([email], 'Oilan. Ваша заявка на поиск курса!', message);
     })
 
     let cityName = "";
