@@ -2188,7 +2188,9 @@ ${link}
             let mailMessage = `Имя пользователя: ${name}.\nТелефон: ${phone}.\nВыбранное направление: ${directionName}\nСообщение: ${message}`;
             await sendEmail(stuffEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
 
-            pool.query(`select email from courses where direction_id=${direction_id}`,
+            let emailsFetchQuery = `select courses.title, courses.email, subcourses.title, subcourses.category_id from subcourses join courses on subcourses.course_id = courses.id where subcourses.category_id = ${direction_id}`;
+
+            pool.query(emailsFetchQuery,
                 async (error, coursesResult) => {
                     if (error) {
                         throw error
@@ -2196,7 +2198,9 @@ ${link}
                     let coursesEmails = [];
 
                     for (let i = 0; i < coursesResult.rows.length; i++){
-                        coursesEmails.push(coursesResult.rows[i]);
+                        if(coursesEmails.indexOf(coursesResult.rows[i].email) === -1) {
+                            coursesEmails.push(coursesResult.rows[i].email);
+                        }
                     }
 
                     let accountLink = `http://localhost:3000/cabinet`;
