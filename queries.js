@@ -2189,7 +2189,7 @@ ${link}
 
             let emailsFetchQuery = `select courses.title, courses.email, subcourses.title, subcourses.category_id from subcourses join courses on subcourses.course_id = courses.id where subcourses.category_id = ${direction_id}`;
 
-            pool.query(emailsFetchQuery,
+            await pool.query(emailsFetchQuery,
                 async (error, coursesResult) => {
                     if (error) {
                         throw error
@@ -2206,9 +2206,8 @@ ${link}
                     let messageForCenter = `Новая заявка по вашему направлению!
 Проверьте ваш личный кабинет Oilan, чтобы откликнуться на нее!
 Ссылка на личный кабинет: ${accountLink}`
-                    for(let i = 0; i < coursesEmails.length; i++){
-                        await sendEmail(coursesEmails, 'Oilan. Новая заявка по вашему направлению!', messageForCenter);
-                    }
+
+                    await sendEmail(coursesEmails, 'Oilan. Новая заявка по вашему направлению!', messageForCenter);
                 }
             )
 
