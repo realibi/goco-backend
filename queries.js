@@ -2188,22 +2188,26 @@ ${link}
             let mailMessage = `Имя пользователя: ${name}.\nТелефон: ${phone}.\nВыбранное направление: ${directionName}\nСообщение: ${message}`;
             await sendEmail(stuffEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
 
-            // pool.query(`select email from courses where direction_id=${direction_id}`,
-            //     async (error, coursesResult) => {
-            //         if (error) {
-            //             throw error
-            //         }
-            //         let coursesEmails = [];
-            //
-            //         for (let i = 0; i < coursesResult.rows.length; i++){
-            //             coursesEmails.push(coursesResult.rows[i]);
-            //         }
-            //
-            //         for(let i = 0; i < coursesEmails.length; i++){
-            //             await sendEmail(coursesEmails, 'Oilan. Новая заявка на поиск курса!', mailMessage);
-            //         }
-            //     }
-            // )
+            pool.query(`select email from courses where direction_id=${direction_id}`,
+                async (error, coursesResult) => {
+                    if (error) {
+                        throw error
+                    }
+                    let coursesEmails = [];
+
+                    for (let i = 0; i < coursesResult.rows.length; i++){
+                        coursesEmails.push(coursesResult.rows[i]);
+                    }
+
+                    let accountLink = `http://localhost:3000/cabinet`;
+                    let messageForCenter = `Новая заявка по вашему направлению!
+Проверьте ваш личный кабинет Oilan, чтобы откликнуться на нее!
+Ссылка на личный кабинет: ${accountLink}`
+                    for(let i = 0; i < coursesEmails.length; i++){
+                        await sendEmail(messageForCenter, 'Oilan. Новая заявка на поиск курса!', mailMessage);
+                    }
+                }
+            )
         }
     )
 }
