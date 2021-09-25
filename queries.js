@@ -2204,7 +2204,7 @@ ${link}
 Проверьте ваш личный кабинет Oilan, чтобы откликнуться на нее!
 Ссылка на личный кабинет: ${accountLink}`
                     for(let i = 0; i < coursesEmails.length; i++){
-                        await sendEmail(messageForCenter, 'Oilan. Новая заявка на поиск курса!', mailMessage);
+                        await sendEmail(coursesEmails, 'Oilan. Новая заявка на поиск курса!', messageForCenter);
                     }
                 }
             )
